@@ -8,3 +8,6 @@ class Project(models.Model):
     description = models.TextField("Description")
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2)
     current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
+
+class Funded(models.Model):
+    amount = models.DecimalField("Amount", max_digits=19, decimal_places=2)
