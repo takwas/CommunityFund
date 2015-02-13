@@ -43,13 +43,13 @@ class Like(models.Model):
     user = models.ForeignKey(User)
     interest = models.ForeignKey(CommunityInterests)
 
-class UserLocation(model.Model):
+class UserLocation(models.Model):
     user = models.ForeignKey(User)
     location = models.CharField("Name", max_length = 100)
     longitude = models.CharField("Name", max_length = 100)
     latitude = models.CharField("Name", max_length = 100)
     
-class CommunityLocation(model.Model):
+class CommunityLocation(models.Model):
     Community = models.ForeignKey(Community)
     location = models.CharField("Name", max_length = 100)
     longitude = models.CharField("Name", max_length = 100)
