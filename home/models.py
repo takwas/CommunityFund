@@ -8,11 +8,11 @@ class Project(models.Model):
     description = models.TextField("Description")
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2)
     current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
-    pub_date = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField(auto_now_add=True, null=True)
 
 class Funded(models.Model):
-    project = models.ForeignKey(Project)
-    user = models.ForeignKey(User)
+    project = models.ForeignKey(Project, null=True)
+    user = models.ForeignKey(User, null=True)
     amount = models.DecimalField("Amount", max_digits=19, decimal_places=2)
 
 class UserInterests(models.Model):
