@@ -3,7 +3,7 @@
 {% block content %}
 
 {% for post in object_list %}
-    <li>{{ post }}</li>
+    <li>{{ post.initiator }} - {{ post.name }}</li>
 {% endfor %}
 
 {% endblock %}
