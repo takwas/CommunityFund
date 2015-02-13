@@ -59,7 +59,7 @@ WSGI_APPLICATION = 'communityfund.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'communityfund_db'),
+        'NAME': 'communityfund_db',
     }
 }
 
