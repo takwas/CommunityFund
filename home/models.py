@@ -42,11 +42,15 @@ class Like(models.Model):
     user = models.ForeignKey(User)
     interest = models.ForeignKey(Interests)
 
-# TODO
-#class Location(models.Model):
+class UserLocation(model.Model):
+    user = models.ForeignKey(User)
+    location = models.CharField("Name", max_length = 100)
+    longitude = models.CharField("Name", max_length = 100)
+    latitude = models.CharField("Name", max_length = 100)
     
-
-# TODO
-#class CurrentlyAt(models.Model):
-    
+class CommunityLocation(model.Model):
+    Community = models.ForeignKey(Community)
+    location = models.CharField("Name", max_length = 100)
+    longitude = models.CharField("Name", max_length = 100)
+    latitude = models.CharField("Name", max_length = 100)    
 
