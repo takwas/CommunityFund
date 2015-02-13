@@ -8,6 +8,7 @@ class Project(models.Model):
     description = models.TextField("Description")
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2)
     current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
+    pub_date = models.DateTimeField(auto_now_add=True)
 
 class Funded(models.Model):
     project = models.ForeignKey(Project)
@@ -18,13 +19,13 @@ class UserInterests(models.Model):
     user = models.ForeignKey(User, name="user_interests")
     interest = models.CharField("Interest", max_length=100)
 
-class CommunityInterests(models.Model):
-    community = models.ForeignKey(Community, related_name="comm_interests")
-    interest = models.CharField("Interest", max_length=100)
-
 class Community(models.Model):
     name = models.CharField("Name", max_length=100)
     location = models.CharField("Location", max_length=100)
+
+class CommunityInterests(models.Model):
+    community = models.ForeignKey(Community, related_name="comm_interests")
+    interest = models.CharField("Interest", max_length=100)
 
 class ProjectReputation(models.Model):
     rated = models.ForeignKey(Project, related_name="project_rep")
@@ -40,7 +41,7 @@ class UserReputation(models.Model):
        
 class Like(models.Model):
     user = models.ForeignKey(User)
-    interest = models.ForeignKey(Interests)
+    interest = models.ForeignKey(CommunityInterests)
 
 class UserLocation(model.Model):
     user = models.ForeignKey(User)
