@@ -29,6 +29,3 @@ class UserReputationAdmin(admin.ModelAdmin):
     pass
 admin.site.register(UserReputation, UserReputationAdmin)
 
-class LikeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Like, LikeAdmin)

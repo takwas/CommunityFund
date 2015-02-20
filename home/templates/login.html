@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a>Login</a>
+
+{% if form.errors %}
+    <p>Wrong username or password cuz. Try again.</p>
+{% endif %}
+
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+
+    <div>
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        <br>
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+
+    <input type="submit" value="login"></input>
+    <input type="hidden" name="next" value="{{ next }}"></input>
+</form>
+
+{% endblock %}
