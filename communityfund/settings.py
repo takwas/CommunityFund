@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'floppyforms',
     'crispy_forms',
+    'registration',
     'home',
     'registration',
 )
