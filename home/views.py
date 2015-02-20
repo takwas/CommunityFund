@@ -28,3 +28,15 @@ class ProjectCreateView(CreateView):
         form_obj.save()
 
         return super(ProjectCreateView, self).form_valid(form)
+
+class FundCreateView(CreateView):
+
+    model = Funded
+    form_class = FundForm
+
+    def form_valid(self, form):
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.save()
+
+        return super(FundCreateView, self).form_valid(form)
