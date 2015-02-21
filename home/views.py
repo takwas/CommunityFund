@@ -40,3 +40,15 @@ class FundCreateView(CreateView):
         form_obj.save()
 
         return super(FundCreateView, self).form_valid(form)
+
+class CommunityCreateView(CreateView):
+    model = Community
+    form_class = CommunityForm
+
+    def form_valid(self, form):
+        form_obj = form.save(commit=False)
+        form_obj.save();
+
+        return super(CommunityCreateView, self).form_valid(form)
+
+        

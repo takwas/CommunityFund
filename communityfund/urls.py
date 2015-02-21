@@ -23,5 +23,9 @@ urlpatterns = patterns('',
         name="project_create"),
 
     url(r'^project/fund$', login_required(FundCreateView.as_view(success_url="/")),
-        name="fund_amount"),
+        name="fund_project"),
+
+    url(r'^community/create$', login_required(CommunityCreateView.as_view(success_url="/")),
+        name="community_create"),
+
 )
