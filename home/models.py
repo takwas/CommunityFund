@@ -22,7 +22,7 @@ class Project(models.Model):
     communty = models.ForeignKey(Community)
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2)
     current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
-    pub_date = models.DateTimeField(auto_now_add=True, null=True)
+    pub_date = models.DateTimeField(auto_now_add=True)
 
     def __repr__(self):
         return self.name
@@ -106,15 +106,4 @@ class UserLocation(models.Model):
 
     def __unicode__(self):
         return "user %s is located in %s" % (self.user, self.location)
-    
 
-class CommunityLocation(models.Model):
-    
-    community = models.ForeignKey(Community)
-    location = models.CharField("Name", max_length = 100)
-
-    def __repr__(self):
-        return (self.user, self.location)
-
-    def __unicode__(self):
-        return "community %s is located in %s" % (self.community, self.location)

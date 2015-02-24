@@ -8,7 +8,7 @@ from .forms import *
 
 class HomeView(ListView):
 
-    model = Project
+    model = Community
 
 class CustomRegistrationView(RegistrationView):
 
