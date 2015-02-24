@@ -2,13 +2,28 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+
+class UserProfile(model.Model):
+
+    user = models.OneToOneField(User)
+    location = models.CharField("Location", max_length=100)
+    interests = models.CharField("Interests", max_length=256)
+
+    def __repr__(self):
+        return (self.user, self.location, self.interest)
+
+    def __unicode__(self):
+        return "user %s at %s is interested in %s" % (self.user, self.location, self.interest)
+
+
 class Community(models.Model):
 
     name = models.CharField("Name", max_length=100)
     location = models.CharField("Location", max_length=100)
+    interests = models.CharField("Interests", max_length=256)
 
     def __repr__(self):
-        return (self.name, self.location)
+        return (self.name, self.location, self.interests)
 
     def __unicode__(self):
         return self.name
@@ -44,30 +59,6 @@ class Funded(models.Model):
         return "%s funded %s in amount %s" % (self.project, self.user, self.amount)
 
 
-class UserInterests(models.Model):
-
-    user = models.ForeignKey(User, name="user_interests")
-    interest = models.CharField("Interest", max_length=100)
-
-    def __repr__(self):
-        return (self.user, self.interest)
-
-    def __unicode__(self):
-        return "user %s is interested in %s" % (self.user, self.interest)
-
-
-class CommunityInterests(models.Model):
-    
-    community = models.ForeignKey(Community, related_name="comm_interests")
-    interest = models.CharField("Interest", max_length=100)
-
-    def __repr__(self):
-        return (self.community, self.interest)
-
-    def __unicode(self):
-        return "%s community interested in %s" % (self.community, self.interest)
-
-
 class ProjectReputation(models.Model):
 
     rated = models.ForeignKey(Project, related_name="project_rep")
@@ -94,27 +85,3 @@ class UserReputation(models.Model):
 
     def __unicode__(self):
         return "%s rated %s as %s" % (self.rater, self.rated, self.rating)
-
-
-class UserLocation(models.Model):
-
-    user = models.ForeignKey(User)
-    location = models.CharField("Name", max_length = 100)
-
-    def __repr__(self):
-        return (self.user, self.location)
-
-    def __unicode__(self):
-        return "user %s is located in %s" % (self.user, self.location)
-    
-
-class CommunityLocation(models.Model):
-    
-    community = models.ForeignKey(Community)
-    location = models.CharField("Name", max_length = 100)
-
-    def __repr__(self):
-        return (self.user, self.location)
-
-    def __unicode__(self):
-        return "community %s is located in %s" % (self.community, self.location)
