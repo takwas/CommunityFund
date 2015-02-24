@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-class UserProfile(model.Model):
+class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     location = models.CharField("Location", max_length=100)

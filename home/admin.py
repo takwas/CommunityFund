@@ -13,14 +13,6 @@ class FundedAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Funded, FundedAdmin)
 
-class UserInterestsAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(UserInterests, UserInterestsAdmin)
-
-class CommunityInterestsAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(CommunityInterests, CommunityInterestsAdmin)
-
 class ProjectReputationAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ProjectReputation, ProjectReputationAdmin)
