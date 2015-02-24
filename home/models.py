@@ -87,14 +87,3 @@ class UserReputation(models.Model):
         return "%s rated %s as %s" % (self.rater, self.rated, self.rating)
 
 
-class UserLocation(models.Model):
-
-    user = models.ForeignKey(User)
-    location = models.CharField("Name", max_length = 100)
-
-    def __repr__(self):
-        return (self.user, self.location)
-
-    def __unicode__(self):
-        return "user %s is located in %s" % (self.user, self.location)
-
