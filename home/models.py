@@ -85,7 +85,6 @@ class UserReputation(models.Model):
 
     def __unicode__(self):
         return "%s rated %s as %s" % (self.rater, self.rated, self.rating)
-<<<<<<< HEAD
 
 
 class UserLocation(models.Model):
@@ -99,5 +98,3 @@ class UserLocation(models.Model):
     def __unicode__(self):
         return "user %s is located in %s" % (self.user, self.location)
 
-=======
->>>>>>> 0accb58e260f04a923748f9065fbb764665c18bf
