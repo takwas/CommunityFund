@@ -3,7 +3,11 @@
 {% block content %}
 
 {% for post in object_list %}
-    <li>{{ post.initiator }} - {{ post.name }}</li>
+    <li>
+        <a href="{% url 'community_details' pk=post.pk %}">
+            {{ post.name }} - {{ post.interests }}
+        </a>
+    </li>
 {% endfor %}
 
 {% endblock %}

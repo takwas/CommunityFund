@@ -28,4 +28,6 @@ urlpatterns = patterns('',
     url(r'^community/create$', login_required(CommunityCreateView.as_view(success_url="/")),
         name="community_create"),
 
+    url(r'^community/cid=(?P<pk>\d+)/$', login_required(CommunityDetail.as_view(
+        template_name='community_detail.html')), name="community_details")
 )

@@ -52,3 +52,5 @@ class CommunityCreateView(CreateView):
         return super(CommunityCreateView, self).form_valid(form)
 
         
+class CommunityDetail(DetailView):
+    model = Community

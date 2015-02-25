@@ -24,6 +24,10 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_DIRS = (
+    BASE_DIR + "/home/templates/home",
+    )
+
 ALLOWED_HOSTS = []
 
 
