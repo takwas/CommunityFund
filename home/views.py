@@ -52,3 +52,25 @@ class CommunityCreateView(CreateView):
         return super(CommunityCreateView, self).form_valid(form)
 
         
+class CommunityDetail(DetailView):
+    model = Community
+    template_name = "community_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CommunityDetail, self).get_context_data(**kwargs)
+
+        comm = context["object"]
+
+        context["projects"] = Project.objects.all().filter(community=comm)
+
+        return context
+
+
+class ProjectDetail(DetailView):
+    model = Project
+    template_name = "project_detail.html"
+
+
+
+
+

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{ object.name}}</h2>
+{{ object.location }}
+{{ object.interests }}
+<br>
+
+<!--
+{% block projects %}
+{% endblock %}
+-->
+
+<h2>Projects</h2>
+{% for post in projects %}
+    <li>
+        <a href="{% url 'project_details' pk=post.pk %}">
+            {{ post.name }} by {{ post.initiator }}
+        </a>
+    </li>
+{% endfor %}
+
+<footer>
+    <p>
+        <a id="project_create" href="{% url 'project_create' %}">Create Project</a>
+    </p>
+</footer>
+
+
+{% endblock %}
