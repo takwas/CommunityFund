@@ -10,7 +10,7 @@ class UserProfile(models.Model):
     interests = models.CharField("Interests", max_length=256)
 
     def __repr__(self):
-        return (self.user, self.location, self.interest)
+        return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interest)
 
     def __unicode__(self):
         return "user %s at %s is interested in %s" % (self.user, self.location, self.interest)
@@ -23,7 +23,7 @@ class Community(models.Model):
     interests = models.CharField("Interests", max_length=256)
 
     def __repr__(self):
-        return (self.name, self.location, self.interests)
+        return "{name: %s, location: %s, interests: %s}" % (self.name, self.location, self.interests)
 
     def __unicode__(self):
         return self.name
@@ -34,13 +34,13 @@ class Project(models.Model):
     initiator = models.ForeignKey(User)
     name = models.CharField("Name", max_length=100)
     description = models.TextField("Description")
-    communty = models.ForeignKey(Community)
+    community = models.ForeignKey(Community)
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2)
     current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __repr__(self):
-        return self.name
+        return "{name: %s, initiator: %s, description: %s, community: %s}" % (self.name, self.initiator, self.description, self.community)
 
     def __unicode__(self):
         return self.name
@@ -53,7 +53,7 @@ class Funded(models.Model):
     amount = models.DecimalField("Amount", max_digits=19, decimal_places=2)
 
     def __repr__(self):
-        return (self.user, self.project, self.amount)
+        return "{user: %s, project: %s, amount: %s}" % (self.user, self.project, self.amount)
 
     def __unicode__(self):
         return "%s funded %s in amount %s" % (self.project, self.user, self.amount)
@@ -67,7 +67,7 @@ class ProjectReputation(models.Model):
         validators=[MaxValueValidator(5),MinValueValidator(0)])
 
     def __repr__(self):
-        return (self.rated, self.rater, self.rating)
+        return "{rated: %s, rater: %s, rating: %s}" % (self.rated, self.rater, self.rating)
 
     def __unicode__(self):
         return "%s rated %s as %s" % (self.rater, self.rated, self.rating)
@@ -81,7 +81,7 @@ class UserReputation(models.Model):
         validators=[MaxValueValidator(5),MinValueValidator(0)])
 
     def __repr__(self):
-        return (self.rated, self.rater, self.rating)
+        return "{rated: %s, rater: %s, rating: %s}" % (self.rated, self.rater, self.rating)
 
     def __unicode__(self):
         return "%s rated %s as %s" % (self.rater, self.rated, self.rating)
