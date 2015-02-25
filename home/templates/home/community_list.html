@@ -5,9 +5,15 @@
 {% for post in object_list %}
     <li>
         <a href="{% url 'community_details' pk=post.pk %}">
-            {{ post.name }} - {{ post.interests }}
+            {{ post.name }}
         </a>
     </li>
 {% endfor %}
+
+<footer>
+    <p>
+        <a id="community_create" href="{% url 'community_create' %}">Create Community</a>
+    </p>
+</footer>
 
 {% endblock %}

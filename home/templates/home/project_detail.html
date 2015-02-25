@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ object.name}}</h1>
+Initiator: {{ object.initiator }}<br>
+Community: {{ object.community }}<br>
+Description: {{ object.description }}<br>
+Funding Goal: {{ object.funding_goal }}<br>
+Current Funds: {{ object.current_funds }}<br>
+Publication Date: {{ object.pub_date }}<br>
+
+<footer>
+    <p>
+        <a id="fund_project" href="{% url 'fund_project' %}">Fund Project</a>
+    </p>
+</footer>
+
+
+{% endblock %}

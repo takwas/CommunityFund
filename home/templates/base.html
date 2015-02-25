@@ -12,10 +12,6 @@
         <p>
             {% if user.is_authenticated %}
                 <a id="logout" href="{% url 'logout' %}">Logout</a>
-                <br>
-                <a id="community_create" href="{% url 'community_create' %}">Create Community</a>
-                <a id="project_create" href="{% url 'project_create' %}">Create Project</a>
-                <a id="fund_project" href="{% url 'fund_project' %}">Fund Project</a>
             {% else %}
                 <a id="login" href="{% url 'login'  %}">Login</a>
                 <a id="register" href="{% url 'register' %}">Register</a>

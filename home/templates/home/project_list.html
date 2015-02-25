@@ -1,0 +1,14 @@
+{% extends "community_details.html" %}
+
+{% block content %}
+
+<h2>Projects</h2>
+{% for post in projects %}
+    <li>
+        <a href="{% url 'project_details' pk=post.pk %}">
+            {{ post.name }} by {{ post.initiator }}
+        </a>
+    </li>
+{% endfor %}
+
+{% endblock %}
