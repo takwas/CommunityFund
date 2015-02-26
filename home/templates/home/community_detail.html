@@ -15,7 +15,7 @@
 <h2>Projects</h2>
 {% for post in projects %}
     <li>
-        <a href="{% url 'project_details' pk=post.pk %}">
+        <a href="{% url 'project_details' pk=post.pk cid=object.pk %}">
             {{ post.name }} by {{ post.initiator }}
         </a>
     </li>
@@ -23,7 +23,7 @@
 
 <footer>
     <p>
-        <a id="project_create" href="{% url 'project_create' %}">Create Project</a>
+        <a id="project_create" href="{% url 'project_create' pk=object.pk %}">Create Project</a>
     </p>
 </footer>
 

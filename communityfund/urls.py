@@ -19,10 +19,11 @@ urlpatterns = patterns('',
     url(r'^logout/$', "django.contrib.auth.views.logout",
         {"next_page": "/"}, name="logout"),
 
-    url(r'^project/create$', login_required(ProjectCreateView.as_view(success_url="/")),
+    url(r'^community/cid=(?P<pk>\d+)/project/create$', login_required(ProjectCreateView.as_view(success_url="/")),
         name="project_create"),
 
-    url(r'^project/fund$', login_required(FundCreateView.as_view(success_url="/")),
+    # inconsistent
+    url(r'^project/pid=(?P<pk>\d+)/fund$', login_required(FundCreateView.as_view(success_url="/")),
         name="fund_project"),
 
     url(r'^community/create$', login_required(CommunityCreateView.as_view(success_url="/")),
@@ -31,6 +32,6 @@ urlpatterns = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/$', login_required(CommunityDetail.as_view()), 
         name="community_details"),
 
-    url(r'^project/pid=(?P<pk>\d+)/$', login_required(ProjectDetail.as_view()),
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/$', login_required(ProjectDetail.as_view()),
         name="project_details")
 )
