@@ -3,8 +3,8 @@
 {% block content %}
 
 <h2>{{ object.name}}</h2>
-{{ object.location }}
-{{ object.interests }}
+{{ object.location }}<br>
+{{ object.interests }}<br>
 <br>
 
 <!--
@@ -24,6 +24,7 @@
 <footer>
     <p>
         <a id="project_create" href="{% url 'project_create' pk=object.pk %}">Create Project</a>
+        Filter Projects
     </p>
 </footer>
 

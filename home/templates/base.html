@@ -12,6 +12,7 @@
         <p>
             {% if user.is_authenticated %}
                 <a id="profile" href="{% url 'profile' %}">My Profile</a>
+                Find Communities
                 <a id="logout" href="{% url 'logout' %}">Logout</a>
             {% else %}
                 <a id="login" href="{% url 'login'  %}">Login</a>
