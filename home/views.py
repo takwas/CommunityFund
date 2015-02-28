@@ -30,8 +30,10 @@ def createProjectView(request, pk):
             form_obj.current_funds = 0
             form_obj.save()
 
-            return HttpResponseRedirect(reverse('community_details', 
-                kwargs={'pk': pk}))
+            print(form_obj.id)
+
+            return HttpResponseRedirect(reverse('project_details', 
+                kwargs={'cid': pk, 'pk': form_obj.id}))
     else:
         form = ProjectForm()
 
