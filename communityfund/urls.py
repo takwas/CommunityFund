@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/project/create$', createProjectView, 
         name="project_create"),
 
-    url(r'^project/pid=(?P<pk>\d+)/fund$', fundProjectView,
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/fund$', fundProjectView,
         name="fund_project"),
 
     url(r'^community/create$', login_required(CommunityCreateView.as_view()),

@@ -12,7 +12,7 @@ Publication Date: {{ object.pub_date }}<br>
 
 <footer>
     <p>
-        <a id="fund_project" href="{% url 'fund_project' pk=object.pk %}">Fund Project</a>
+        <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">Fund Project</a>
     </p>
 </footer>
 

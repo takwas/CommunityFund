@@ -42,7 +42,7 @@ def createProjectView(request, pk):
 
 
 @login_required
-def fundProjectView(request, pk):
+def fundProjectView(request, cid, pk):
     if request.method == "POST":
         form = FundForm(request.POST)
 
@@ -53,7 +53,7 @@ def fundProjectView(request, pk):
             form_obj.save();
 
             return HttpResponseRedirect(reverse('project_details',
-                kwargs={'pk': pk}))
+                kwargs={'cid': cid, 'pk': pk}))
     else:
         form = FundForm()
 
