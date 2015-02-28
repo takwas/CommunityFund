@@ -39,15 +39,11 @@ def editProfile(request):
             return HttpResponseRedirect(reverse("home"))
     else:
         user = request.user
-        username = user.username
-        email = user.email
         profile = user.profile
-        
-        print(username, email, location, interests)
 
         form = ProfileForm(instance=profile)
 
-    return render(request, "profile_detail.html", {'form': form, })
+    return render(request, "profile_detail.html", {'form': form, 'user': user})
     
 
 
