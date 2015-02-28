@@ -26,7 +26,7 @@ class FundForm(forms.ModelForm):
 
     class Meta:
         model = Funded
-        exclude = ("user",)
+        exclude = ("user", "project")
 
 class CommunityForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -38,3 +38,4 @@ class CommunityForm(forms.ModelForm):
 
     class Meta:
         model = Community
+        exclude = ()

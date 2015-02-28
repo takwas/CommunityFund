@@ -17,23 +17,9 @@ class CustomRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
         return reverse_lazy("home")
     
-# get rid of this
-class ProjectCreateView(CreateView):
-    model = Project
-    form_class = ProjectForm
-
-    def form_valid(self, form):
-        form_obj = form.save(commit=False)
-        form_obj.initiator = self.request.user
-        form_obj.current_funds = 0
-        form_obj.save()
-
-        return super(ProjectCreateView, self).form_valid(form)
-
-
 
 @login_required
-def createProject(request, pk):
+def createProjectView(request, pk):
     if request.method == "POST":
         form = ProjectForm(request.POST)
 
@@ -52,17 +38,24 @@ def createProject(request, pk):
         {'form': form, })
 
 
-class FundCreateView(CreateView):
+@login_required
+def fundProjectView(request, pk):
+    if request.method == "POST":
+        form = FundForm(request.POST)
 
-    model = Funded
-    form_class = FundForm
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.user = request.user
+            form_obj.project = Project.objects.get(id=pk)
+            form_obj.save();
 
-    def form_valid(self, form):
-        form_obj = form.save(commit=False)
-        form_obj.user = self.request.user
-        form_obj.save()
+            return HttpResponseRedirect("/")
+    else:
+        form = FundForm()
 
-        return super(FundCreateView, self).form_valid(form)
+    return render(request, "funded_form.html",
+        {'form': form, })
+
 
 class CommunityCreateView(CreateView):
     model = Community
