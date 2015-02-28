@@ -3,10 +3,10 @@
 {% block content %}
 
 <h2>Profile: {{ user.username }}</h2>
-Email {{ user.email }}<br>
-<br>
+Email: {{ user.email }}<br>
+Location: {{ profile.location }}<br>
+Interests: {{ profile.interests }}<br>
 
-{% load crispy_forms_tags %}
-{% crispy form %}
+<a href="{% url 'edit_profile' %}">Edit Profile</a>
 
 {% endblock %}

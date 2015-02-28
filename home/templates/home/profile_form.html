@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Profile: {{ user.username }}</h2>
+Email {{ user.email }}<br>
+<br>
+
+{% load crispy_forms_tags %}
+{% crispy form %}
+
+{% endblock %}

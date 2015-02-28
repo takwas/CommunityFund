@@ -13,8 +13,9 @@ urlpatterns = patterns('',
     url(r'^register/$', CustomRegistrationView.as_view(), 
         name="register"),
 
-    url(r'^profile/$', editProfile,#login_required(ProfileView.as_view()), 
-        name="profile"),
+    url(r'^profile$', viewProfile, name="profile"),
+
+    url(r'^profile/edit$', editProfile, name="edit_profile"),
 
     url(r'^login/$', "django.contrib.auth.views.login",
         {"template_name": "login.html"}, name="login"),
