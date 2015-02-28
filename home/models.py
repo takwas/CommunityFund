@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max, Avg, Sum, Count
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -48,6 +49,10 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
+    def getCurrentFunds(self):
+        funds = Funded.objects.all().filter(project=self.id).aggregate(Sum('amount'))
+        return funds['amount__sum']
+
 
 class Funded(models.Model):
 
@@ -59,7 +64,7 @@ class Funded(models.Model):
         return "{user: %s, project: %s, amount: %s}" % (self.user, self.project, self.amount)
 
     def __unicode__(self):
-        return "%s funded %s in amount %s" % (self.project, self.user, self.amount)
+        return "%s funded %s in amount %s" % (self.user, self.project, self.amount)
 
 
 class ProjectReputation(models.Model):
