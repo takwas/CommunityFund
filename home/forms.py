@@ -6,7 +6,6 @@ from .models import *
 class ProjectForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
@@ -15,7 +14,7 @@ class ProjectForm(forms.ModelForm):
     class Meta:
 
         model = Project
-        exclude = ("initiator", "pub_date", "current_funds")
+        exclude = ("initiator", "pub_date", "current_funds", "community")
 
 class FundForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

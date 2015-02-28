@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from registration.backends.simple.views import RegistrationView
@@ -15,19 +17,40 @@ class CustomRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
         return reverse_lazy("home")
     
+# get rid of this
 class ProjectCreateView(CreateView):
-
     model = Project
     form_class = ProjectForm
 
     def form_valid(self, form):
-
         form_obj = form.save(commit=False)
         form_obj.initiator = self.request.user
         form_obj.current_funds = 0
         form_obj.save()
 
         return super(ProjectCreateView, self).form_valid(form)
+
+
+
+@login_required
+def createProject(request, pk):
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.initiator = request.user
+            form_obj.community = Community.objects.get(id=pk)
+            form_obj.current_funds = 0
+            form_obj.save()
+
+            return HttpResponseRedirect("/")
+    else:
+        form = ProjectForm()
+
+    return render(request, "project_form.html",
+        {'form': form, })
+
 
 class FundCreateView(CreateView):
 
@@ -59,6 +82,8 @@ class CommunityDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CommunityDetail, self).get_context_data(**kwargs)
 
+        print(context)
+
         comm = context["object"]
 
         context["projects"] = Project.objects.all().filter(community=comm)
@@ -70,7 +95,24 @@ class ProjectDetail(DetailView):
     model = Project
     template_name = "project_detail.html"
 
+@login_required
+def createProject(request, pk):
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
 
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.initiator = request.user
+            form_obj.community = Community.objects.get(id=pk)
+            form_obj.current_funds = 0
+            form_obj.save()
+
+            return HttpResponseRedirect("/")
+    else:
+        form = ProjectForm()
+
+    return render(request, "project_form.html",
+        {'form': form, })
 
 
 
