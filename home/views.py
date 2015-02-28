@@ -16,7 +16,41 @@ class CustomRegistrationView(RegistrationView):
 
     def get_success_url(self, request, user):
         return reverse_lazy("home")
+
+@login_required
+class ProfileView(CreateView):
+    model = UserProfile
+    template_name = "profile_detail.html"
+'''
+     def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        comm = context["object"]
+        context["projects"] = Project.objects.all().filter(community=comm)
+
+        return context
+'''
+
+def editProfile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=request.user.profile)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("home"))
+    else:
+        user = request.user
+        username = user.username
+        email = user.email
+        profile = user.profile
+        
+        print(username, email, location, interests)
+
+        form = ProfileForm(instance=profile)
+
+    return render(request, "profile_detail.html", {'form': form, })
     
+
+
 
 @login_required
 def createProjectView(request, pk):

@@ -15,6 +15,9 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return "user %s at %s is interested in %s" % (self.user, self.location, self.interest)
 
+# create a User profile upon access
+User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
+
 
 class Community(models.Model):
 
