@@ -144,7 +144,7 @@ class ProjectDetail(DetailView):
 
         context["rating"] = ProjectReputation.objects.all().filter(rated=p).aggregate(Avg('rating'))
         context["num_ratings"] = ProjectReputation.objects.all().filter(rated=p).aggregate(Count('rating'))
-        
+
         return context
 
 
@@ -210,7 +210,7 @@ class ProjectDeleteView(DeleteView):
 
 
 @login_required
-def rate_user_view(request, cid, pk):
+def rate_user_form(request, cid, pk):
     project = Project.objects.get(id=pk)
 
     if request.method == "POST":
@@ -234,7 +234,7 @@ def rate_user_view(request, cid, pk):
 
 
 @login_required
-def rate_project_view(request, cid, pk):
+def rate_project_form(request, cid, pk):
     project = Project.objects.get(id=pk)
 
     if request.method == "POST":
