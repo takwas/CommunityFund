@@ -97,7 +97,7 @@ class RateUserForm(forms.ModelForm):
 
     class Meta:
         model = UserReputation
-        exclude = ("rater", "rated")
+        exclude = ("rater", "rated", "project")
 
 
 class RateProjectForm(forms.ModelForm):

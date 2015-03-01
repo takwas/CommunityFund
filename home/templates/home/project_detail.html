@@ -31,9 +31,11 @@ Publication Date: {{ object.pub_date }}<br>
                 {% endif %}
             {% endif %}
 
-            <a id="rate_user" href="{% url 'rate_user' cid=object.community.id pk=object.pk %}">
-                Rate Initiator
-            </a>
+            {% if not did_rate_user and did_fund %}
+                <a id="rate_user" href="{% url 'rate_user' cid=object.community.id pk=object.pk %}">
+                    Rate Initiator
+                </a>
+            {% endif %}
         {% endif %}
         
         <!-- Once the funds have been reached -->

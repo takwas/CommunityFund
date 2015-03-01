@@ -92,7 +92,8 @@ class ProjectReputation(models.Model):
 class UserReputation(models.Model):
     
     rated = models.ForeignKey(User, related_name="user_rep")
-    rater = models.ForeignKey(User) 
+    rater = models.ForeignKey(User)
+    project = models.ForeignKey(Project) 
     rating = models.IntegerField("Rating", 
         validators=[MaxValueValidator(5),MinValueValidator(1)])
 

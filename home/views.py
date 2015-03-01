@@ -133,8 +133,13 @@ class ProjectDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         p = context["object"]
+        
         context["did_fund"] = Funded.objects.all().filter(user=self.request.user, project=p)
+        
         context["did_rate_project"] = ProjectReputation.objects.all().filter(rater=self.request.user, rated=p)
+        
+        context["did_rate_user"] = UserReputation.objects.all().filter(rater=self.request.user, 
+            rated=p.initiator, project=p)
 
         return context
 
@@ -203,7 +208,7 @@ class ProjectDeleteView(DeleteView):
 @login_required
 def rate_user_view(request, cid, pk):
     project = Project.objects.get(id=pk)
-    
+
     if request.method == "POST":
         form = RateUserForm(request.POST)
 
@@ -211,6 +216,7 @@ def rate_user_view(request, cid, pk):
             form_obj = form.save(commit=False)
             form_obj.rater = request.user
             form_obj.rated = project.initiator
+            form_obj.project = project
 
             form_obj.save()
 
