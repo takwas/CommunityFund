@@ -17,10 +17,10 @@ Publication Date: {{ object.pub_date }}<br>
             Rate Funders
         {% else %}
 
-        <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
-            Fund Project
+            <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
+                Fund Project
+            </a>
             Rate Initiator
-        </a>
         {% endif %}
         
         <!-- Once the funds have been reached -->
