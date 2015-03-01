@@ -39,7 +39,8 @@ class Project(models.Model):
     name = models.CharField("Name", max_length=100)
     description = models.TextField("Description")
     community = models.ForeignKey(Community)
-    funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2)
+    funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2, 
+        validators=[MinValueValidator(0)])
     current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
     pub_date = models.DateTimeField(auto_now_add=True)
 
@@ -58,7 +59,8 @@ class Funded(models.Model):
 
     project = models.ForeignKey(Project, null=True)
     user = models.ForeignKey(User, null=True)
-    amount = models.DecimalField("Amount", max_digits=19, decimal_places=2)
+    amount = models.DecimalField("Amount", max_digits=19, decimal_places=2, 
+        validators=[MinValueValidator(0)])
 
     def __repr__(self):
         return "{user: %s, project: %s, amount: %s}" % (self.user, self.project, self.amount)
