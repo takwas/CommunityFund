@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from .models import *
 from .forms import *
+from django.db.models import Max, Avg, Sum, Count
 
 
 class HomeView(ListView):
@@ -141,6 +142,9 @@ class ProjectDetail(DetailView):
         context["did_rate_user"] = UserReputation.objects.all().filter(rater=self.request.user, 
             rated=p.initiator, project=p)
 
+        context["rating"] = ProjectReputation.objects.all().filter(rated=p).aggregate(Avg('rating'))
+        context["num_ratings"] = ProjectReputation.objects.all().filter(rated=p).aggregate(Count('rating'))
+        
         return context
 
 

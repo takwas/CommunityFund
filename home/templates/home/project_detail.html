@@ -10,6 +10,10 @@ Funding Goal: {{ object.funding_goal }}<br>
 Current Funds: {{ object.current_funds }}<br>
 Publication Date: {{ object.pub_date }}<br>
 
+{% if object.current_funds == object.funding_goal %}
+    Project Rating: {{ rating.rating__avg }} ({{ num_ratings.rating__count }} ratings)<br>
+{% endif %}
+
 <footer>
     {% if user.is_authenticated %}
     <p>
