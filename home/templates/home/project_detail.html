@@ -23,10 +23,12 @@ Publication Date: {{ object.pub_date }}<br>
                 <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
                     Fund Project
                 </a>
-            {% else %}
-                <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">
-                    Rate Project
-                </a>
+            {% elif did_fund %}
+                {% if not did_rate_project %}
+                    <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">
+                        Rate Project
+                    </a>
+                {% endif %}
             {% endif %}
 
             <a id="rate_user" href="{% url 'rate_user' cid=object.community.id pk=object.pk %}">

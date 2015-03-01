@@ -130,6 +130,14 @@ class ProjectDetail(DetailView):
     model = Project
     template_name = "project_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetail, self).get_context_data(**kwargs)
+        p = context["object"]
+        context["did_fund"] = Funded.objects.all().filter(user=self.request.user, project=p)
+        context["did_rate_project"] = ProjectReputation.objects.all().filter(rater=self.request.user, rated=p)
+
+        return context
+
 
 class MemberListView(ListView):
 
@@ -194,12 +202,8 @@ class ProjectDeleteView(DeleteView):
 
 @login_required
 def rate_user_view(request, cid, pk):
-
     project = Project.objects.get(id=pk)
-    funds = Funded.objects.all().filter(user=request.user, project=pk)
-
-    print(funds)
-
+    
     if request.method == "POST":
         form = RateUserForm(request.POST)
 
@@ -221,11 +225,7 @@ def rate_user_view(request, cid, pk):
 
 @login_required
 def rate_project_view(request, cid, pk):
-
     project = Project.objects.get(id=pk)
-    funds = Funded.objects.all().filter(user=request.user, project=pk)
-
-    print(funds)
 
     if request.method == "POST":
         form = RateProjectForm(request.POST)
