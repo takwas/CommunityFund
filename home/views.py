@@ -178,7 +178,8 @@ class UserProfileView(DetailView):
         projects = Project.objects.all().filter(initiator=user)
 
         context["projects"] = projects
-        context["profile"] = user
+        context["prof_user"] = user
+        context["profile"] = UserProfile.objects.get(user=user)
 
         ratings = UserReputation.objects.all().filter(rated=user)
 
@@ -201,7 +202,7 @@ class UserProfileView(DetailView):
         context["num_projects"] = projects.aggregate(Count('name'))['name__count']
 
         return context
-        
+
 
 class UserProfileUpdateView(UpdateView):
 

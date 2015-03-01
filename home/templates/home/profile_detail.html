@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<h2>Profile: {{ profile.username }}</h2>
-Email: {{ profile.email }}<br>
+<h2>Profile: {{ prof_user.username }}</h2>
+Email: {{ prof_user.email }}<br>
 Location: {{ profile.location }}<br>
 Interests: {{ profile.interests }}<br>
 Rating: {{ rating }} ({{ num_ratings }} ratings) <br>
 Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)<br>
 
-{% if user == profile %}
+{% if user == prof_user %}
 <a href="{% url 'user_profile_edit' pk=user.id %}">Edit Profile</a><br>
 <br>
 My Projects:
