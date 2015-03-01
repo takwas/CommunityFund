@@ -80,7 +80,7 @@ class ProjectReputation(models.Model):
     rated = models.ForeignKey(Project, related_name="project_rep")
     rater = models.ForeignKey(User) 
     rating = models.IntegerField("Rating", 
-        validators=[MaxValueValidator(5),MinValueValidator(0)])
+        validators=[MaxValueValidator(5),MinValueValidator(1)])
 
     def __repr__(self):
         return "{rated: %s, rater: %s, rating: %s}" % (self.rated, self.rater, self.rating)
@@ -94,7 +94,7 @@ class UserReputation(models.Model):
     rated = models.ForeignKey(User, related_name="user_rep")
     rater = models.ForeignKey(User) 
     rating = models.IntegerField("Rating", 
-        validators=[MaxValueValidator(5),MinValueValidator(0)])
+        validators=[MaxValueValidator(5),MinValueValidator(1)])
 
     def __repr__(self):
         return "{rated: %s, rater: %s, rating: %s}" % (self.rated, self.rater, self.rating)

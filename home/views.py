@@ -190,3 +190,57 @@ class ProjectDeleteView(DeleteView):
 
     model = Project
     success_url = "/"
+
+
+@login_required
+def rate_user_view(request, cid, pk):
+
+    project = Project.objects.get(id=pk)
+    funds = Funded.objects.all().filter(user=request.user, project=pk)
+
+    print(funds)
+
+    if request.method == "POST":
+        form = RateUserForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.rater = request.user
+            form_obj.rated = project.initiator
+
+            form_obj.save()
+
+            return HttpResponseRedirect(reverse('project_details',
+                kwargs={'cid': cid, 'pk': pk}))
+    else:
+        form = RateUserForm()
+
+    return render(request, "rate_form.html",
+        {'form': form, })
+
+
+@login_required
+def rate_project_view(request, cid, pk):
+
+    project = Project.objects.get(id=pk)
+    funds = Funded.objects.all().filter(user=request.user, project=pk)
+
+    print(funds)
+
+    if request.method == "POST":
+        form = RateProjectForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.rater = request.user
+            form_obj.rated = project
+
+            form_obj.save()
+
+            return HttpResponseRedirect(reverse('project_details',
+                kwargs={'cid': cid, 'pk': pk}))
+    else:
+        form = RateProjectForm()
+
+    return render(request, "rate_form.html",
+        {'form': form, })

@@ -77,3 +77,45 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ("user",)
+
+
+class RateUserForm(forms.ModelForm):
+    CHOICES=[(1,'1'),
+             (2,'2'),
+             (3,'3'),
+             (4,'4'),
+             (5,'5')]
+
+    rating = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+
+    def __init__(self, *args, **kwargs):
+
+        super(RateUserForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit("submit", "Update"))
+
+    class Meta:
+        model = UserReputation
+        exclude = ("rater", "rated")
+
+
+class RateProjectForm(forms.ModelForm):
+    CHOICES=[(1,'1'),
+             (2,'2'),
+             (3,'3'),
+             (4,'4'),
+             (5,'5')]
+
+    rating = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+
+    def __init__(self, *args, **kwargs):
+
+        super(RateProjectForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit("submit", "Update"))
+
+    class Meta:
+        model = ProjectReputation
+        exclude = ("rater", "rated")
