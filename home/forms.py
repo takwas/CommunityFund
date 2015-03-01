@@ -11,6 +11,8 @@ class ProjectForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
 
+        self.fields['funding_goal'] = forms.IntegerField(min_value=1)
+
     class Meta:
 
         model = Project
@@ -35,10 +37,14 @@ class FundForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
+        max_amount = kwargs.pop('max_amount', None)
+
         super(FundForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
+
+        self.fields['amount'] = forms.IntegerField(min_value=1, max_value=max_amount)
 
     class Meta:
         model = Funded

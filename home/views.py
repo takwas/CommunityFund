@@ -69,6 +69,8 @@ def join_comm_view(request, pk):
 
 @login_required
 def fund_project_view(request, cid, pk):
+
+    project = Project.objects.get(id=pk)
     
     if request.method == "POST":
         form = FundForm(request.POST)
@@ -76,8 +78,6 @@ def fund_project_view(request, cid, pk):
         if form.is_valid():
             form_obj = form.save(commit=False)
             form_obj.user = request.user
-
-            project = Project.objects.get(id=pk)
 
             form_obj.project = project
             project.current_funds += form_obj.amount
@@ -88,7 +88,8 @@ def fund_project_view(request, cid, pk):
             return HttpResponseRedirect(reverse('project_details',
                 kwargs={'cid': cid, 'pk': pk}))
     else:
-        form = FundForm()
+        max_funds = project.funding_goal - project.current_funds
+        form = FundForm(max_amount=max_funds)
 
     return render(request, "funded_form.html",
         {'form': form, })
