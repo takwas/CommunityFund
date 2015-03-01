@@ -97,3 +97,13 @@ class UserReputation(models.Model):
         return "%s rated %s as %s" % (self.rater, self.rated, self.rating)
 
 
+class Member(models.Model):
+
+    user = models.ForeignKey(User)
+    community = models.ForeignKey(Community, related_name="comm_member")
+
+    def __repr__(self):
+        return "{user: %s, community: %s}" % (self.user, self.community)
+
+    def __unicode__(self):
+        return "%s member of %s" % (self.user, self.community)
