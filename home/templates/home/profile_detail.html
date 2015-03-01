@@ -7,7 +7,7 @@ Email: {{ user.email }}<br>
 Location: {{ profile.location }}<br>
 Interests: {{ profile.interests }}<br>
 
-<a href="{% url 'edit_profile' %}">Edit Profile</a><br>
+<a href="{% url 'user_profile_edit' pk=user.id %}">Edit Profile</a><br>
 
 <br>
 My Projects:

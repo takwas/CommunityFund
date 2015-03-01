@@ -17,10 +17,6 @@ urlpatterns = patterns('',
     url(r'^register/$', CustomRegistrationView.as_view(), 
         name="register"),
 
-    url(r'^profile$', view_profile, name="profile"),
-
-    url(r'^profile/edit$', edit_profile, name="edit_profile"),
-
     url(r'^login/$', "django.contrib.auth.views.login",
         {"template_name": "login.html"}, name="login"),
 
@@ -49,6 +45,8 @@ urlpatterns = patterns('',
         name="member_list"),
 
     url(r'^user/(?P<slug>\w+)/$', UserProfileView.as_view(), name="user_profile"),
+
+    url(r'^user/(?P<pk>\w+)/edit$', login_required(UserProfileUpdateView.as_view()), name="user_profile_edit"),
 
     url(r'^community/cid=(?P<pk>\d+)/update$', login_required(CommunityUpdateView.as_view()), 
         name="comm_update"),

@@ -11,12 +11,10 @@ from .forms import *
 
 
 class HomeView(ListView):
-
     model = Community
 
 
 class CommunityListView(ListView):
-
     model = Community
 
 
@@ -25,34 +23,6 @@ class CustomRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
         return reverse_lazy("home")
 
-
-@login_required
-def view_profile(request):
-
-    user = request.user
-    profile = user.profile
-    projects = Project.objects.all().filter(initiator=user)
-    return render(request, "profile_detail.html", 
-        {'user': user, 'profile': profile, 'projects': projects})
-
-
-@login_required
-def edit_profile(request):
-
-    if request.method == "POST":
-        form = ProfileForm(request.POST, instance=request.user.profile)
-
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("profile"))
-    else:
-        user = request.user
-        profile = user.profile
-
-        form = ProfileForm(instance=profile)
-
-    return render(request, "profile_form.html", {'form': form, 'user': user})
-    
 
 @login_required
 def create_project_view(request, pk):
@@ -176,13 +146,31 @@ class UserProfileView(DetailView):
 
     model = get_user_model()
     slug_field = "username"
-    template_name = "user_detail.html"
+    template_name = "profile_detail.html"
 
     def get_object(self, queryset=None):
 
         user = super(UserProfileView, self).get_object(queryset)
         UserProfile.objects.get_or_create(user=user)
         return user
+
+    def get_context_data(self, **kwargs):
+
+        context = super(UserProfileView, self).get_context_data(**kwargs)
+        comm = context["object"]
+        context["projects"] = Project.objects.all().filter(initiator=self.request.user)
+        context["profile"] = UserProfile.objects.get(user=self.request.user)
+
+        return context
+
+class UserProfileUpdateView(UpdateView):
+
+    model = UserProfile
+    form_class = ProfileForm 
+
+    def get_success_url(self):
+        return reverse('user_profile', kwargs={'slug': self.request.user.username})
+
 
 class ProjectUpdateView(UpdateView):
 

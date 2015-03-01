@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Max, Avg, Sum, Count
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -9,6 +10,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     location = models.CharField("Location", max_length=100)
     interests = models.CharField("Interests", max_length=256)
+    cc_number = models.CharField("CC Number", max_length=16)
 
     def __repr__(self):
         return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interest)
@@ -16,8 +18,11 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return "user %s at %s is interested in %s" % (self.user, self.location, self.interest)
 
-# create a User profile upon access
-User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
+# auto create userprofile
+def create_profile(sender, instance, **kwargs):
+    UserProfile.objects.get_or_create(user=instance)
+
+post_save.connect(create_profile, sender=User)
 
 
 class Community(models.Model):
