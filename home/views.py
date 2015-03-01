@@ -144,11 +144,10 @@ class ProjectDetail(DetailView):
         context["did_rate_user"] = UserReputation.objects.all() \
             .filter(rater=self.request.user, rated=p.initiator, project=p)
 
-        context["rating"] = ProjectReputation.objects.all() \
-            .filter(rated=p).aggregate(Avg('rating'))
-        
-        context["num_ratings"] = ProjectReputation.objects.all() \
-            .filter(rated=p).aggregate(Count('rating'))
+        ratings = ProjectReputation.objects.all().filter(rated=p)
+
+        context["rating"] = ratings.aggregate(Avg('rating'))['rating__avg']
+        context["num_ratings"] = ratings.aggregate(Count('rating'))['rating__count']
 
         return context
 
@@ -175,19 +174,36 @@ class UserProfileView(DetailView):
 
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
-        context["projects"] = Project.objects.all() \
-            .filter(initiator=self.request.user)
-
         user = User.objects.get(username=self.kwargs["slug"])
+        projects = Project.objects.all().filter(initiator=user)
+
+        context["projects"] = projects
         context["profile"] = user
 
-        context["rating"] = UserReputation.objects.all() \
-            .filter(rated=user).aggregate(Avg('rating'))
+        ratings = UserReputation.objects.all().filter(rated=user)
 
-        context["num_ratings"] = UserReputation.objects.all() \
-            .filter(rated=user).aggregate(Count('rating'))
+        context["rating"] = ratings.aggregate(Avg('rating'))['rating__avg']
+        context["num_ratings"] = ratings.aggregate(Count('rating'))['rating__count']
 
-        print(context["rating"], context["num_ratings"])
+        # get the average of the average ratings for projects
+        pratings = []
+        for p in projects:
+            avg_rating = ProjectReputation.objects.all().filter(rated=p) \
+                            .aggregate(Avg('rating'))['rating__avg']
+            if avg_rating:
+                pratings += [avg_rating]
+
+
+        print(pratings)
+        if len(pratings) > 0:
+            context["prating"] = sum(pratings) / len(pratings)
+        else:
+            context["prating"] = None
+
+        context["num_projects"] = projects.aggregate(Count('name'))['name__count']
+
+        print(context["num_projects"])
+
 
         return context
 

@@ -6,9 +6,10 @@
 Email: {{ profile.email }}<br>
 Location: {{ profile.location }}<br>
 Interests: {{ profile.interests }}<br>
-Rating: {{ rating.rating__avg }} ({{ num_ratings.rating__count }} ratings) <br>
+Rating: {{ rating }} ({{ num_ratings }} ratings) <br>
+Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)<br>
 
-{% if user.username == profile.user.username %}
+{% if user == profile %}
 <a href="{% url 'user_profile_edit' pk=user.id %}">Edit Profile</a><br>
 <br>
 My Projects:
