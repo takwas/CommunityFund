@@ -22,6 +22,7 @@ User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 class Community(models.Model):
 
+    creator = models.ForeignKey(User)
     name = models.CharField("Name", max_length=100)
     location = models.CharField("Location", max_length=100)
     interests = models.CharField("Interests", max_length=256)

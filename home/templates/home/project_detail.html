@@ -11,11 +11,13 @@ Current Funds: {{ object.current_funds }}<br>
 Publication Date: {{ object.pub_date }}<br>
 
 <footer>
+    {% if user.is_authenticated %}
     <p>
         {% if user == object.initiator %}
-            Update Project Details
+            <a id="update_project" href="{% url 'project_update' cid=object.community.id pk=object.pk %}">Edit Project</a>
             Rate Funders
         {% else %}
+        
 
             <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
                 Fund Project
@@ -27,6 +29,7 @@ Publication Date: {{ object.pub_date }}<br>
         Rate Project
 
     </p>
+    {% endif %}
 </footer>
 
 
