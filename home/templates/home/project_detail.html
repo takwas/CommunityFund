@@ -15,6 +15,7 @@ Publication Date: {{ object.pub_date }}<br>
     <p>
         {% if user == object.initiator %}
             <a id="update_project" href="{% url 'project_update' cid=object.community.id pk=object.pk %}">Edit Project</a>
+            <a id="delete_project" href="{% url 'project_delete' cid=object.community.id pk=object.pk %}">Delete Project</a>
             Rate Funders
         {% else %}
         

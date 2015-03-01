@@ -55,4 +55,8 @@ urlpatterns = patterns('',
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/update$', login_required(ProjectUpdateView.as_view()),
         name="project_update"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/delete$', 
+            login_required(ProjectDeleteView.as_view()), name="project_delete"),
+
 )
