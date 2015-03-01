@@ -104,8 +104,14 @@ def fund_project_view(request, cid, pk):
         if form.is_valid():
             form_obj = form.save(commit=False)
             form_obj.user = request.user
-            form_obj.project = Project.objects.get(id=pk)
-            form_obj.save();
+
+            project = Project.objects.get(id=pk)
+
+            form_obj.project = project
+            project.current_funds += form_obj.amount
+
+            project.save()
+            form_obj.save()
 
             return HttpResponseRedirect(reverse('project_details',
                 kwargs={'cid': cid, 'pk': pk}))

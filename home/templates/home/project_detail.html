@@ -13,11 +13,6 @@ Publication Date: {{ object.pub_date }}<br>
 <footer>
     {% if user.is_authenticated %}
     <p>
-        <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">Fund Project</a>
-        <a id="update_project" href="{% url 'project_update' cid=object.community.id pk=object.pk %}">Edit Project</a>
-
-        Rate Initiator
-        Rate Funders
         Rate Project
 
     </p>
