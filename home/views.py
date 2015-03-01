@@ -171,8 +171,7 @@ class UserProfileView(DetailView):
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
         context["projects"] = Project.objects.all().filter(initiator=self.request.user)
-        x = list(User.objects.all().filter(username=self.kwargs["slug"]))
-        context["profile"] = UserProfile.objects.get(user=x[0])
+        context["profile"] = User.objects.get(username=self.kwargs["slug"])
 
         return context
 
