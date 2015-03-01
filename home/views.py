@@ -200,3 +200,9 @@ class CommunityUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('community_details', kwargs={'pk': self.kwargs['pk'],})
+
+
+class ProjectDeleteView(DeleteView):
+
+    model = Project
+    success_url = "/"
