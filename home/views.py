@@ -31,7 +31,9 @@ def view_profile(request):
 
     user = request.user
     profile = user.profile
-    return render(request, "profile_detail.html", {'user': user, 'profile': profile})
+    projects = Project.objects.all().filter(initiator=user)
+    return render(request, "profile_detail.html", 
+        {'user': user, 'profile': profile, 'projects': projects})
 
 
 @login_required
