@@ -7,11 +7,6 @@
 {{ object.interests }}<br>
 <br>
 
-<!--
-{% block projects %}
-{% endblock %}
--->
-
 <h2>Projects</h2>
 {% for post in projects %}
     <li>
@@ -23,8 +18,15 @@
 
 <footer>
     <p>
-        <a id="project_create" href="{% url 'project_create' pk=object.pk %}">Create Project</a>
-        Filter Projects
+        {% if user.is_authenticated %}
+
+            <a id="project_create" href="{% url 'project_create' pk=object.pk %}">Create Project</a>
+
+            {% if not is_member %} 
+                <a id="join_comm" href="{% url 'join_comm' pk=object.pk %}">Join Community</a>
+            {% endif %}
+
+        {% endif %}
     </p>
 </footer>
 

@@ -16,6 +16,20 @@ class ProjectForm(forms.ModelForm):
         model = Project
         exclude = ("initiator", "pub_date", "current_funds", "community")
 
+class MemberForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super(MemberForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+    class Meta:
+
+        model = Member
+        exclude = ("user", "community")
+
 class FundForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
 
