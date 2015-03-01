@@ -3,8 +3,8 @@
 {% block content %}
 
 <h1>{{ object.name}}</h1>
-Initiator: {{ object.initiator }}<br>
-Community: {{ object.community }}<br>
+Initiator: <a href="{% url 'user_profile' slug=object.initiator  %}">{{ object.initiator }}</a><br>
+Community: <a href="{% url 'community_details' pk=object.community.id  %}">{{ object.community }}</a><br>
 Description: {{ object.description }}<br>
 Funding Goal: {{ object.funding_goal }}<br>
 Current Funds: {{ object.current_funds }}<br>

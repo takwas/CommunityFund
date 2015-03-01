@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<h2>Profile: {{ user.username }}</h2>
-Email: {{ user.email }}<br>
+<h2>Profile: {{ profile.user.username }}</h2>
+Email: {{ profile.user.email }}<br>
 Location: {{ profile.location }}<br>
 Interests: {{ profile.interests }}<br>
 
+{% if user.username == profile.user.username %}
 <a href="{% url 'user_profile_edit' pk=user.id %}">Edit Profile</a><br>
-
 <br>
 My Projects:
 {% for p in projects %}
@@ -18,5 +18,6 @@ My Projects:
         </a>
     </li>
 {% endfor %}
+{% endif %}
 
 {% endblock %}

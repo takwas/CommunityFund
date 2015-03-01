@@ -148,18 +148,13 @@ class UserProfileView(DetailView):
     slug_field = "username"
     template_name = "profile_detail.html"
 
-    def get_object(self, queryset=None):
-
-        user = super(UserProfileView, self).get_object(queryset)
-        UserProfile.objects.get_or_create(user=user)
-        return user
-
     def get_context_data(self, **kwargs):
 
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
         context["projects"] = Project.objects.all().filter(initiator=self.request.user)
-        context["profile"] = UserProfile.objects.get(user=self.request.user)
+        x = list(User.objects.all().filter(username=self.kwargs["slug"]))
+        context["profile"] = UserProfile.objects.get(user=x[0])
 
         return context
 
