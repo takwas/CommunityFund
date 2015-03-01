@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Funders</h2>
+
+{% for f in funders %}
+    <li>
+        <a href="{% url 'rate_funder' cid=cid pk=pk funder=f.user %}">
+            {{ f.user }} - {{ f.amount }}
+        </a>
+    </li>
+{% endfor %}
+
+{% endblock %}

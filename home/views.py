@@ -242,7 +242,7 @@ class ProjectDeleteView(DeleteView):
 
 
 @login_required
-def rate_user_form(request, cid, pk):
+def rate_initiator_form(request, cid, pk):
     project = Project.objects.get(id=pk)
 
     if request.method == "POST":
@@ -286,3 +286,36 @@ def rate_project_form(request, cid, pk):
 
     return render(request, "rate_form.html",
         {'form': form, })
+
+@login_required
+def funders_list_view(request, cid, pk):
+    funders = Funded.objects.all().filter(project=pk)
+
+    return render(request, "funders_list.html", 
+        {'cid': cid, 'pk': pk, 'funders': funders})
+
+
+@login_required
+def rate_funder_form(request, cid, pk, funder):
+    project = Project.objects.get(id=pk)
+    funder = User.objects.get(username=funder)
+
+    if request.method == "POST":
+        form = RateUserForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.rater = request.user
+            form_obj.rated = funder
+            form_obj.project = project
+
+            form_obj.save()
+
+            return HttpResponseRedirect(reverse('funders_view',
+                kwargs={'cid': cid, 'pk': pk}))
+    else:
+        form = RateUserForm()
+
+    return render(request, "rate_form.html",
+        {'form': form, })
+
