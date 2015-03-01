@@ -12,11 +12,18 @@ Publication Date: {{ object.pub_date }}<br>
 
 <footer>
     <p>
-        <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">Fund Project</a>
+        {% if user == object.initiator %}
+            Update Project Details
+            Rate Funders
+        {% else %}
 
-        Update Project Details
-        Rate Initiator
-        Rate Funders
+        <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
+            Fund Project
+            Rate Initiator
+        </a>
+        {% endif %}
+        
+        <!-- Once the funds have been reached -->
         Rate Project
 
     </p>
