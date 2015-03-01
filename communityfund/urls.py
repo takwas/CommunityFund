@@ -49,4 +49,10 @@ urlpatterns = patterns('',
         name="member_list"),
 
     url(r'^user/(?P<slug>\w+)/$', UserProfileView.as_view(), name="user_profile"),
+
+    url(r'^community/cid=(?P<pk>\d+)/update$', login_required(CommunityUpdateView.as_view()), 
+        name="comm_update"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/update$', login_required(ProjectUpdateView.as_view()),
+        name="project_update"),
 )

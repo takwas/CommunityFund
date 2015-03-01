@@ -30,7 +30,9 @@ class MemberForm(forms.ModelForm):
         model = Member
         exclude = ("user", "community")
 
+
 class FundForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
 
         super(FundForm, self).__init__(*args, **kwargs)
@@ -42,7 +44,9 @@ class FundForm(forms.ModelForm):
         model = Funded
         exclude = ("user", "project")
 
+
 class CommunityForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
 
         super(CommunityForm, self).__init__(*args, **kwargs)
@@ -52,9 +56,11 @@ class CommunityForm(forms.ModelForm):
 
     class Meta:
         model = Community
-        exclude = ()
+        exclude = ("creator",)
+
 
 class ProfileForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
 
         super(ProfileForm, self).__init__(*args, **kwargs)

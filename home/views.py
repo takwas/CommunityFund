@@ -126,6 +126,7 @@ class CommunityCreateView(CreateView):
 
     def form_valid(self, form):
         form_obj = form.save(commit=False)
+        form_obj.creator = self.request.user
         form_obj.save();
 
         return super(CommunityCreateView, self).form_valid(form)
@@ -174,8 +175,20 @@ class UserProfileView(DetailView):
         user = super(UserProfileView, self).get_object(queryset)
         UserProfile.objects.get_or_create(user=user)
         return user
+
+class ProjectUpdateView(UpdateView):
+
+    model = Project
+    form_class = ProjectForm 
+
+    def get_success_url(self):
+        return reverse('project_details', kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
     
 
+class CommunityUpdateView(UpdateView):
 
+    model = Community
+    form_class = CommunityForm
 
-
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk'],})
