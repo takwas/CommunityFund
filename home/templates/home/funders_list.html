@@ -2,13 +2,17 @@
 
 {% block content %}
 
-<h2>Funders</h2>
+<h2>Rate Funders</h2>
 
 {% for f in funders %}
     <li>
-        <a href="{% url 'rate_funder' cid=cid pk=pk funder=f.user %}">
+        {% if f.user.username in rated %}
             {{ f.user }} - {{ f.amount }}
-        </a>
+        {% else %}
+            <a href="{% url 'rate_funder' cid=cid pk=pk funder=f.user %}">
+                {{ f.user }} - {{ f.amount }}
+            </a>
+        {% endif %}
     </li>
 {% endfor %}
 

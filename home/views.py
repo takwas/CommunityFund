@@ -193,8 +193,6 @@ class UserProfileView(DetailView):
             if avg_rating:
                 pratings += [avg_rating]
 
-
-        print(pratings)
         if len(pratings) > 0:
             context["prating"] = sum(pratings) / len(pratings)
         else:
@@ -202,10 +200,8 @@ class UserProfileView(DetailView):
 
         context["num_projects"] = projects.aggregate(Count('name'))['name__count']
 
-        print(context["num_projects"])
-
-
         return context
+        
 
 class UserProfileUpdateView(UpdateView):
 
@@ -291,8 +287,15 @@ def rate_project_form(request, cid, pk):
 def funders_list_view(request, cid, pk):
     funders = Funded.objects.all().filter(project=pk)
 
+    ratings = UserReputation.objects.all().filter(rater=request.user, project=pk)
+
+    # check who this user has already rated
+    rated = []
+    for r in ratings:
+        rated += [str((User.objects.get(username=r.rated)))]
+
     return render(request, "funders_list.html", 
-        {'cid': cid, 'pk': pk, 'funders': funders})
+        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated})
 
 
 @login_required
