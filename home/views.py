@@ -121,7 +121,8 @@ class CommunityDetail(DetailView):
         context = super(CommunityDetail, self).get_context_data(**kwargs)
         comm = context["object"]
         context["projects"] = Project.objects.all().filter(community=comm)
-        context["is_member"] = Member.objects.all().filter(user=self.request.user, community=comm)
+        context["is_member"] = Member.objects.all() \
+            .filter(user=self.request.user, community=comm)
 
         return context
 
@@ -137,13 +138,17 @@ class ProjectDetail(DetailView):
         
         context["did_fund"] = Funded.objects.all().filter(user=self.request.user, project=p)
         
-        context["did_rate_project"] = ProjectReputation.objects.all().filter(rater=self.request.user, rated=p)
+        context["did_rate_project"] = ProjectReputation.objects.all() \
+            .filter(rater=self.request.user, rated=p)
         
-        context["did_rate_user"] = UserReputation.objects.all().filter(rater=self.request.user, 
-            rated=p.initiator, project=p)
+        context["did_rate_user"] = UserReputation.objects.all() \
+            .filter(rater=self.request.user, rated=p.initiator, project=p)
 
-        context["rating"] = ProjectReputation.objects.all().filter(rated=p).aggregate(Avg('rating'))
-        context["num_ratings"] = ProjectReputation.objects.all().filter(rated=p).aggregate(Count('rating'))
+        context["rating"] = ProjectReputation.objects.all() \
+            .filter(rated=p).aggregate(Avg('rating'))
+        
+        context["num_ratings"] = ProjectReputation.objects.all() \
+            .filter(rated=p).aggregate(Count('rating'))
 
         return context
 
@@ -170,8 +175,19 @@ class UserProfileView(DetailView):
 
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
-        context["projects"] = Project.objects.all().filter(initiator=self.request.user)
-        context["profile"] = User.objects.get(username=self.kwargs["slug"])
+        context["projects"] = Project.objects.all() \
+            .filter(initiator=self.request.user)
+
+        user = User.objects.get(username=self.kwargs["slug"])
+        context["profile"] = user
+
+        context["rating"] = UserReputation.objects.all() \
+            .filter(rated=user).aggregate(Avg('rating'))
+
+        context["num_ratings"] = UserReputation.objects.all() \
+            .filter(rated=user).aggregate(Count('rating'))
+
+        print(context["rating"], context["num_ratings"])
 
         return context
 
@@ -190,7 +206,8 @@ class ProjectUpdateView(UpdateView):
     form_class = ProjectForm 
 
     def get_success_url(self):
-        return reverse('project_details', kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
+        return reverse('project_details', 
+            kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
     
 
 class CommunityUpdateView(UpdateView):
