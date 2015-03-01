@@ -44,4 +44,9 @@ urlpatterns = patterns('',
 
     url(r'^community/cid=(?P<pk>\d+)/join$', join_comm_view, 
         name="join_comm"),
+
+    url(r'^community/cid=(?P<pk>\d+)/members$', MemberListView.as_view(), 
+        name="member_list"),
+
+    url(r'^user/(?P<slug>\w+)/$', UserProfileView.as_view(), name="user_profile"),
 )

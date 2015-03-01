@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from registration.backends.simple.views import RegistrationView
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.contrib.auth import get_user_model
 from .models import *
 from .forms import *
 
@@ -148,6 +149,33 @@ class ProjectDetail(DetailView):
     
     model = Project
     template_name = "project_detail.html"
+
+
+class MemberListView(ListView):
+
+    model = Member
+    template_name = "member_list.html"
+
+    def get_queryset(self):
+        
+        qset = super(MemberListView, self).get_queryset()
+        qset.filter(community=self.kwargs['pk'])
+        return qset
+
+
+class UserProfileView(DetailView):
+
+    model = get_user_model()
+    slug_field = "username"
+    template_name = "user_detail.html"
+
+    def get_object(self, queryset=None):
+
+        user = super(UserProfileView, self).get_object(queryset)
+        UserProfile.objects.get_or_create(user=user)
+        return user
+    
+
 
 
 
