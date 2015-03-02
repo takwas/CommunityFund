@@ -32,11 +32,16 @@ def create_project_view(request, pk):
         form = ProjectForm(request.POST)
 
         if form.is_valid():
+            comm = Community.objects.get(id=pk)
+
             form_obj = form.save(commit=False)
             form_obj.initiator = request.user
-            form_obj.community = Community.objects.get(id=pk)
+            form_obj.community = comm
             form_obj.current_funds = 0
             form_obj.save()
+
+            # automatically get added to community if not a member
+            obj, created = Member.objects.get_or_create(user=request.user, community=comm)
 
             return HttpResponseRedirect(reverse('project_details', 
                 kwargs={'cid': pk, 'pk': form_obj.id}))
@@ -158,10 +163,7 @@ class MemberListView(ListView):
     template_name = "member_list.html"
 
     def get_queryset(self):
-        
-        qset = super(MemberListView, self).get_queryset()
-        qset.filter(community=self.kwargs['pk'])
-        return qset
+        return Member.objects.all().filter(community_id=self.kwargs['pk'])
 
 
 class UserProfileView(DetailView):
