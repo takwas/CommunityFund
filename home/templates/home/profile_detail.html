@@ -20,6 +20,13 @@ My Projects:
         </a>
     </li>
 {% endfor %}
+<br>
+My Recent Funding:
+{% for f in funds %}
+    <li>
+        ${{ f.amount }} to {{ f.project }}
+    </li>
+{% endfor %}
 {% endif %}
 
 {% endblock %}

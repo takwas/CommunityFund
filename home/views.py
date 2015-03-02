@@ -207,6 +207,9 @@ class UserProfileView(DetailView):
 
         context["num_projects"] = projects.aggregate(Count('name'))['name__count']
 
+        # get funds given to projects
+        context["funds"] = Funded.objects.all().filter(user=self.request.user)
+
         return context
 
 
