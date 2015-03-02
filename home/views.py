@@ -287,6 +287,7 @@ def rate_project_form(request, cid, pk):
 @login_required
 def funders_list_view(request, cid, pk):
     funders = Funded.objects.all().filter(project=pk)
+    initiator = Project.objects.get(id=pk).initiator
 
     ratings = UserReputation.objects.all().filter(rater=request.user, project=pk)
 
@@ -296,7 +297,8 @@ def funders_list_view(request, cid, pk):
         rated += [str((User.objects.get(username=r.rated)))]
 
     return render(request, "funders_list.html", 
-        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated})
+        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
+         'initiator': initiator})
 
 
 @login_required
