@@ -114,6 +114,10 @@ class CommunityCreateView(CreateView):
         form_obj.creator = self.request.user
         form_obj.save();
 
+        # automatically get added to community if not a member
+        obj, created = Member.objects.get_or_create(user=self.request.user, 
+            community_id=form_obj.id)
+
         return super(CommunityCreateView, self).form_valid(form)
 
         
