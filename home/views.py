@@ -374,8 +374,6 @@ def rate_funder_form(request, cid, pk, funder):
     return render(request, "rate_form.html",
         {'form': form, })
 
-<<<<<<< HEAD
-
 def get_project(pid):
     return Project.objects.get(id=pid)
 
@@ -385,6 +383,3 @@ def get_all_projects():
 def get_community(cid):
     return Community.objects.get(id=cid)
 
-
-=======
->>>>>>> 35089e77ba59905a34ec195723c5f1cd19f87bcb
