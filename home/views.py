@@ -155,6 +155,8 @@ class UserProfileView(DetailView):
         context["projects"] = Project.objects.all().filter(initiator=self.request.user)
         x = list(User.objects.all().filter(username=self.kwargs["slug"]))
         context["profile"] = UserProfile.objects.get(user=x[0])
+        context["comms"] = Member.objects.all().filter(user=self.request.user)
+        context["friends"] = [x for x.community.comm_members in context["comms"]]
 
         return context
 
