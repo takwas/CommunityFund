@@ -24,7 +24,10 @@ My Projects:
 My Recent Funding:
 {% for f in funds %}
     <li>
-        ${{ f.amount }} to {{ f.project }}
+        ${{ f.amount }} to 
+        <a href="{% url 'project_details' cid=f.project.community_id pk=f.project_id %}">
+            {{ f.project }}
+        </a>
     </li>
 {% endfor %}
 {% endif %}
