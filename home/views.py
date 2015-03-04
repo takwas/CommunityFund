@@ -210,6 +210,20 @@ class UserProfileView(DetailView):
         # get funds given to projects
         context["funds"] = Funded.objects.all().filter(user=self.request.user)
 
+        # communities
+        comms = [x.community for x in Member.objects.all().filter(user=self.request.user)]
+        friends = []
+
+        for item in comms:
+            members = Member.objects.all().filter(community=item) 
+            
+            for member in members:
+                if member.user not in friends and member.user != self.request.user:
+                    friends.append(member.user)
+        
+        context["comms"] = comms
+        context["friends"] = friends
+
         return context
 
 
@@ -292,6 +306,7 @@ def rate_project_form(request, cid, pk):
 
     return render(request, "rate_form.html",
         {'form': form, })
+
 
 @login_required
 def funders_list_view(request, cid, pk):

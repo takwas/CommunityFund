@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     cc_number = models.CharField("CC Number", max_length=16)
 
     def __repr__(self):
-        return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interest)
+        return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interests)
 
     def __unicode__(self):
         return "user %s at %s is interested in %s" % (self.user, self.location, self.interest)
