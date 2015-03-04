@@ -114,3 +114,16 @@ class Member(models.Model):
 
     def __unicode__(self):
         return "%s member of %s" % (self.user, self.community)
+
+
+class Comment(models.Model):
+
+    user = models.ForeignKey(User)
+    community = models.ForeignKey(Community, related_name="comm_member")
+    text = models.CharField("Text", max_length=1000)
+
+    def __repr__(self):
+        return "{user: %s, community: %s}" % (self.user, self.community)
+
+    def __unicode__(self):
+        return "%s commented %s on %s" % (self.user, self.text, self.community)
