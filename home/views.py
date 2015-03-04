@@ -10,7 +10,7 @@ from .models import *
 from .forms import *
 from django.db.models import Max, Avg, Sum, Count
 
-# shawty i'm curious
+# shawty i'm curious eh
 
 def get_project(pid):
     return Project.objects.get(id=pid)
