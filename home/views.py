@@ -378,7 +378,7 @@ def get_project(pid):
     return Project.objects.get(id=pid)
 
 def get_all_projects():
-    return Projects.objects.all()
+    return Project.objects.all()
 
 def get_community(cid):
     return Community.objects.get(id=cid)
