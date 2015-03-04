@@ -11,6 +11,7 @@ Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)<br>
 
 {% if user == prof_user %}
 <a href="{% url 'user_profile_edit' pk=user.id %}">Edit Profile</a><br>
+
 <br>
 My Projects:
 {% for p in projects %}
@@ -20,6 +21,7 @@ My Projects:
         </a>
     </li>
 {% endfor %}
+
 <br>
 My Recent Funding:
 {% for f in funds %}
@@ -30,6 +32,24 @@ My Recent Funding:
         </a>
     </li>
 {% endfor %}
-{% endif %}
 
+<br>
+My Communties:
+{% for community in comms %}
+    <li>
+        <a href="{% url 'community_details' pk=community.pk %}">{{ community.name }}</a>
+    </li>
+
+{% endfor %}
+
+<br>
+My Friends:
+{% for friend in friends %}
+    <li>
+        <a href="{% url 'user_profile' slug=friend.username %}">{{ friend.username }}</a>
+    </li>
+
+{% endfor %}
+
+{% endif %}
 {% endblock %}
