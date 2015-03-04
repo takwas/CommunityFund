@@ -29,9 +29,9 @@ Publication Date: {{ object.pub_date }}<br>
             {% endif %}
 
             {% if did_fund and not did_rate_project %}
-                    <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">
-                        Rate Project
-                    </a>
+                <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">
+                    Rate Project
+                </a>
             {% endif %}
 
             {% if not did_rate_user and did_fund %}
