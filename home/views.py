@@ -158,6 +158,10 @@ class ProjectDetail(DetailView):
         context["rating"] = ratings.aggregate(Avg('rating'))['rating__avg']
         context["num_ratings"] = ratings.aggregate(Count('rating'))['rating__count']
 
+        context["is_member"] = Member.objects.all().filter(community=p.community, user=self.request.user)
+
+        print(context["is_member"])
+
         return context
 
 

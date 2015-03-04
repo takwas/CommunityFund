@@ -20,18 +20,16 @@ Publication Date: {{ object.pub_date }}<br>
         {% if user == object.initiator %}
             <a id="update_project" href="{% url 'project_update' cid=object.community.id pk=object.pk %}">Edit Project</a>
             <a id="delete_project" href="{% url 'project_delete' cid=object.community.id pk=object.pk %}">Delete Project</a>
-        {% else %}
+        {% elif is_member %}
         
             {% if object.current_funds < object.funding_goal %}
                 <a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
                     Fund Project
                 </a>
-            {% elif did_fund %}
-                {% if not did_rate_project %}
+            {% elif did_fund and not did_rate_project %}
                     <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">
                         Rate Project
                     </a>
-                {% endif %}
             {% endif %}
 
             {% if not did_rate_user and did_fund %}
@@ -42,10 +40,6 @@ Publication Date: {{ object.pub_date }}<br>
         {% endif %}
 
         <a id="view_funders" href="{% url 'funders_view' cid=object.community.id pk=object.pk %}">View Funders</a>
-        
-        <!-- Once the funds have been reached -->
-        
-
     </p>
     {% endif %}
 </footer>
