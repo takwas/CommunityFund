@@ -10,6 +10,7 @@ from .models import *
 from .forms import *
 from django.db.models import Max, Avg, Sum, Count
 
+# shawty i'm curious
 
 class HomeView(ListView):
     model = Community
