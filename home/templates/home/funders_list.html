@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Funders for this Project</h2>
+
+{% for f in funders %}
+    <li>
+
+        <a href="{% url 'user_profile' slug=f.user  %}">{{ f.user }}</a> - {{ f.amount }}
+
+        {% if user == initiator and f.user.username not in rated%}
+            <a href="{% url 'rate_funder' cid=cid pk=pk funder=f.user %}">
+                Give Rating
+            </a>
+        {% endif %}
+    </li>
+{% endfor %}
+
+{% endblock %}

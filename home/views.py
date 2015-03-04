@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from .models import *
 from .forms import *
+from django.db.models import Max, Avg, Sum, Count
 
 
 class HomeView(ListView):
@@ -31,11 +32,16 @@ def create_project_view(request, pk):
         form = ProjectForm(request.POST)
 
         if form.is_valid():
+            comm = Community.objects.get(id=pk)
+
             form_obj = form.save(commit=False)
             form_obj.initiator = request.user
-            form_obj.community = Community.objects.get(id=pk)
+            form_obj.community = comm
             form_obj.current_funds = 0
             form_obj.save()
+
+            # automatically get added to community if not a member
+            obj, created = Member.objects.get_or_create(user=request.user, community=comm)
 
             return HttpResponseRedirect(reverse('project_details', 
                 kwargs={'cid': pk, 'pk': form_obj.id}))
@@ -69,6 +75,8 @@ def join_comm_view(request, pk):
 
 @login_required
 def fund_project_view(request, cid, pk):
+
+    project = Project.objects.get(id=pk)
     
     if request.method == "POST":
         form = FundForm(request.POST)
@@ -76,8 +84,6 @@ def fund_project_view(request, cid, pk):
         if form.is_valid():
             form_obj = form.save(commit=False)
             form_obj.user = request.user
-
-            project = Project.objects.get(id=pk)
 
             form_obj.project = project
             project.current_funds += form_obj.amount
@@ -88,7 +94,8 @@ def fund_project_view(request, cid, pk):
             return HttpResponseRedirect(reverse('project_details',
                 kwargs={'cid': cid, 'pk': pk}))
     else:
-        form = FundForm()
+        max_funds = project.funding_goal - project.current_funds
+        form = FundForm(max_amount=max_funds)
 
     return render(request, "funded_form.html",
         {'form': form, })
@@ -107,6 +114,10 @@ class CommunityCreateView(CreateView):
         form_obj.creator = self.request.user
         form_obj.save();
 
+        # automatically get added to community if not a member
+        obj, created = Member.objects.get_or_create(user=self.request.user, 
+            community_id=form_obj.id)
+
         return super(CommunityCreateView, self).form_valid(form)
 
         
@@ -119,7 +130,8 @@ class CommunityDetail(DetailView):
         context = super(CommunityDetail, self).get_context_data(**kwargs)
         comm = context["object"]
         context["projects"] = Project.objects.all().filter(community=comm)
-        context["is_member"] = Member.objects.all().filter(user=self.request.user, community=comm)
+        context["is_member"] = Member.objects.all() \
+            .filter(user=self.request.user, community=comm)
 
         return context
 
@@ -129,6 +141,25 @@ class ProjectDetail(DetailView):
     model = Project
     template_name = "project_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetail, self).get_context_data(**kwargs)
+        p = context["object"]
+        
+        context["did_fund"] = Funded.objects.all().filter(user=self.request.user, project=p)
+        
+        context["did_rate_project"] = ProjectReputation.objects.all() \
+            .filter(rater=self.request.user, rated=p)
+        
+        context["did_rate_user"] = UserReputation.objects.all() \
+            .filter(rater=self.request.user, rated=p.initiator, project=p)
+
+        ratings = ProjectReputation.objects.all().filter(rated=p)
+
+        context["rating"] = ratings.aggregate(Avg('rating'))['rating__avg']
+        context["num_ratings"] = ratings.aggregate(Count('rating'))['rating__count']
+
+        return context
+
 
 class MemberListView(ListView):
 
@@ -136,10 +167,7 @@ class MemberListView(ListView):
     template_name = "member_list.html"
 
     def get_queryset(self):
-        
-        qset = super(MemberListView, self).get_queryset()
-        qset.filter(community=self.kwargs['pk'])
-        return qset
+        return Member.objects.all().filter(community_id=self.kwargs['pk'])
 
 
 class UserProfileView(DetailView):
@@ -152,13 +180,38 @@ class UserProfileView(DetailView):
 
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
-        context["projects"] = Project.objects.all().filter(initiator=self.request.user)
-        x = list(User.objects.all().filter(username=self.kwargs["slug"]))
-        context["profile"] = UserProfile.objects.get(user=x[0])
-        context["comms"] = Member.objects.all().filter(user=self.request.user)
-        context["friends"] = [x for x.community.comm_members in context["comms"]]
+        user = User.objects.get(username=self.kwargs["slug"])
+        projects = Project.objects.all().filter(initiator=user)
+
+        context["projects"] = projects
+        context["prof_user"] = user
+        context["profile"] = UserProfile.objects.get(user=user)
+
+        ratings = UserReputation.objects.all().filter(rated=user)
+
+        context["rating"] = ratings.aggregate(Avg('rating'))['rating__avg']
+        context["num_ratings"] = ratings.aggregate(Count('rating'))['rating__count']
+
+        # get the average of the average ratings for projects
+        pratings = []
+        for p in projects:
+            avg_rating = ProjectReputation.objects.all().filter(rated=p) \
+                            .aggregate(Avg('rating'))['rating__avg']
+            if avg_rating:
+                pratings += [avg_rating]
+
+        if len(pratings) > 0:
+            context["prating"] = sum(pratings) / len(pratings)
+        else:
+            context["prating"] = None
+
+        context["num_projects"] = projects.aggregate(Count('name'))['name__count']
+
+        # get funds given to projects
+        context["funds"] = Funded.objects.all().filter(user=self.request.user)
 
         return context
+
 
 class UserProfileUpdateView(UpdateView):
 
@@ -175,7 +228,8 @@ class ProjectUpdateView(UpdateView):
     form_class = ProjectForm 
 
     def get_success_url(self):
-        return reverse('project_details', kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
+        return reverse('project_details', 
+            kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
     
 
 class CommunityUpdateView(UpdateView):
@@ -191,3 +245,92 @@ class ProjectDeleteView(DeleteView):
 
     model = Project
     success_url = "/"
+
+
+@login_required
+def rate_initiator_form(request, cid, pk):
+    project = Project.objects.get(id=pk)
+
+    if request.method == "POST":
+        form = RateUserForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.rater = request.user
+            form_obj.rated = project.initiator
+            form_obj.project = project
+
+            form_obj.save()
+
+            return HttpResponseRedirect(reverse('project_details',
+                kwargs={'cid': cid, 'pk': pk}))
+    else:
+        form = RateUserForm()
+
+    return render(request, "rate_form.html",
+        {'form': form, })
+
+
+@login_required
+def rate_project_form(request, cid, pk):
+    project = Project.objects.get(id=pk)
+
+    if request.method == "POST":
+        form = RateProjectForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.rater = request.user
+            form_obj.rated = project
+
+            form_obj.save()
+
+            return HttpResponseRedirect(reverse('project_details',
+                kwargs={'cid': cid, 'pk': pk}))
+    else:
+        form = RateProjectForm()
+
+    return render(request, "rate_form.html",
+        {'form': form, })
+
+@login_required
+def funders_list_view(request, cid, pk):
+    funders = Funded.objects.all().filter(project=pk)
+    initiator = Project.objects.get(id=pk).initiator
+
+    ratings = UserReputation.objects.all().filter(rater=request.user, project=pk)
+
+    # check who this user has already rated
+    rated = []
+    for r in ratings:
+        rated += [str((User.objects.get(username=r.rated)))]
+
+    return render(request, "funders_list.html", 
+        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
+         'initiator': initiator})
+
+
+@login_required
+def rate_funder_form(request, cid, pk, funder):
+    project = Project.objects.get(id=pk)
+    funder = User.objects.get(username=funder)
+
+    if request.method == "POST":
+        form = RateUserForm(request.POST)
+
+        if form.is_valid():
+            form_obj = form.save(commit=False)
+            form_obj.rater = request.user
+            form_obj.rated = funder
+            form_obj.project = project
+
+            form_obj.save()
+
+            return HttpResponseRedirect(reverse('funders_view',
+                kwargs={'cid': cid, 'pk': pk}))
+    else:
+        form = RateUserForm()
+
+    return render(request, "rate_form.html",
+        {'form': form, })
+

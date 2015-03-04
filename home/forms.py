@@ -11,6 +11,8 @@ class ProjectForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
 
+        self.fields['funding_goal'] = forms.IntegerField(min_value=1)
+
     class Meta:
 
         model = Project
@@ -35,10 +37,14 @@ class FundForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
+        max_amount = kwargs.pop('max_amount', None)
+
         super(FundForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
+
+        self.fields['amount'] = forms.IntegerField(min_value=1, max_value=max_amount)
 
     class Meta:
         model = Funded
@@ -71,3 +77,45 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ("user",)
+
+
+class RateUserForm(forms.ModelForm):
+    CHOICES=[(1,'1'),
+             (2,'2'),
+             (3,'3'),
+             (4,'4'),
+             (5,'5')]
+
+    rating = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+
+    def __init__(self, *args, **kwargs):
+
+        super(RateUserForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit("submit", "Update"))
+
+    class Meta:
+        model = UserReputation
+        exclude = ("rater", "rated", "project")
+
+
+class RateProjectForm(forms.ModelForm):
+    CHOICES=[(1,'1'),
+             (2,'2'),
+             (3,'3'),
+             (4,'4'),
+             (5,'5')]
+
+    rating = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+
+    def __init__(self, *args, **kwargs):
+
+        super(RateProjectForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit("submit", "Update"))
+
+    class Meta:
+        model = ProjectReputation
+        exclude = ("rater", "rated")

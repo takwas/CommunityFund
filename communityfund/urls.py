@@ -57,4 +57,15 @@ urlpatterns = patterns('',
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/delete$', 
             login_required(ProjectDeleteView.as_view()), name="project_delete"),
 
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-user$', 
+            rate_initiator_form, name="rate_init"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-project$', 
+            rate_project_form, name="rate_project"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders/rate=(?P<funder>\w+)$', 
+            rate_funder_form, name="rate_funder"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders$', 
+            funders_list_view, name="funders_view")
 )
