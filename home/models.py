@@ -119,7 +119,7 @@ class Member(models.Model):
 class Comment(models.Model):
 
     user = models.ForeignKey(User)
-    community = models.ForeignKey(Community, related_name="comm_member")
+    community = models.ForeignKey(Community, related_name="comm_member_msg")
     text = models.CharField("Text", max_length=1000)
 
     def __repr__(self):

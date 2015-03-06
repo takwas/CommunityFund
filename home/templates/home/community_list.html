@@ -2,6 +2,12 @@
 
 {% block content %}
 
+<h3>Search for Communities by an Interest</h3>
+{% csrf_token %}
+<input type="text" id="search" name="search"/>
+<ul id="search_communities"></ul>
+
+<h3> All Communities</h3>
 {% for post in object_list %}
     <li>
         <a href="{% url 'community_details' pk=post.pk %}">

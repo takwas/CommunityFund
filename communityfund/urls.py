@@ -1,6 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
+
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.conf.urls.static import static
+
 from home.views import *
 
 urlpatterns = patterns('',
@@ -12,7 +17,9 @@ urlpatterns = patterns('',
 
     url(r'^$', HomeView.as_view(), name="home"),
 
-    url(r'^community/list$', CommunityListView.as_view(), name="comm_list"),
+    url(r'^community/list$', csrf_exempt(CommunityListView.as_view()), name="comm_list"),
+
+    url(r'^search/$', search_communities, name="search_comm"),
 
     url(r'^register/$', CustomRegistrationView.as_view(), 
         name="register"),
@@ -68,4 +75,4 @@ urlpatterns = patterns('',
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders$', 
             funders_list_view, name="funders_view")
-)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

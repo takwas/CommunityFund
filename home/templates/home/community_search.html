@@ -1,0 +1,13 @@
+{% if comm.count > 0 %}
+    {% for c in comm %}
+        <li>
+            <a href="{% url 'community_details' pk=c.pk %}">
+                {{ c.name }}
+            </a>
+        </li>
+    {% endfor %}
+
+    {% else %}
+        <li>No communities have that interest</li>
+
+{% endif %}

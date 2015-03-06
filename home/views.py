@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, FormView
@@ -6,9 +6,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from registration.backends.simple.views import RegistrationView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
+from django.db.models import Max, Avg, Sum, Count
 from .models import *
 from .forms import *
-from django.db.models import Max, Avg, Sum, Count
+
 
 # shawty i'm curious eh
 
@@ -378,8 +379,18 @@ def get_project(pid):
     return Project.objects.get(id=pid)
 
 def get_all_projects():
-    return Projects.objects.all()
+    return Project.objects.all()
 
 def get_community(cid):
     return Community.objects.get(id=cid)
 
+
+def search_communities(request):
+    if request.method == "POST":
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+
+    comm = Community.objects.filter(interests__contains=search_text)
+
+    return render_to_response("community_search.html", {'comm': comm})
