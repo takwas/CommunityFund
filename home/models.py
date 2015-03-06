@@ -118,22 +118,11 @@ class Member(models.Model):
 
 class CommunityComment(models.Model):
 
-    community = models.ForeignKey(Community, related_name="comm_member")
+    community = models.ForeignKey(Community, related_name="com_member")
     text = models.CharField("Text", max_length=1000)
 
     def __repr__(self):
         return "{community: %s, text: %s}" % (self.community, self.community)
-
-    def __unicode__(self):
-        return "%s commented %s on %s" % (self.user, self.text, self.community)
-
-class ProjectComment(models.Model):
-
-    community = models.ForeignKey(Community, related_name="comm_member")
-    text = models.CharField("Text", max_length=1000)
-
-    def __repr__(self):
-        return "{user: %s, community: %s}" % (self.user, self.community)
 
     def __unicode__(self):
         return "%s commented %s on %s" % (self.user, self.text, self.community)

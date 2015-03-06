@@ -69,6 +69,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'communityfund_db',
+        'HOST': 'localhost', #assuming psql is running locally
+        'PORT': 5432,
+        'USER': 'postgres', #admin username that you set up with no password
+        'PASSWORD': 'tritheman123'        
     }
 }
 
