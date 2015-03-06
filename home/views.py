@@ -383,3 +383,26 @@ def get_all_projects():
 def get_community(cid):
     return Community.objects.get(id=cid)
 
+@login_required
+def AddComment(request, cid, comment):
+    
+    comm = get_community(cid)
+    user = get_user(uid)
+    
+    if request.method == "POST":
+        form =  AddCommentForm(request.POST)
+        
+        if form.is_valid():
+            form_obj = form.save(commit = False)
+            form_obj.user = request.user
+            form_obj.community = comm
+            form_obj.text = comment
+            
+            form_obj.save()
+            
+            return HttpResponseRedirect(reverse('community_details', kwargs
+                    ={'cid': cid, 'comment': comment}))
+    else:
+        form = AddCommentForm()
+        
+    return render(request, "comment_form.html", {'form': form, })

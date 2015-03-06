@@ -67,5 +67,7 @@ urlpatterns = patterns('',
             rate_funder_form, name="rate_funder"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders$', 
-            funders_list_view, name="funders_view")
+            funders_list_view, name="funders_view"),
+    
+    url(r'^comments/', include('django.contrib.comments.urls')),
 )
