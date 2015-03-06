@@ -22,7 +22,7 @@
 
             <a id="project_create" href="{% url 'project_create' pk=object.pk %}">Create Project</a>
             <a id="member_list" href="{% url 'member_list' pk=object.pk %}">Member List</a>
-
+            <a id="add_comment" href="{% url 'add_comment' pk=object.pk %}">Comment List</a>
             {% if creator == user %}
                 <a id="comm_update" href="{% url 'comm_update' pk=object.pk %}">Edit Community</a>
             {% endif %}

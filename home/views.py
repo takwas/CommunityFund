@@ -401,7 +401,7 @@ def AddComment(request, cid, comment):
             form_obj.save()
             
             return HttpResponseRedirect(reverse('community_details', kwargs
-                    ={'cid': cid, 'comment': comment}))
+                    ={'cid': cid}))
     else:
         form = AddCommentForm()
         
