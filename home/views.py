@@ -374,16 +374,7 @@ def rate_funder_form(request, cid, pk, funder):
 
     return render(request, "rate_form.html",
         {'form': form, })
-
-def get_project(pid):
-    return Project.objects.get(id=pid)
-
-def get_all_projects():
-    return Project.objects.all()
-
-def get_community(cid):
-    return Community.objects.get(id=cid)
-
+    
 
 def search_communities(request):
     if request.method == "POST":
