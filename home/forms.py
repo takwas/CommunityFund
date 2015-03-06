@@ -130,4 +130,4 @@ class AddCommentForm(forms.ModelForm):
         
     class Meta:
         model = CommunityComment
-        exclude = ("user", "community", "text")
+        exclude = ("user", "community",)
