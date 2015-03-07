@@ -11,8 +11,6 @@ from .models import *
 from .forms import *
 
 
-# shawty i'm curious eh
-
 def get_project(pid):
     return Project.objects.get(id=pid)
 
@@ -133,7 +131,7 @@ class CommunityCreateView(CreateView):
     def form_valid(self, form):
         form_obj = form.save(commit=False)
         form_obj.creator = self.request.user
-        form_obj.save();
+        form_obj.save()
 
         # automatically get added to community if not a member
         obj, created = Member.objects.get_or_create(user=self.request.user, 
@@ -153,6 +151,7 @@ class CommunityDetail(DetailView):
         context["projects"] = get_all_projects().filter(community=comm)
         context["is_member"] = get_all_members() \
             .filter(user=self.request.user, community=comm)
+        context["cmnt_list"] = Comment.objects.all().filter(community=comm)
 
         return context
 
@@ -385,3 +384,37 @@ def search_communities(request):
     comm = Community.objects.filter(interests__contains=search_text)
 
     return render_to_response("community_search.html", {'comm': comm})
+
+
+class CommentCreateView(CreateView):
+
+    model = Comment
+    form_class = CommentForm 
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
+
+    def form_valid(self, form):
+
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.community = Community.objects.get(pk=self.kwargs["pk"])
+        form_obj.save()
+
+        return super(CommentCreateView, self).form_valid(form)
+
+
+class CommentUpdateView(UpdateView):
+
+    model = Comment
+    form_class = CommentForm 
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
+
+class CommentDeleteView(DeleteView):
+
+    model = Comment
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})

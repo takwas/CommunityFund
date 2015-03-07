@@ -121,6 +121,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User)
     community = models.ForeignKey(Community, related_name="comm_comments")
     text = models.CharField("Text", max_length=100)
+    pub_date = models.DateTimeField(auto_now_add=True)
 
     def __repr__(self):
         return "{user: %s, community: %s, text: %s}" % (self.user, self.community, self.text)

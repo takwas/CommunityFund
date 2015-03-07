@@ -119,3 +119,17 @@ class RateProjectForm(forms.ModelForm):
     class Meta:
         model = ProjectReputation
         exclude = ("rater", "rated")
+
+
+class CommentForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+    class Meta:
+        model = Comment
+        exclude = ("user", "community", "pub_date")
