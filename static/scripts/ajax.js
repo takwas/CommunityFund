@@ -19,3 +19,4 @@ $(function() {
 function searchSuccess(data, textStatus, jqXHR) {
     $('#search_communities').html(data);
 }
+

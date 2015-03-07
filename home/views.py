@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Max, Avg, Sum, Count
 from .models import *
 from .forms import *
+from fm.views import AjaxCreateView, AjaxUpdateView, AjaxDeleteView
 
 
 def get_project(pid):
@@ -120,7 +121,7 @@ def fund_project_view(request, cid, pk):
         {'form': form, })
 
 
-class CommunityCreateView(CreateView):
+class CommunityCreateView(AjaxCreateView):
     
     model = Community
     form_class = CommunityForm
