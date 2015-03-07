@@ -46,6 +46,15 @@ community_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/join$', join_comm_view, 
         name="join_comm"),
 
+    url(r'^community/cid=(?P<pk>\d+)/comment$', login_required(CommentCreateView.as_view()), 
+        name="cmnt_create"),
+
+    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/delete$', login_required(CommentDeleteView.as_view()), 
+        name="cmnt_delete"),
+
+    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/update$', login_required(CommentUpdateView.as_view()), 
+        name="cmnt_update"),
+
     url(r'^community/cid=(?P<pk>\d+)/members$', MemberListView.as_view(), 
         name="member_list"),
 
@@ -80,6 +89,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', HomeView.as_view(), name="home"),
+
 ) + user_urls + community_urls + project_urls
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
