@@ -46,7 +46,7 @@ community_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/join$', csrf_exempt(login_required(JoinCommunityView.as_view())), 
         name="join_comm"),
 
-    url(r'^community/cid=(?P<pk>\d+)/comment$', login_required(CommentCreateView.as_view()), 
+    url(r'^community/cid=(?P<pk>\d+)/comment$', csrf_exempt(login_required(CommentCreateView.as_view())), 
         name="cmnt_create"),
 
     url(r'^community/cid=(?P<pk>\d+)/members$', MemberListView.as_view(), 

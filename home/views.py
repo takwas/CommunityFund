@@ -124,7 +124,6 @@ class CommentCreateView(AjaxCreateView):
         return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
 
     def form_valid(self, form):
-
         form_obj = form.save(commit=False)
         form_obj.user = self.request.user
         form_obj.community = Community.objects.get(pk=self.kwargs["pk"])

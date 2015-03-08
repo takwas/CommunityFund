@@ -28,7 +28,30 @@ $(function() {
                             'cid': cid, 'csrfmiddlewaretoken': '{{csrf_token}}'
                         },
                         success: function(response) {
-                            $('#join_comm').remove();
+                            window.location.reload(true);
+                        },
+                        dataType: 'html'
+                    });
+                }
+            }
+        );
+    });
+
+    // adds new comment to community
+    $('#add_cmnt').click(function() {
+        var cid = $(this).attr('name');
+
+        bootbox.prompt("Write a comment", 
+            function(result) {
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: "comment",
+                        data: {
+                            'cid': cid, 'text': result,
+                            'csrfmiddlewaretoken': '{{csrf_token}}'
+                        },
+                        success: function(response) {
                             window.location.reload(true);
                         },
                         dataType: 'html'
