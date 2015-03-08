@@ -19,7 +19,8 @@ Publication Date: {{ object.pub_date }}<br>
     <p>
         {% if user == object.initiator %}
             <a href="{% url 'project_update' cid=object.community.id pk=object.pk %}" class="fm-update" data-fm-head="Update your Project" data-fm-callback="reload">Update Project</a>
-            <a id="delete_project" href="{% url 'project_delete' cid=object.community.id pk=object.pk %}">Delete Project</a>
+            
+            <a href="{% url 'project_delete' cid=object.community.id pk=object.pk %}" class="fm-delete" data-fm-head="Delete this Project" data-fm-callback="redirect" data-fm-target="{% url 'community_details' pk=object.community.id %}">Delete Project</a>
         {% elif is_member %}
         
             {% if object.current_funds < object.funding_goal %}

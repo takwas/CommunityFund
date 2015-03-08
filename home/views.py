@@ -274,7 +274,7 @@ class CommunityUpdateView(AjaxUpdateView):
         return reverse('community_details', kwargs={'pk': self.kwargs['pk'],})
 
 
-class ProjectDeleteView(DeleteView):
+class ProjectDeleteView(AjaxDeleteView):
 
     model = Project
     success_url = "/"
