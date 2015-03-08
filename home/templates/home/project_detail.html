@@ -18,15 +18,11 @@ Publication Date: {{ object.pub_date }}<br>
     {% if user.is_authenticated %}
     <p>
         {% if user == object.initiator %}
-            <a id="update_project" href="{% url 'project_update' cid=object.community.id pk=object.pk %}">Edit Project</a>
+            <a href="{% url 'project_update' cid=object.community.id pk=object.pk %}" class="fm-update" data-fm-head="Update your Project" data-fm-callback="reload">Update Project</a>
             <a id="delete_project" href="{% url 'project_delete' cid=object.community.id pk=object.pk %}">Delete Project</a>
         {% elif is_member %}
         
             {% if object.current_funds < object.funding_goal %}
-                <!--<a id="fund_project" href="{% url 'fund_project' cid=object.community.id pk=object.pk %}">
-                    Fund Project
-                </a>-->
-
                 <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Fund this Project" data-fm-callback="reload">Fund Project</a>
             {% elif did_fund and not did_rate_project %}
                 <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">

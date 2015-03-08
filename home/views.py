@@ -255,7 +255,7 @@ class UserProfileUpdateView(AjaxUpdateView):
         return reverse('user_profile', kwargs={'slug': self.request.user.username})
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(AjaxUpdateView):
 
     model = Project
     form_class = ProjectForm 
