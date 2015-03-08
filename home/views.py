@@ -360,3 +360,22 @@ class RateInitiatorView(AjaxCreateView):
     form_class = RateUserForm
     template_name = "rate_form.html"
 
+
+class RateFunderView(AjaxCreateView):
+    model = UserReputation
+    form_class = RateUserForm
+    template_name = "rate_form.html"
+
+    def form_valid(self, form):
+        project = get_project(self.kwargs['pk'])
+        funder = get_user(self.kwargs['funder'])
+
+        form_obj = form.save(commit=False)
+        form_obj.rater = self.request.user
+        form_obj.rated = funder
+        form_obj.project = project
+
+        form_obj.save()
+
+        return super(RateFunderView, self).form_valid(form)
+
