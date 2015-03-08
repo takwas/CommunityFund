@@ -270,7 +270,8 @@ class JoinCommunityView(AjaxCreateView):
 
         form_obj.save()
 
-        return super(JoinCommunityView, self).form_valid(form)        
+        return super(JoinCommunityView, self).form_valid(form)  
+              
 
 class RateInitiatorView(AjaxCreateView):
     model = UserReputation
@@ -278,7 +279,6 @@ class RateInitiatorView(AjaxCreateView):
     template_name = "rate_form.html"
 
     def form_valid(self, form):
-        print(self.kwargs)
         project = get_project(self.kwargs['pk'])
 
         form_obj = form.save(commit=False)
@@ -291,27 +291,21 @@ class RateInitiatorView(AjaxCreateView):
         return super(RateInitiatorView, self).form_valid(form)
 
 
-@login_required
-def rate_project_form(request, cid, pk):
-    project = get_project(pk)
+class RateProjectView(AjaxCreateView):
+    model = ProjectReputation
+    form_class = RateProjectForm
+    template_name = "rate_form.html"
 
-    if request.method == "POST":
-        form = RateProjectForm(request.POST)
+    def form_valid(self, form):
+        project = get_project(self.kwargs['pk'])
 
-        if form.is_valid():
-            form_obj = form.save(commit=False)
-            form_obj.rater = request.user
-            form_obj.rated = project
+        form_obj = form.save(commit=False)
+        form_obj.rater = self.request.user
+        form_obj.rated = project
 
-            form_obj.save()
+        form_obj.save()
 
-            return HttpResponseRedirect(reverse('project_details',
-                kwargs={'cid': cid, 'pk': pk}))
-    else:
-        form = RateProjectForm()
-
-    return render(request, "rate_form.html",
-        {'form': form, })
+        return super(RateProjectView, self).form_valid(form)
 
 
 @login_required

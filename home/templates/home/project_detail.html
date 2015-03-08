@@ -26,7 +26,7 @@ Publication Date: {{ object.pub_date }}<br>
             {% if object.current_funds < object.funding_goal %}
                 <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Fund this Project" data-fm-callback="reload">Fund Project</a>
             {% elif did_fund and not did_rate_project %}
-                <a id="rate_project" href="{% url 'rate_project' cid=object.community.id pk=object.pk %}">
+                <a href="{% url 'rate_project' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Rate this Project" data-fm-callback="reload">
                     Rate Project
                 </a>
             {% endif %}
