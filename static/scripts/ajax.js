@@ -41,14 +41,14 @@ $(function() {
     $('#add_cmnt').click(function() {
         var cid = $(this).attr('name');
 
-        bootbox.prompt("Write a comment", 
+        bootbox.prompt("Write a comment (maximum 100 characters):", 
             function(result) {
                 if (result) {
                     $.ajax({
                         type: "POST",
                         url: "comment",
                         data: {
-                            'cid': cid, 'text': result,
+                            'cid': cid, 'text': result.trim().substring(0,100),
                             'csrfmiddlewaretoken': '{{csrf_token}}'
                         },
                         success: function(response) {
