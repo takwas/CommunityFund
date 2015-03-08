@@ -41,7 +41,7 @@
             {% endif %}
 
             {% if not is_member %} 
-                <a id="join_comm" href="{% url 'join_comm' pk=object.pk %}">Join Community</a>
+                <a id="join_comm" href="{% url 'join_comm' pk=object.pk %}" class="fm-create" data-fm-head="Join this Community" data-fm-callback="reload">Join Community</a>
             {% endif %}
 
         {% endif %}

@@ -43,7 +43,7 @@ community_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/$', login_required(CommunityDetail.as_view()), 
         name="community_details"),
 
-    url(r'^community/cid=(?P<pk>\d+)/join$', join_comm_view, 
+    url(r'^community/cid=(?P<pk>\d+)/join$', login_required(JoinCommunityView.as_view()), 
         name="join_comm"),
 
     url(r'^community/cid=(?P<pk>\d+)/comment$', login_required(CommentCreateView.as_view()), 

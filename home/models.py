@@ -8,9 +8,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
-    location = models.CharField("Location", max_length=100, null=True, blank=True)
-    interests = models.CharField("Interests", max_length=256, null=True, blank=True)
-    cc_number = models.CharField("CC Number", max_length=16, null=True, blank=True)
+    location = models.CharField("Location", max_length=100, blank=True)
+    interests = models.CharField("Interests", max_length=256, blank=True)
+    cc_number = models.CharField("CC Number", max_length=16, blank=True)
 
     def __repr__(self):
         return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interests)

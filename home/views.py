@@ -45,25 +45,6 @@ class CustomRegistrationView(RegistrationView):
         return reverse_lazy("home")
 
 
-@login_required
-def join_comm_view(request, pk):
-
-    if request.method == "POST":
-        form = MemberForm(request.POST)
-
-        if form.is_valid():
-            form_obj = form.save(commit=False)
-            form_obj.user = request.user
-            form_obj.community = get_community(pk)
-            form_obj.save()
-
-            return HttpResponseRedirect(reverse('community_details', 
-                kwargs={'pk': pk,}))
-    else:
-        form = MemberForm()
-
-    return render(request, "member_form.html",
-        {'form': form, })
 
 
 class CommunityCreateView(AjaxCreateView):
@@ -122,7 +103,6 @@ class FundProjectView(AjaxCreateView):
         return ({'max_amount': max_funds})
 
     def form_valid(self, form):
-        print(self.kwargs)
         project = get_project(self.kwargs["pk"])
 
         form_obj = form.save(commit=False)
@@ -278,6 +258,21 @@ class ProjectDeleteView(AjaxDeleteView):
 
     model = Project
     success_url = "/"
+
+
+class JoinCommunityView(AjaxCreateView):
+
+    model = Member
+    form_class = MemberForm
+
+    def form_valid(self, form):
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.community = get_community(self.kwargs["pk"])
+
+        form_obj.save()
+
+        return super(JoinCommunityView, self).form_valid(form)        
 
 
 @login_required
