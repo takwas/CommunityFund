@@ -32,7 +32,7 @@ Publication Date: {{ object.pub_date }}<br>
             {% endif %}
 
             {% if not did_rate_user and did_fund %}
-                <a id="rate_user" href="{% url 'rate_init' cid=object.community.id pk=object.pk %}">
+                <a href="{% url 'rate_init' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Rate the Project Initiator" data-fm-callback="reload">
                     Rate Initiator
                 </a>
             {% endif %}

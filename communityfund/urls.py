@@ -24,7 +24,7 @@ user_urls = patterns('',
         name="user_profile_edit"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-user$', 
-            rate_initiator_form, name="rate_init"),
+            login_required(RateInitiatorView.as_view()), name="rate_init"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders/rate=(?P<funder>\w+)$', 
             rate_funder_form, name="rate_funder")

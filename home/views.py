@@ -43,7 +43,7 @@ class CustomRegistrationView(RegistrationView):
 
     def get_success_url(self, request, user):
         return reverse_lazy("home")
-        
+
 
 class CommunityCreateView(AjaxCreateView):
     
@@ -272,29 +272,23 @@ class JoinCommunityView(AjaxCreateView):
 
         return super(JoinCommunityView, self).form_valid(form)        
 
+class RateInitiatorView(AjaxCreateView):
+    model = UserReputation
+    form_class = RateUserForm
+    template_name = "rate_form.html"
 
-@login_required
-def rate_initiator_form(request, cid, pk):
-    project = get_project(pk)
+    def form_valid(self, form):
+        print(self.kwargs)
+        project = get_project(self.kwargs['pk'])
 
-    if request.method == "POST":
-        form = RateUserForm(request.POST)
+        form_obj = form.save(commit=False)
+        form_obj.rater = self.request.user
+        form_obj.rated = project.initiator
+        form_obj.project = project
 
-        if form.is_valid():
-            form_obj = form.save(commit=False)
-            form_obj.rater = request.user
-            form_obj.rated = project.initiator
-            form_obj.project = project
+        form_obj.save()
 
-            form_obj.save()
-
-            return HttpResponseRedirect(reverse('project_details',
-                kwargs={'cid': cid, 'pk': pk}))
-    else:
-        form = RateUserForm()
-
-    return render(request, "rate_form.html",
-        {'form': form, })
+        return super(RateInitiatorView, self).form_valid(form)
 
 
 @login_required
