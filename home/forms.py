@@ -36,8 +36,8 @@ class MemberForm(forms.ModelForm):
 class FundForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-
-        max_amount = kwargs.pop('max_amount', None)
+        print(kwargs)
+        max_amount = kwargs.pop('initial', None).pop('max_amount', None)
 
         super(FundForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()

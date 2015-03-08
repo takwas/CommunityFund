@@ -66,7 +66,7 @@ project_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/project/create$', login_required(ProjectCreateView.as_view()),
         name="project_create"),
 
-    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/fund$', fund_project_view,
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/fund$', login_required(FundProjectView.as_view()),
         name="fund_project"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/$', login_required(ProjectDetail.as_view()),

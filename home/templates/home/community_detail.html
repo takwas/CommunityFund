@@ -30,9 +30,6 @@
 <footer>
     <p>
         {% if user.is_authenticated %}
-        <!--
-            <a id="project_create" href="{% url 'project_create' pk=object.pk %}">Create Project</a> -->
-
             <a href="{% url 'project_create' pk=object.pk %}" class="fm-create" data-fm-head="Create a Project" data-fm-callback="reload">Create Project</a>
 
 

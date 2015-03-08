@@ -66,34 +66,6 @@ def join_comm_view(request, pk):
         {'form': form, })
 
 
-@login_required
-def fund_project_view(request, cid, pk):
-
-    project = get_project(pk)
-    
-    if request.method == "POST":
-        form = FundForm(request.POST)
-
-        if form.is_valid():
-            form_obj = form.save(commit=False)
-            form_obj.user = request.user
-
-            form_obj.project = project
-            project.current_funds += form_obj.amount
-
-            project.save()
-            form_obj.save()
-
-            return HttpResponseRedirect(reverse('project_details',
-                kwargs={'cid': cid, 'pk': pk}))
-    else:
-        max_funds = project.funding_goal - project.current_funds
-        form = FundForm(max_amount=max_funds)
-
-    return render(request, "funded_form.html",
-        {'form': form, })
-
-
 class CommunityCreateView(AjaxCreateView):
     
     model = Community
@@ -135,8 +107,33 @@ class ProjectCreateView(AjaxCreateView):
         obj, created = Member.objects.get_or_create(user=self.request.user, 
             community=comm)
 
-
         return super(ProjectCreateView, self).form_valid(form)
+
+
+class FundProjectView(AjaxCreateView):
+    model = Funded
+    form_class = FundForm
+
+    def get_initial(self):
+        # couldn't find another way to get max value for funds into the form
+        project = get_project(self.kwargs["pk"])
+        max_funds = project.funding_goal - project.current_funds
+
+        return ({'max_amount': max_funds})
+
+    def form_valid(self, form):
+        print(self.kwargs)
+        project = get_project(self.kwargs["pk"])
+
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.project = project
+        project.current_funds += form_obj.amount
+
+        project.save()
+        form_obj.save()
+
+        return super(FundProjectView, self).form_valid(form)
 
         
 class CommunityDetail(DetailView):
