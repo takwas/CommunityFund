@@ -45,9 +45,6 @@ class CustomRegistrationView(RegistrationView):
         return reverse_lazy("home")
 
 
-
-
-
 @login_required
 def join_comm_view(request, pk):
 
@@ -271,7 +268,7 @@ class ProjectUpdateView(UpdateView):
             kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
     
 
-class CommunityUpdateView(UpdateView):
+class CommunityUpdateView(AjaxUpdateView):
 
     model = Community
     form_class = CommunityForm

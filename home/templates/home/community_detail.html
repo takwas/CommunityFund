@@ -39,8 +39,8 @@
             <a id="member_list" href="{% url 'member_list' pk=object.pk %}">Member List</a>
 
             <a href="{% url 'cmnt_create' pk=object.pk %}">Add Comment</a>
-            {% if creator == user %}
-                <a id="comm_update" href="{% url 'comm_update' pk=object.pk %}">Edit Community</a>
+            {% if object.creator == user %}
+                <a href="{% url 'comm_update' pk=object.pk %}" class="fm-update" data-fm-head="Update your Community" data-fm-callback="reload">Update Community</a>
             {% endif %}
 
             {% if not is_member %} 
