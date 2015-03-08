@@ -2,6 +2,7 @@ import floppyforms.__future__ as forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from .models import *
+from decimal import *
 
 class ProjectForm(forms.ModelForm):
 
@@ -11,7 +12,7 @@ class ProjectForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
 
-        self.fields['funding_goal'] = forms.DecimalField(min_value=1)
+        self.fields['funding_goal'] = forms.DecimalField(min_value=5, decimal_places=2)
 
     class Meta:
 
@@ -43,7 +44,10 @@ class FundForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
 
-        self.fields['amount'] = forms.IntegerField(min_value=1, max_value=max_amount)
+        min_value = Decimal('0.01')
+
+        self.fields['amount'] = forms.DecimalField(min_value=min_value, 
+            max_value=max_amount, decimal_places=2)
 
     class Meta:
         model = Funded
