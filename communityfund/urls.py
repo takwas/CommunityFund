@@ -69,6 +69,6 @@ urlpatterns = patterns('',
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders$', 
             funders_list_view, name="funders_view"),
     
-    url(r'^community/cid=(?P<cid>\d+)/comment$', 
-                AddComment, name="add_comment")    
+    url(r'^community/cid=(?P<pk>\d+)/comment$', 
+                add_comment, name="add_comment")    
 )

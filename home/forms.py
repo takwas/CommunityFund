@@ -121,9 +121,11 @@ class RateProjectForm(forms.ModelForm):
         exclude = ("rater", "rated")
 
 class AddCommentForm(forms.ModelForm):
+    
+    
     def __init__(self, *args, **kwargs):
         
-        super(AddCommentForm, self).__inti__(*args, **kwargs)
+        super(AddCommentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_methd = "post"
         self.helper.add_input(Submit("submit", "Update"))
