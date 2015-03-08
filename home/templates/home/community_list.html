@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if user.is_authenticated %}
 
 <h3>Search for Communities by an Interest</h3>
 {% csrf_token %}
@@ -16,4 +17,5 @@
     </li>
 {% endfor %}
 
+{% endif %}
 {% endblock %}

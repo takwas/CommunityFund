@@ -43,9 +43,7 @@ class CustomRegistrationView(RegistrationView):
 
     def get_success_url(self, request, user):
         return reverse_lazy("home")
-
-
-
+        
 
 class CommunityCreateView(AjaxCreateView):
     
