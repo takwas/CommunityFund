@@ -381,7 +381,7 @@ def search_communities(request):
     else:
         search_text = ''
 
-    comm = Community.objects.filter(interests__contains=search_text)
+    comm = Community.objects.filter(interests__icontains=search_text)
 
     return render_to_response("community_search.html", {'comm': comm})
 
