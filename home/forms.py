@@ -96,7 +96,6 @@ class RateUserForm(forms.ModelForm):
         super(RateUserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
-        self.helper.add_input(Submit("submit", "Update"))
 
     class Meta:
         model = UserReputation
@@ -117,7 +116,6 @@ class RateProjectForm(forms.ModelForm):
         super(RateProjectForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
-        self.helper.add_input(Submit("submit", "Update"))
 
     class Meta:
         model = ProjectReputation
