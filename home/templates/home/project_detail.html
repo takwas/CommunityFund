@@ -10,6 +10,14 @@ Funding Goal: {{ object.funding_goal }}<br>
 Current Funds: {{ object.current_funds }}<br>
 Publication Date: {{ object.pub_date }}<br>
 
+<div class="progress">
+    <div class="progress-bar progress-bar-success" role="progressbar" 
+        aria-valuenow="{{ object.current_funds }}" aria-valuemin="0" 
+        aria-valuemax="{{ object.funding_goal }}" style="width:{{ percentage }}%">
+        ${{ object.current_funds }} raised out of ${{ object.funding_goal }}
+    </div>
+</div>
+
 {% if object.current_funds == object.funding_goal %}
     Project Rating: {{ rating }} ({{ num_ratings }} ratings)<br>
 {% endif %}

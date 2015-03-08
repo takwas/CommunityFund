@@ -181,6 +181,8 @@ class ProjectDetail(DetailView):
         context["is_member"] = get_all_members() \
             .filter(community=p.community, user=self.request.user)
 
+        context["percentage"] = p.current_funds / p.funding_goal * 100
+
         return context
 
 
