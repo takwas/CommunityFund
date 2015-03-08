@@ -51,9 +51,6 @@ class CommunityCreateView(AjaxCreateView):
     model = Community
     form_class = CommunityForm
 
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.object.id})
-
     def form_valid(self, form):
         form_obj = form.save(commit=False)
         form_obj.creator = self.request.user
@@ -87,9 +84,6 @@ class CommunityUpdateView(AjaxUpdateView):
     model = Community
     form_class = CommunityForm
 
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk'],})
-
 
 class JoinCommunityView(AjaxCreateView):
 
@@ -120,9 +114,6 @@ class CommentCreateView(AjaxCreateView):
     model = Comment
     form_class = CommentForm 
 
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
-
     def form_valid(self, form):
         form_obj = form.save(commit=False)
         form_obj.user = self.request.user
@@ -147,9 +138,6 @@ def search_communities(request):
 class ProjectCreateView(AjaxCreateView):
     model = Project
     form_class = ProjectForm
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.object.id})
 
     def form_valid(self, form):
         comm_id = self.kwargs["pk"]
@@ -201,10 +189,6 @@ class ProjectUpdateView(AjaxUpdateView):
     model = Project
     form_class = ProjectForm 
 
-    def get_success_url(self):
-        return reverse('project_details', 
-            kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
-
 
 class ProjectDeleteView(AjaxDeleteView):
 
@@ -217,7 +201,7 @@ class FundProjectView(AjaxCreateView):
     form_class = FundForm
 
     def get_initial(self):
-        # couldn't find another way to get max value for funds into the form
+        # pass in max values for form
         project = get_project(self.kwargs["pk"])
         max_funds = project.funding_goal - project.current_funds
 
@@ -333,9 +317,6 @@ class UserProfileUpdateView(AjaxUpdateView):
 
     model = UserProfile
     form_class = ProfileForm 
-
-    def get_success_url(self):
-        return reverse('user_profile', kwargs={'slug': self.request.user.username})
 
 
 class RateInitiatorView(AjaxCreateView):
