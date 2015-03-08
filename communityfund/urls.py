@@ -49,11 +49,11 @@ community_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/comment$', login_required(CommentCreateView.as_view()), 
         name="cmnt_create"),
 
-    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/delete$', login_required(CommentDeleteView.as_view()), 
-        name="cmnt_delete"),
+    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/delete$', 
+        login_required(CommentDeleteView.as_view()), name="cmnt_delete"),
 
-    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/update$', login_required(CommentUpdateView.as_view()), 
-        name="cmnt_update"),
+    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/update$', 
+        login_required(CommentUpdateView.as_view()), name="cmnt_update"),
 
     url(r'^community/cid=(?P<pk>\d+)/members$', MemberListView.as_view(), 
         name="member_list"),
@@ -66,14 +66,14 @@ project_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/project/create$', login_required(ProjectCreateView.as_view()),
         name="project_create"),
 
-    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/fund$', login_required(FundProjectView.as_view()),
-        name="fund_project"),
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/fund$', 
+        login_required(FundProjectView.as_view()), name="fund_project"),
 
-    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/$', login_required(ProjectDetail.as_view()),
-        name="project_details"),
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/$', 
+        login_required(ProjectDetail.as_view()), name="project_details"),
 
-    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/update$', login_required(ProjectUpdateView.as_view()),
-        name="project_update"),
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/update$', 
+        login_required(ProjectUpdateView.as_view()), name="project_update"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/delete$', 
             login_required(ProjectDeleteView.as_view()), name="project_delete"),

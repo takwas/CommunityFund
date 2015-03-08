@@ -45,6 +45,7 @@ class CustomRegistrationView(RegistrationView):
         return reverse_lazy("home")
 
 
+# Community Related Views
 class CommunityCreateView(AjaxCreateView):
     
     model = Community
@@ -65,6 +66,90 @@ class CommunityCreateView(AjaxCreateView):
         return super(CommunityCreateView, self).form_valid(form)
 
 
+class CommunityDetail(DetailView):
+    
+    model = Community
+    template_name = "community_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CommunityDetail, self).get_context_data(**kwargs)
+        comm = context["object"]
+        context["projects"] = get_all_projects().filter(community=comm)
+        context["is_member"] = get_all_members() \
+            .filter(user=self.request.user, community=comm)
+        context["cmnt_list"] = Comment.objects.all().filter(community=comm)
+
+        return context
+
+
+class CommunityUpdateView(AjaxUpdateView):
+
+    model = Community
+    form_class = CommunityForm
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk'],})
+
+
+class JoinCommunityView(AjaxCreateView):
+
+    model = Member
+    form_class = MemberForm
+
+    def form_valid(self, form):
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.community = get_community(self.kwargs["pk"])
+
+        form_obj.save()
+
+        return super(JoinCommunityView, self).form_valid(form) 
+
+
+class MemberListView(ListView):
+
+    model = Member
+    template_name = "member_list.html"
+
+    def get_queryset(self):
+        return get_all_members().filter(community_id=self.kwargs['pk'])
+
+
+class CommentCreateView(AjaxCreateView):
+
+    model = Comment
+    form_class = CommentForm 
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
+
+    def form_valid(self, form):
+
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.community = Community.objects.get(pk=self.kwargs["pk"])
+        form_obj.save()
+
+        return super(CommentCreateView, self).form_valid(form)
+
+
+class CommentUpdateView(AjaxUpdateView):
+
+    model = Comment
+    form_class = CommentForm 
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
+
+class CommentDeleteView(AjaxDeleteView):
+
+    model = Comment
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
+
+
+# Project Related Views
 class ProjectCreateView(AjaxCreateView):
     model = Project
     form_class = ProjectForm
@@ -87,47 +172,6 @@ class ProjectCreateView(AjaxCreateView):
             community=comm)
 
         return super(ProjectCreateView, self).form_valid(form)
-
-
-class FundProjectView(AjaxCreateView):
-    model = Funded
-    form_class = FundForm
-
-    def get_initial(self):
-        # couldn't find another way to get max value for funds into the form
-        project = get_project(self.kwargs["pk"])
-        max_funds = project.funding_goal - project.current_funds
-
-        return ({'max_amount': max_funds})
-
-    def form_valid(self, form):
-        project = get_project(self.kwargs["pk"])
-
-        form_obj = form.save(commit=False)
-        form_obj.user = self.request.user
-        form_obj.project = project
-        project.current_funds += form_obj.amount
-
-        project.save()
-        form_obj.save()
-
-        return super(FundProjectView, self).form_valid(form)
-
-        
-class CommunityDetail(DetailView):
-    
-    model = Community
-    template_name = "community_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(CommunityDetail, self).get_context_data(**kwargs)
-        comm = context["object"]
-        context["projects"] = get_all_projects().filter(community=comm)
-        context["is_member"] = get_all_members() \
-            .filter(user=self.request.user, community=comm)
-        context["cmnt_list"] = Comment.objects.all().filter(community=comm)
-
-        return context
 
 
 class ProjectDetail(DetailView):
@@ -158,15 +202,93 @@ class ProjectDetail(DetailView):
         return context
 
 
-class MemberListView(ListView):
+class ProjectUpdateView(AjaxUpdateView):
 
-    model = Member
-    template_name = "member_list.html"
+    model = Project
+    form_class = ProjectForm 
 
-    def get_queryset(self):
-        return get_all_members().filter(community_id=self.kwargs['pk'])
+    def get_success_url(self):
+        return reverse('project_details', 
+            kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
 
 
+class ProjectDeleteView(AjaxDeleteView):
+
+    model = Project
+    success_url = "/"
+
+
+class FundProjectView(AjaxCreateView):
+    model = Funded
+    form_class = FundForm
+
+    def get_initial(self):
+        # couldn't find another way to get max value for funds into the form
+        project = get_project(self.kwargs["pk"])
+        max_funds = project.funding_goal - project.current_funds
+
+        return ({'max_amount': max_funds})
+
+    def form_valid(self, form):
+        project = get_project(self.kwargs["pk"])
+
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.project = project
+        project.current_funds += form_obj.amount
+
+        project.save()
+        form_obj.save()
+
+        return super(FundProjectView, self).form_valid(form)
+
+
+class RateProjectView(AjaxCreateView):
+    model = ProjectReputation
+    form_class = RateProjectForm
+    template_name = "rate_form.html"
+
+    def form_valid(self, form):
+        project = get_project(self.kwargs['pk'])
+
+        form_obj = form.save(commit=False)
+        form_obj.rater = self.request.user
+        form_obj.rated = project
+
+        form_obj.save()
+
+        return super(RateProjectView, self).form_valid(form)
+
+
+@login_required
+def funders_list_view(request, cid, pk):
+    funders = get_all_funds().filter(project=pk)
+    initiator = get_project(pk).initiator
+
+    ratings = UserReputation.objects.all().filter(rater=request.user, project=pk)
+
+    # check who this user has already rated
+    rated = []
+    for r in ratings:
+        rated += [str((get_user(r.rated)))]
+
+    return render(request, "funders_list.html", 
+        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
+         'initiator': initiator})
+    
+
+def search_communities(request):
+    if request.method == "POST":
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+
+    comm = Community.objects.filter(interests__contains=search_text)
+
+    return render_to_response("community_search.html", {'comm': comm})
+
+
+# User Related Views
 class UserProfileView(DetailView):
 
     model = get_user_model()
@@ -233,46 +355,6 @@ class UserProfileUpdateView(AjaxUpdateView):
         return reverse('user_profile', kwargs={'slug': self.request.user.username})
 
 
-class ProjectUpdateView(AjaxUpdateView):
-
-    model = Project
-    form_class = ProjectForm 
-
-    def get_success_url(self):
-        return reverse('project_details', 
-            kwargs={'pk': self.kwargs['pk'], 'cid': self.kwargs['cid']})
-    
-
-class CommunityUpdateView(AjaxUpdateView):
-
-    model = Community
-    form_class = CommunityForm
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk'],})
-
-
-class ProjectDeleteView(AjaxDeleteView):
-
-    model = Project
-    success_url = "/"
-
-
-class JoinCommunityView(AjaxCreateView):
-
-    model = Member
-    form_class = MemberForm
-
-    def form_valid(self, form):
-        form_obj = form.save(commit=False)
-        form_obj.user = self.request.user
-        form_obj.community = get_community(self.kwargs["pk"])
-
-        form_obj.save()
-
-        return super(JoinCommunityView, self).form_valid(form)  
-
-
 class RateInitiatorView(AjaxCreateView):
     model = UserReputation
     form_class = RateUserForm
@@ -309,81 +391,3 @@ class RateFunderView(AjaxCreateView):
 
         return super(RateFunderView, self).form_valid(form)
 
-
-class RateProjectView(AjaxCreateView):
-    model = ProjectReputation
-    form_class = RateProjectForm
-    template_name = "rate_form.html"
-
-    def form_valid(self, form):
-        project = get_project(self.kwargs['pk'])
-
-        form_obj = form.save(commit=False)
-        form_obj.rater = self.request.user
-        form_obj.rated = project
-
-        form_obj.save()
-
-        return super(RateProjectView, self).form_valid(form)
-
-
-@login_required
-def funders_list_view(request, cid, pk):
-    funders = get_all_funds().filter(project=pk)
-    initiator = get_project(pk).initiator
-
-    ratings = UserReputation.objects.all().filter(rater=request.user, project=pk)
-
-    # check who this user has already rated
-    rated = []
-    for r in ratings:
-        rated += [str((get_user(r.rated)))]
-
-    return render(request, "funders_list.html", 
-        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
-         'initiator': initiator})
-    
-
-def search_communities(request):
-    if request.method == "POST":
-        search_text = request.POST['search_text']
-    else:
-        search_text = ''
-
-    comm = Community.objects.filter(interests__contains=search_text)
-
-    return render_to_response("community_search.html", {'comm': comm})
-
-
-class CommentCreateView(AjaxCreateView):
-
-    model = Comment
-    form_class = CommentForm 
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
-
-    def form_valid(self, form):
-
-        form_obj = form.save(commit=False)
-        form_obj.user = self.request.user
-        form_obj.community = Community.objects.get(pk=self.kwargs["pk"])
-        form_obj.save()
-
-        return super(CommentCreateView, self).form_valid(form)
-
-
-class CommentUpdateView(AjaxUpdateView):
-
-    model = Comment
-    form_class = CommentForm 
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
-
-class CommentDeleteView(AjaxDeleteView):
-
-    model = Comment
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
