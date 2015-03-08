@@ -246,7 +246,7 @@ class UserProfileView(DetailView):
         return context
 
 
-class UserProfileUpdateView(UpdateView):
+class UserProfileUpdateView(AjaxUpdateView):
 
     model = UserProfile
     form_class = ProfileForm 

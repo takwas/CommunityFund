@@ -10,7 +10,8 @@ Rating: {{ rating }} ({{ num_ratings }} ratings) <br>
 Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)<br>
 
 {% if user == prof_user %}
-<a href="{% url 'user_profile_edit' pk=user.id %}">Edit Profile</a><br>
+<a href="{% url 'user_profile_edit' pk=user.id %}" class="fm-update" data-fm-head="Update your Profile" data-fm-callback="reload">Update Profile</a>
+<br>
 
 <br>
 My Projects:
