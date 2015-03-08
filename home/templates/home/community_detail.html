@@ -43,8 +43,9 @@
                 <a href="{% url 'comm_update' pk=object.pk %}" class="fm-update" data-fm-head="Update your Community" data-fm-callback="reload">Update Community</a>
             {% endif %}
 
-            {% if not is_member %} 
-                <a id="join_comm" href="{% url 'join_comm' pk=object.pk %}" class="fm-create" data-fm-head="Join this Community" data-fm-callback="reload">Join Community</a>
+            {% if not is_member %}
+                {% csrf_token %}
+                <input id="join_comm" type="button" name="{{ object.pk }}" value="Join this Community"/>
             {% endif %}
 
         {% endif %}

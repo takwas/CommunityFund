@@ -149,6 +149,17 @@ class CommentDeleteView(AjaxDeleteView):
         return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
 
 
+def search_communities(request):
+    if request.method == "POST":
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+
+    comm = Community.objects.filter(interests__contains=search_text)
+
+    return render_to_response("community_search.html", {'comm': comm})
+
+
 # Project Related Views
 class ProjectCreateView(AjaxCreateView):
     model = Project
@@ -275,17 +286,6 @@ def funders_list_view(request, cid, pk):
     return render(request, "funders_list.html", 
         {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
          'initiator': initiator})
-    
-
-def search_communities(request):
-    if request.method == "POST":
-        search_text = request.POST['search_text']
-    else:
-        search_text = ''
-
-    comm = Community.objects.filter(interests__contains=search_text)
-
-    return render_to_response("community_search.html", {'comm': comm})
 
 
 # User Related Views
