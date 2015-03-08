@@ -31,7 +31,7 @@
         <p>
             {% if user.is_authenticated %}
                 <a id="profile" href="{% url 'user_profile' slug=user.username %}">My Profile</a>
-                <a href="{% url 'community_create' %}" class="fm-create" data-fm-head="Create a New Community" data-fm-callback="redirect" data-fm-target="{% url 'user_profile' slug=user %}">Create Community</a>
+                <a href="{% url 'community_create' %}" class="fm-create" data-fm-head="Create a New Community" data-fm-callback="redirect" data-fm-target="{% url 'user_profile' slug=user %}#communities">Create Community</a>
                 <a id="logout" href="{% url 'logout' %}">Logout</a>
             {% else %}
                 <a id="login" href="{% url 'login' %}">Login</a>

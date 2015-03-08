@@ -13,44 +13,58 @@ Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)<br>
 <a href="{% url 'user_profile_edit' pk=user.id %}" class="fm-update" data-fm-head="Update your Profile" data-fm-callback="reload">Update Profile</a>
 <br>
 
+<h3>Contents</h3>
+<a href="#projects">My Projects</a><br>
+<a href="#funding">My Recent Funding</a><br>
+<a href="#communities">My Communities</a><br>
+<a href="#friends">My Friends</a><br>
 <br>
-My Projects:
-{% for p in projects %}
-    <li>
-        <a href="{% url 'project_details' cid=p.community.id pk=p.pk %}">
-            {{ p.name }} - ${{ p.current_funds }} out of ${{ p.funding_goal }}
-        </a>
-    </li>
-{% endfor %}
 
 <br>
-My Recent Funding:
-{% for f in funds %}
-    <li>
-        ${{ f.amount }} to 
-        <a href="{% url 'project_details' cid=f.project.community_id pk=f.project_id %}">
-            {{ f.project }}
-        </a>
-    </li>
-{% endfor %}
-
+<div id="projects">
+    My Projects:
+    {% for p in projects %}
+        <li>
+            <a href="{% url 'project_details' cid=p.community.id pk=p.pk %}">
+                {{ p.name }} - ${{ p.current_funds }} out of ${{ p.funding_goal }}
+            </a>
+        </li>
+    {% endfor %}
+</div>
 <br>
-My Communties:
-{% for community in comms %}
-    <li>
-        <a href="{% url 'community_details' pk=community.pk %}">{{ community.name }}</a>
-    </li>
 
-{% endfor %}
-
+<div id="funding">
+    My Recent Funding:
+    {% for f in funds %}
+        <li>
+            ${{ f.amount }} to 
+            <a href="{% url 'project_details' cid=f.project.community_id pk=f.project_id %}">
+                {{ f.project }}
+            </a>
+        </li>
+    {% endfor %}
+</div>
 <br>
-My Friends:
-{% for friend in friends %}
-    <li>
-        <a href="{% url 'user_profile' slug=friend.username %}">{{ friend.username }}</a>
-    </li>
 
-{% endfor %}
+<div id="communities">
+    My Communties:
+    {% for community in comms %}
+        <li>
+            <a href="{% url 'community_details' pk=community.pk %}">{{ community.name }}</a>
+        </li>
 
+    {% endfor %}
+</div>
+<br>
+
+<div id="friends">
+    My Friends:
+    {% for friend in friends %}
+        <li>
+            <a href="{% url 'user_profile' slug=friend.username %}">{{ friend.username }}</a>
+        </li>
+
+    {% endfor %}
+</div>
 {% endif %}
 {% endblock %}

@@ -18,7 +18,7 @@ user_urls = patterns('',
     url(r'^logout/$', "django.contrib.auth.views.logout",
         {"next_page": "/"}, name="logout"),
 
-    url(r'^user/(?P<slug>\w+)/$', UserProfileView.as_view(), name="user_profile"),
+    url(r'^user/(?P<slug>\w+)/?$', UserProfileView.as_view(), name="user_profile"),
 
     url(r'^user/(?P<pk>\w+)/edit$', login_required(UserProfileUpdateView.as_view()), 
         name="user_profile_edit"),
