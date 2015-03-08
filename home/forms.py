@@ -11,7 +11,7 @@ class ProjectForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
 
-        self.fields['funding_goal'] = forms.IntegerField(min_value=1)
+        self.fields['funding_goal'] = forms.DecimalField(min_value=1)
 
     class Meta:
 
@@ -66,7 +66,7 @@ class CommunityForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-    
+
     def __init__(self, *args, **kwargs):
 
         super(ProfileForm, self).__init__(*args, **kwargs)
