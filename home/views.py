@@ -84,6 +84,10 @@ class CommunityUpdateView(AjaxUpdateView):
     model = Community
     form_class = CommunityForm
 
+    def get_queryset(self):
+        qset = super(CommunityUpdateView, self).get_queryset()
+        return qset.filter(creator=self.request.user)
+
 
 class JoinCommunityView(AjaxCreateView):
 
@@ -191,11 +195,19 @@ class ProjectUpdateView(AjaxUpdateView):
     model = Project
     form_class = ProjectForm 
 
+    def get_queryset(self):
+        qset = super(ProjectUpdateView, self).get_queryset()
+        return qset.filter(initiator=self.request.user)
+
 
 class ProjectDeleteView(AjaxDeleteView):
 
     model = Project
     success_url = "/"
+
+    def get_queryset(self):
+        qset = super(ProjectDeleteView, self).get_queryset()
+        return qset.filter(initiator=self.request.user)
 
 
 class FundProjectView(AjaxCreateView):
@@ -320,8 +332,13 @@ class UserProfileUpdateView(AjaxUpdateView):
     model = UserProfile
     form_class = ProfileForm 
 
+    def get_queryset(self):
+        qset = super(UserProfileUpdateView, self).get_queryset()
+        return qset.filter(user=self.request.user)
+
 
 class RateInitiatorView(AjaxCreateView):
+
     model = UserReputation
     form_class = RateUserForm
     template_name = "rate_form.html"
@@ -340,6 +357,7 @@ class RateInitiatorView(AjaxCreateView):
 
 
 class RateFunderView(AjaxCreateView):
+
     model = UserReputation
     form_class = RateUserForm
     template_name = "rate_form.html"
