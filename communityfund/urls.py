@@ -63,7 +63,7 @@ community_urls = patterns('',
 )
 
 project_urls = patterns('', 
-    url(r'^community/cid=(?P<pk>\d+)/project/create$', create_project_view, 
+    url(r'^community/cid=(?P<pk>\d+)/project/create$', login_required(ProjectCreateView.as_view()),
         name="project_create"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/fund$', fund_project_view,

@@ -45,31 +45,7 @@ class CustomRegistrationView(RegistrationView):
         return reverse_lazy("home")
 
 
-@login_required
-def create_project_view(request, pk):
 
-    if request.method == "POST":
-        form = ProjectForm(request.POST)
-
-        if form.is_valid():
-            comm = get_community(pk)
-
-            form_obj = form.save(commit=False)
-            form_obj.initiator = request.user
-            form_obj.community = comm
-            form_obj.current_funds = 0
-            form_obj.save()
-
-            # automatically get added to community if not a member
-            obj, created = Member.objects.get_or_create(user=request.user, community=comm)
-
-            return HttpResponseRedirect(reverse('project_details', 
-                kwargs={'cid': pk, 'pk': form_obj.id}))
-    else:
-        form = ProjectForm()
-
-    return render(request, "project_form.html",
-        {'form': form, })
 
 
 @login_required
@@ -140,6 +116,31 @@ class CommunityCreateView(AjaxCreateView):
 
         return super(CommunityCreateView, self).form_valid(form)
 
+
+class ProjectCreateView(AjaxCreateView):
+    model = Project
+    form_class = ProjectForm
+
+    def get_success_url(self):
+        return reverse('community_details', kwargs={'pk': self.object.id})
+
+    def form_valid(self, form):
+        comm_id = self.kwargs["pk"]
+        comm = get_community(comm_id)
+
+        form_obj = form.save(commit=False)
+        form_obj.initiator = self.request.user
+        form_obj.community = comm
+        form_obj.current_funds = 0
+        form_obj.save()
+
+        # automatically get added to community if not a member
+        obj, created = Member.objects.get_or_create(user=self.request.user, 
+            community=comm)
+
+
+        return super(ProjectCreateView, self).form_valid(form)
+
         
 class CommunityDetail(DetailView):
     
@@ -181,8 +182,6 @@ class ProjectDetail(DetailView):
 
         context["is_member"] = get_all_members() \
             .filter(community=p.community, user=self.request.user)
-
-        print(context["is_member"])
 
         return context
 
