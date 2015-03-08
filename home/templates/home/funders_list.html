@@ -9,8 +9,8 @@
 
         <a href="{% url 'user_profile' slug=f.user  %}">{{ f.user }}</a> - {{ f.amount }}
 
-        {% if user == initiator and f.user.username not in rated%}
-            <a href="{% url 'rate_funder' cid=cid pk=pk funder=f.user %}">
+        {% if user == initiator and f.user.username not in rated %}
+            <a href="{% url 'rate_funder' cid=cid pk=pk funder=f.user %}" class="fm-create" data-fm-head="Rate this Funder" data-fm-callback="reload">
                 Give Rating
             </a>
         {% endif %}

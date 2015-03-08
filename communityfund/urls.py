@@ -23,11 +23,11 @@ user_urls = patterns('',
     url(r'^user/(?P<pk>\w+)/edit$', login_required(UserProfileUpdateView.as_view()), 
         name="user_profile_edit"),
 
-    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-user$', 
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-initiator$', 
             login_required(RateInitiatorView.as_view()), name="rate_init"),
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders/rate=(?P<funder>\w+)$', 
-            rate_funder_form, name="rate_funder")
+            login_required(RateFunderView.as_view()), name="rate_funder")
 
 )
 

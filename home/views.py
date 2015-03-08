@@ -271,7 +271,7 @@ class JoinCommunityView(AjaxCreateView):
         form_obj.save()
 
         return super(JoinCommunityView, self).form_valid(form)  
-              
+
 
 class RateInitiatorView(AjaxCreateView):
     model = UserReputation
@@ -289,6 +289,25 @@ class RateInitiatorView(AjaxCreateView):
         form_obj.save()
 
         return super(RateInitiatorView, self).form_valid(form)
+
+
+class RateFunderView(AjaxCreateView):
+    model = UserReputation
+    form_class = RateUserForm
+    template_name = "rate_form.html"
+
+    def form_valid(self, form):
+        project = get_project(self.kwargs['pk'])
+        funder = get_user(self.kwargs['funder'])
+
+        form_obj = form.save(commit=False)
+        form_obj.rater = self.request.user
+        form_obj.rated = funder
+        form_obj.project = project
+
+        form_obj.save()
+
+        return super(RateFunderView, self).form_valid(form)
 
 
 class RateProjectView(AjaxCreateView):
@@ -323,31 +342,6 @@ def funders_list_view(request, cid, pk):
     return render(request, "funders_list.html", 
         {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
          'initiator': initiator})
-
-
-@login_required
-def rate_funder_form(request, cid, pk, funder):
-    project = get_project(pk)
-    funder = get_user(funder)
-
-    if request.method == "POST":
-        form = RateUserForm(request.POST)
-
-        if form.is_valid():
-            form_obj = form.save(commit=False)
-            form_obj.rater = request.user
-            form_obj.rated = funder
-            form_obj.project = project
-
-            form_obj.save()
-
-            return HttpResponseRedirect(reverse('funders_view',
-                kwargs={'cid': cid, 'pk': pk}))
-    else:
-        form = RateUserForm()
-
-    return render(request, "rate_form.html",
-        {'form': form, })
     
 
 def search_communities(request):
