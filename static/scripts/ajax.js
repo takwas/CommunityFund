@@ -28,7 +28,8 @@ $(function() {
                             'cid': cid, 'csrfmiddlewaretoken': '{{csrf_token}}'
                         },
                         success: function(response) {
-                            $('#join_comm').hide();
+                            $('#join_comm').remove();
+                            window.location.reload(true);
                         },
                         dataType: 'html'
                     });
