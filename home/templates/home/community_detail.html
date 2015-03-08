@@ -22,10 +22,6 @@
     <li>
         {{ cmnt.user.username }} - {{ cmnt.pub_date }}<br>
         {{ cmnt.text }}<br>
-        {% if user == cmnt.user %} 
-            <a href="{% url 'cmnt_update' pk=object.pk cmnt_pk=cmnt.pk %}" class="fm-update" data-fm-head="Edit your Comment" data-fm-callback="reload">Edit</a>
-            <a href="{% url 'cmnt_delete' pk=object.pk cmnt_pk=cmnt.pk%}" class="fm-delete" data-fm-head="Delete your Comment" data-fm-callback="reload">Delete</a>
-        {% endif %}
 {% endfor %}
 
 

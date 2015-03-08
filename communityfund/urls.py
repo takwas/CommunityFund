@@ -49,12 +49,6 @@ community_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/comment$', login_required(CommentCreateView.as_view()), 
         name="cmnt_create"),
 
-    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/delete$', 
-        login_required(CommentDeleteView.as_view()), name="cmnt_delete"),
-
-    url(r'^community/cid=(?P<pk>\d+)/comment/(?P<cmnt_pk>\d+)/update$', 
-        login_required(CommentUpdateView.as_view()), name="cmnt_update"),
-
     url(r'^community/cid=(?P<pk>\d+)/members$', MemberListView.as_view(), 
         name="member_list"),
 

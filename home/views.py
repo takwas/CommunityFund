@@ -133,22 +133,6 @@ class CommentCreateView(AjaxCreateView):
         return super(CommentCreateView, self).form_valid(form)
 
 
-class CommentUpdateView(AjaxUpdateView):
-
-    model = Comment
-    form_class = CommentForm 
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
-
-class CommentDeleteView(AjaxDeleteView):
-
-    model = Comment
-
-    def get_success_url(self):
-        return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
-
-
 def search_communities(request):
     if request.method == "POST":
         search_text = request.POST['search_text']
