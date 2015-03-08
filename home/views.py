@@ -155,7 +155,7 @@ def search_communities(request):
     else:
         search_text = ''
 
-    comm = Community.objects.filter(interests__icontains=search_text)
+    comm = Community.objects.filter(interests__contains=search_text)
 
     return render_to_response("community_search.html", {'comm': comm})
 
@@ -359,6 +359,18 @@ class RateInitiatorView(AjaxCreateView):
     model = UserReputation
     form_class = RateUserForm
     template_name = "rate_form.html"
+
+    def form_valid(self, form):
+        project = get_project(self.kwargs['pk'])
+
+        form_obj = form.save(commit=False)
+        form_obj.rater = self.request.user
+        form_obj.rated = project.initiator
+        form_obj.project = project
+
+        form_obj.save()
+
+        return super(RateInitiatorView, self).form_valid(form)
 
 
 class RateFunderView(AjaxCreateView):
