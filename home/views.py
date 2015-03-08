@@ -355,7 +355,7 @@ def search_communities(request):
     return render_to_response("community_search.html", {'comm': comm})
 
 
-class CommentCreateView(CreateView):
+class CommentCreateView(AjaxCreateView):
 
     model = Comment
     form_class = CommentForm 
@@ -373,7 +373,7 @@ class CommentCreateView(CreateView):
         return super(CommentCreateView, self).form_valid(form)
 
 
-class CommentUpdateView(UpdateView):
+class CommentUpdateView(AjaxUpdateView):
 
     model = Comment
     form_class = CommentForm 
@@ -381,7 +381,7 @@ class CommentUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('community_details', kwargs={'pk': self.kwargs['pk']})
 
-class CommentDeleteView(DeleteView):
+class CommentDeleteView(AjaxDeleteView):
 
     model = Comment
 

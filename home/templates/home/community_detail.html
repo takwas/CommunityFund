@@ -16,13 +16,15 @@
     </li>
 {% endfor %}
 
+
+<h2> Comments</h2>
 {% for cmnt in cmnt_list %}
     <li>
         {{ cmnt.user.username }} - {{ cmnt.pub_date }}<br>
         {{ cmnt.text }}<br>
         {% if user == cmnt.user %} 
-            <a href="{% url 'cmnt_update' pk=object.pk cmnt_pk=cmnt.pk %}">Edit</a>
-            <a href="{% url 'cmnt_delete' pk=object.pk cmnt_pk=cmnt.pk%}">Delete</a>
+            <a href="{% url 'cmnt_update' pk=object.pk cmnt_pk=cmnt.pk %}" class="fm-update" data-fm-head="Edit your Comment" data-fm-callback="reload">Edit</a>
+            <a href="{% url 'cmnt_delete' pk=object.pk cmnt_pk=cmnt.pk%}" class="fm-delete" data-fm-head="Delete your Comment" data-fm-callback="reload">Delete</a>
         {% endif %}
 {% endfor %}
 
@@ -35,7 +37,8 @@
 
             <a id="member_list" href="{% url 'member_list' pk=object.pk %}">Member List</a>
 
-            <a href="{% url 'cmnt_create' pk=object.pk %}">Add Comment</a>
+            <a href="{% url 'cmnt_create' pk=object.pk %}" class="fm-create" data-fm-head="Write a Comment" data-fm-callback="reload">Add Comment</a>
+
             {% if object.creator == user %}
                 <a href="{% url 'comm_update' pk=object.pk %}" class="fm-update" data-fm-head="Update your Community" data-fm-callback="reload">Update Community</a>
             {% endif %}
