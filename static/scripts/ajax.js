@@ -2,16 +2,18 @@ $(function() {
 
     // displays list of communities with matching on interest in the input box
     $('#search').keyup(function() {
-        $.ajax({
-            type: "POST",
-            url: "/search/",
-            data: {
-                'search_text': $('#search').val(),
-                'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
-            },
-            success: searchSuccess,
-            dataType: 'html'
-        });
+        if ($('#search').val().trim()) {
+            $.ajax({
+                type: "POST",
+                url: "/search/",
+                data: {
+                    'search_text': $('#search').val().trim(),
+                    'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                },
+                success: searchSuccess,
+                dataType: 'html'
+            });
+        }
     });
 
     // adds user to the current community
