@@ -26,6 +26,12 @@
                 <a id="add_cmnt" name="{{ object.pk }}">Post a Comment</a>
             </li>
         </ul>
+
+        <ul class="nav nav-sidebar">
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#comments">Comments</a></li>
+        </ul>
+
         {% if object.creator == user %}
             <ul class="nav nav-sidebar">
                 <li>
@@ -40,7 +46,7 @@
     {% endif %}
 
     <!-- main section -->
-    <div id="main" class="container-fluid col-sm-9">
+    <div id="main" class="col-sm-9">
         <div class="row">
             <h1 class="page-header">{{ object.name }}</h1>
             <p class="lead">Located in {{ object.location }}</p>
@@ -54,66 +60,53 @@
 
         <div id="middle" class="col-sm-8">
             <div class="row">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active">
-                        <a href="#comm_projects", role="tab", data-toggle="tab">
-                            Projects
-                        </a>
-                    </li>
 
-                    <li>
-                        <a href="#comm_comments", role="tab", data-toggle="tab">
-                            Comments
-                        </a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-
-                    <!-- Projects -->
-                    <div id="comm_projects" class="tab-pane active">
-                        {% for project in projects %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a href="{% url 'user_profile' slug=project.initiator.username %}" class="pull-right">
-                                        Posted by {{project.initiator }}
-                                    </a>
-                                    <h4><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h4>
-                                </div>
-
-                                <div class="panel-body">
-                                    ${{ project.current_funds }} raised<br>
-                                    ${{ project.funding_goal }} needed<br>
-                                    
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-             
-                    <!-- Comments -->
-                    <div id="comm_comments" class="tab-pane">
-                        {% for cmnt in cmnt_list %}
-
+                <!-- Projects -->
+                <div id="projects" class="card">
+                    <h2>Projects</h2>
+                    {% for project in projects %}
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <a href="{% url 'user_profile' slug=cmnt.user.username %}">
-                                    {{ cmnt.user.username }} says:
+                                <a href="{% url 'user_profile' slug=project.initiator.username %}" class="pull-right">
+                                    Posted by {{project.initiator }}
                                 </a>
-                                <span class="pull-right">on {{ cmnt.pub_date }}</span>
+                                <h4><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h4>
                             </div>
+
                             <div class="panel-body">
-                                {{ cmnt.text }}
+                                ${{ project.current_funds }} raised<br>
+                                ${{ project.funding_goal }} needed<br>
+                                
                             </div>
                         </div>
+                    {% endfor %}
+                </div>
+         
+                <!-- Comments -->
+                <div id="comments" class="card">
+                    <h2>Comments</h2>
+                    {% for cmnt in cmnt_list %}
 
-                        {% endfor %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="{% url 'user_profile' slug=cmnt.user.username %}">
+                                {{ cmnt.user.username }} says:
+                            </a>
+                            <span class="pull-right">on {{ cmnt.pub_date }}</span>
+                        </div>
+                        <div class="panel-body">
+                            {{ cmnt.text }}
+                        </div>
                     </div>
+
+                    {% endfor %}
                 </div>
             </div>
         </div>
 
         <!-- members list -->
         <div class="col-sm-3">
-            <div class="panel panel-default">
+            <div class="panel panel-default card">
                 <div class="panel-heading">
                     <h3>Members</h3>
                 </div>

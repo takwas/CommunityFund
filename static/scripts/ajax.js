@@ -54,7 +54,7 @@ $(function() {
                             'csrfmiddlewaretoken': '{{csrf_token}}'
                         },
                         success: function(response) {
-                            window.location.reload(true);
+                            window.location.href = (document.URL.split('#')[0]) + '#comments';
                         },
                         dataType: 'html'
                     });
