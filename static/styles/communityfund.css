@@ -59,6 +59,10 @@
     box-shadow: 0 10px 6px -6px #777;
 }
 
+#proj_desc {
+    word-wrap: break-word;
+}
+
 * {
     border-radius: 0 !important;
 }

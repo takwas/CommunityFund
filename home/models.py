@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Max, Avg, Sum, Count
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator
 
 
 class UserProfile(models.Model):
@@ -43,7 +43,7 @@ class Project(models.Model):
    
     initiator = models.ForeignKey(User)
     name = models.CharField("Name", max_length=100)
-    description = models.TextField("Description")
+    description = models.TextField("Description", validators=[MaxLengthValidator(500)])
     community = models.ForeignKey(Community)
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2, 
         validators=[MinValueValidator(0)])

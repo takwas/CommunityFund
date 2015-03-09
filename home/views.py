@@ -204,8 +204,6 @@ class ProjectDetail(DetailView):
 
         context["rated"] = rated
 
-        print(rated)
-
         return context
 
 
