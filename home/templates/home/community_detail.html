@@ -18,7 +18,7 @@
                 </li>
 
                 <li>
-                    <a href="{% url 'project_create' pk=object.pk %}" class="fm-create" data-fm-head="Create a Project" data-fm-callback="redirect" data-fm-target="{% url 'user_profile' slug=user %}#projects">
+                    <a href="{% url 'project_create' pk=object.pk %}" class="fm-create" data-fm-head="Create a Project" data-fm-callback="redirect" data-fm-target="{% url 'community_details' pk=object.pk %}#projects">
                         Create a New Project
                     </a>
                 </li>
@@ -110,9 +110,7 @@
             <!-- members list -->
             <div class="col-md-3">
                 <div class="panel panel-default card">
-                    <div class="panel-heading">
-                        <h3>Members</h3>
-                    </div>
+                    <h3>Members</h3>
 
                     <div class="panel-body">
                         <div class="list-group">

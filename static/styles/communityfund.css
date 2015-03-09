@@ -7,10 +7,6 @@
 #search_container {
 }
 
-.progress {
-    width: 70%;
-}
-
 #middle {
     margin-left: 10px;
     margin-right: 20px;
@@ -32,6 +28,17 @@
     overflow: auto;
 }
 
+.progress {
+    margin: 10px 10px 10px 10px;
+}
+.progress-bar-success {
+    background-color: #0AA699;
+    background-image: none;
+}
+
+.table-borderless > tr { 
+     border-top: none; 
+ }
 
 .panel-body {
     word-wrap: break-word;

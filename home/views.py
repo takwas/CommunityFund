@@ -192,6 +192,20 @@ class ProjectDetail(DetailView):
 
         context["percentage"] = p.current_funds / p.funding_goal * 100
 
+
+        # initiator stuff
+        context["funders"] = get_all_funds().filter(project=p)
+        ratings = UserReputation.objects.all().filter(rater=self.request.user, project=p)
+
+        # check who this user has already rated
+        rated = []
+        for r in ratings:
+            rated += [str((get_user(r.rated)))]
+
+        context["rated"] = rated
+
+        print(rated)
+
         return context
 
 
