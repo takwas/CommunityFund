@@ -75,6 +75,10 @@ class CommunityDetail(DetailView):
         context["is_member"] = get_all_members() \
             .filter(user=self.request.user, community=comm)
         context["cmnt_list"] = Comment.objects.all().filter(community=comm)
+        
+        context["members"] = get_all_members().filter(community=comm)
+        context["interests"] = str(comm.interests).split()
+        print(context["interests"])
 
         return context
 
