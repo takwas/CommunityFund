@@ -2,69 +2,147 @@
 
 {% block content %}
 
-<h2>Profile: {{ prof_user.username }}</h2>
-Email: {{ prof_user.email }}<br>
-Location: {{ profile.location }}<br>
-Interests: {{ profile.interests }}<br>
-Rating: {{ rating }} ({{ num_ratings }} ratings) <br>
-Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)<br>
+<div class="row row-offcanvas row-offcanvas-left">
+    <!-- side bar -->
+    <div id="sidebar" class="sidebar-offcanvas">
+        <div class="col-md-12">
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="#communities">My Communities</a>
+                </li>
+                <li>
+                    <a href="#projects">My Projects</a>
+                </li>
+                <li>
+                    <a href="#funding">My Funding</a>
+                </li>
+            </ul>
 
-{% if user == prof_user %}
-<a href="{% url 'user_profile_edit' pk=user.id %}" class="fm-update" data-fm-head="Update your Profile" data-fm-callback="reload">Update Profile</a>
-<br>
+            {% if user == prof_user %}
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="#friends">My Friends</a>
+                    <a href="{% url 'user_profile_edit' pk=user.id %}" class="fm-update" data-fm-head="Update your Profile" data-fm-callback="reload">
+                        Update Profile
+                    </a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
 
-<h3>Contents</h3>
-<a href="#projects">My Projects</a><br>
-<a href="#funding">My Recent Funding</a><br>
-<a href="#communities">My Communities</a><br>
-<a href="#friends">My Friends</a><br>
-<br>
+    <!-- main section -->
+    <div id="main">
+        <div class="col-md-12">
+            <div class="row">
+                <!-- Header -->
+                <div class="row">
+                    <h1 class="page-header">{{ prof_user.username }}</h1>
+                    <p class="lead">{{ prof_user.email}}
 
-<br>
-<div id="projects">
-    My Projects:
-    {% for p in projects %}
-        <li>
-            <a href="{% url 'project_details' cid=p.community.id pk=p.pk %}">
-                {{ p.name }} - ${{ p.current_funds }} out of ${{ p.funding_goal }}
-            </a>
-        </li>
-    {% endfor %}
+                    {% if profile.location %}
+                    <p class="lead">Located in {{ profile.location }}</p>
+                    {% endif %}
+
+                    {% if profile.interests %}
+                    <p class="lead">Interests:</p>
+                    <ul id="interests">
+                        {% for i in interests %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    <p class="lead">Rating: {{ rating }} ({{ num_ratings }} ratings)</p>
+                    <p class="lead">Average Ratings for Projects: {{ prating }} ({{ num_projects }} projects)</p>
+                </div>
+
+                <div id="middle">
+                    <div class="row col-md-12">
+                        {% if user == prof_user %}
+                        <div class="col-md-6">
+                        {% else %}
+                        <div class="col-md-12">
+                        {% endif %}
+                            <!-- Communities -->
+                            <div id="communities" class="panel panel-default card">
+                                <div class="panel-heading">
+                                    <h2>Communities</h2>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="list-group">
+                                        {% for community in comms %}
+                                        <li class="list-group-item">
+                                            <a href="{% url 'community_details' pk=community.pk %}">{{ community.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div> <!-- end communities -->
+                        </div>
+
+                        {% if user == prof_user %}
+                        <div class="col-md-6">
+                            <!-- Friends -->
+                            <div id="friends" class="panel panel-default card">
+                                <div class="panel-heading">
+                                    <h2>Friends</h2>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="list-group">
+                                        {% for friend in friends %}
+                                        <li class="list-group-item">
+                                            <a href="{% url 'user_profile' slug=friend.username %}">{{ friend.username }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div> <!-- end friends -->
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="row col-md-12">
+                        <!-- Projects -->
+                        <div id="projects" class="panel panel-default card">
+                            <h2>Projects</h2>
+                            {% for project in projects %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h4>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        ${{ project.current_funds }} raised<br>
+                                        ${{ project.funding_goal }} needed<br>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div> <!-- end projects -->
+
+                        <!-- Funding -->
+                        <div id="funding" class="panel panel-default card">
+                            <h2>Funding</h2>
+                            {% for fund in funds %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4><a href="{% url 'project_details' pk=fund.project_id cid=fund.project.community_id %}">{{ fund.project }}</a></h4>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        ${{ fund.amount }} given<br>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div> <!-- end funding -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<br>
 
-<div id="funding">
-    My Recent Funding:
-    {% for f in funds %}
-        <li>
-            ${{ f.amount }} to 
-            <a href="{% url 'project_details' cid=f.project.community_id pk=f.project_id %}">
-                {{ f.project }}
-            </a>
-        </li>
-    {% endfor %}
-</div>
-<br>
-
-<div id="communities">
-    My Communties:
-    {% for community in comms %}
-        <li>
-            <a href="{% url 'community_details' pk=community.pk %}">{{ community.name }}</a>
-        </li>
-
-    {% endfor %}
-</div>
-<br>
-
-<div id="friends">
-    My Friends:
-    {% for friend in friends %}
-        <li>
-            <a href="{% url 'user_profile' slug=friend.username %}">{{ friend.username }}</a>
-        </li>
-
-    {% endfor %}
-</div>
-{% endif %}
 {% endblock %}

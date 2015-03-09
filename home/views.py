@@ -74,11 +74,11 @@ class CommunityDetail(DetailView):
         context["projects"] = get_all_projects().filter(community=comm)
         context["is_member"] = get_all_members() \
             .filter(user=self.request.user, community=comm)
-        context["cmnt_list"] = Comment.objects.all().filter(community=comm)
+        context["cmnt_list"] = Comment.objects.all().filter(community=comm) \
+            .order_by("-pub_date")
         
         context["members"] = get_all_members().filter(community=comm)
         context["interests"] = str(comm.interests).split()
-        print(context["interests"])
 
         return context
 
@@ -291,6 +291,7 @@ class UserProfileView(DetailView):
         context["projects"] = projects
         context["prof_user"] = user
         context["profile"] = UserProfile.objects.get(user=user)
+        context["interests"] = str(context["profile"].interests).split()
 
         ratings = UserReputation.objects.all().filter(rated=user)
 

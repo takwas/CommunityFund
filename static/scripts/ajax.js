@@ -3,6 +3,7 @@ $(function() {
     // displays list of communities with matching on interest in the input box
     $('#search').keyup(function() {
         if ($('#search').val().trim()) {
+            $('#search_communities').show();
             $.ajax({
                 type: "POST",
                 url: "/search/",
@@ -13,6 +14,8 @@ $(function() {
                 success: searchSuccess,
                 dataType: 'html'
             });
+        } else {
+            $('#search_communities').hide();
         }
     });
 
@@ -55,6 +58,7 @@ $(function() {
                         },
                         success: function(response) {
                             window.location.href = (document.URL.split('#')[0]) + '#comments';
+                            window.location.reload(true);
                         },
                         dataType: 'html'
                     });
