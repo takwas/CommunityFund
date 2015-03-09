@@ -17,10 +17,19 @@
     margin-bottom: 20px;
 }
 
+#sidebar {
+    width: inherit;
+    min-width: 250px;
+    max-width: 250px;
+    float: left;
+}
+
 #main {
+    height: 85%;
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 20px;
+    overflow: auto;
 }
 
 
