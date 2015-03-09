@@ -135,7 +135,8 @@ def search_communities(request):
 
     comm = Community.objects.filter(interests__icontains=search_text)
 
-    return render_to_response("community_search.html", {'comm': comm})
+    return render_to_response("community_search.html", {'search_text': search_text,
+        'comm': comm})
 
 
 # Project Related Views

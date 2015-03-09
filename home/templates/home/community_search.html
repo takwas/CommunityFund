@@ -1,4 +1,10 @@
 {% if comm.count > 0 %}
+    {% if comm.count == 1 %}
+        Found {{ comm.count }} community with "{{ search_text }}" listed in their interests
+    {% else %}
+        Found {{ comm.count }} communities with "{{ search_text }}" listed in their interests
+    {% endif %}
+
     {% for c in comm %}
         <li>
             <a href="{% url 'community_details' pk=c.pk %}">
@@ -7,7 +13,6 @@
         </li>
     {% endfor %}
 
-    {% else %}
-        <li>No communities have that interest</li>
-
+{% else %}
+    No communities were found with "{{ search_text }}" listed as an interest
 {% endif %}

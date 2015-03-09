@@ -1,6 +1,12 @@
 #content {
     margin: 0 auto;
-    padding: 50px 30px 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+#search_container {
+    padding-top: 60px;
 }
 
 .progress {
