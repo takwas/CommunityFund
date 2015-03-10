@@ -1,2 +1,1 @@
-web: waitress-serve --port=$PORT communityfund.wsgi:application
-
+web: gunicorn communityfund.wsgi
