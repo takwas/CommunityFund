@@ -19,6 +19,14 @@ $(function() {
         }
     });
 
+    // disable enter button
+    $('#search').keydown(function(event){
+        if (event.keyCode==13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
     // adds user to the current community
     $('#join_comm').click(function() {
         var cid = $(this).attr('name');

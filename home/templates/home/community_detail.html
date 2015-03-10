@@ -4,56 +4,25 @@
 
 {% csrf_token %}
 {% if user.is_authenticated %}
-<div class="row row-offcanvas row-offcanvas-left">
-    <!-- side bar -->
-    <div id="sidebar" class="sidebar-offcanvas">
-        <div class="col-md-12">
-            <ul class="nav nav-sidebar">
-                <li>
-                {% if not is_member %}
-                    <a id="join_comm" name="{{ object.pk }}">Join {{ object.name }}</a>
-                {% else %}
-                    <a>My Contributions</a>
-                {% endif %}
-                </li>
-
-                <li>
-                    <a href="{% url 'project_create' pk=object.pk %}" class="fm-create" data-fm-head="Create a Project" data-fm-callback="redirect" data-fm-target="{% url 'community_details' pk=object.pk %}#projects">
-                        Create a New Project
-                    </a>
-                </li>
-
-                <li>
-                    <a id="add_cmnt" name="{{ object.pk }}">Post a Comment</a>
-                </li>
-            </ul>
-
-            <ul class="nav nav-sidebar">
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#comments">Comments</a></li>
-            </ul>
-
-            {% if object.creator == user %}
-                <ul class="nav nav-sidebar">
-                    <li>
-                        <a href="{% url 'comm_update' pk=object.pk %}" class="fm-update" data-fm-head="Update your Community" data-fm-callback="reload">
-                            Update {{ object.name }}
-                        </a>
-                    </li>
-                </ul>
-            {% endif %}
+<div class="col-md-8 center page-content">
+    {% if user == object.creator %}
+        <div class="row">
+            <p><a href="{% url 'comm_update' pk=object.pk %}" class="fm-update" data-fm-head="Update your Community" data-fm-callback="reload">Update {{ object.name }}</a></p>
         </div>
+
+        <hr>
+    {% endif %}
+
+    <div class="row">
+        <h1 class="info">{{ object.name }}</h1>
+        <p class="lead info">Located in {{ object.location }}</p>
     </div>
 
-    <!-- main section -->
-    <div id="main">
-        <div class="col-md-12">
-
-            <!-- Header -->
-            <div class="row">
-                <h1 class="page-header">{{ object.name }}</h1>
-                <p class="lead">Located in {{ object.location }}</p>
-                <p class="lead">Interests:</p>
+    <hr>
+    <div class="row">
+        <div class="table">
+            <div class="table-cell col-md-8">
+                <p class="lead">Community Interests</p>
                 <ul id="interests">
                     {% for i in interests %}
                         <li>{{ i }}</li>
@@ -61,71 +30,96 @@
                 </ul>
             </div>
 
-            <div id="middle" class="col-md-8">
-                <div class="row">
+            <div id="stats" class="table-cell col-md-4">
+                <div class="num h1 bold"><a href="#projects">{{ projects|length }}</a></div>
+                <span class="bold h5">projects started</span>
 
-                    <!-- Projects -->
-                    <div id="projects" class="card">
-                        <h2>Projects</h2>
-                        {% for project in projects %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a href="{% url 'user_profile' slug=project.initiator.username %}" class="pull-right">
-                                        Posted by {{project.initiator }}
-                                    </a>
-                                    <h4><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h4>
-                                </div>
+                <div class="num h1 bold"><a href="#members">{{ members|length }}</a></div>
+                <span class="bold h5">users are members of {{ object.name }}</span>
 
-                                <div class="panel-body">
-                                    ${{ project.current_funds }} raised<br>
-                                    ${{ project.funding_goal }} needed<br>
-                                    
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-             
-                    <!-- Comments -->
-                    <div id="comments" class="card">
-                        <h2>Comments</h2>
-                        {% for cmnt in cmnt_list %}
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <a href="{% url 'user_profile' slug=cmnt.user.username %}">
-                                    {{ cmnt.user.username }} says:
-                                </a>
-                                <span class="pull-right">on {{ cmnt.pub_date }}</span>
-                            </div>
-                            <div class="panel-body">
-                                {{ cmnt.text }}
-                            </div>
+                {% if user.is_authenticated %}
+                    {% if not is_member %}
+                        <div class="inline-block button-wrapper">
+                            <a id="join_comm" name="{{ object.pk }}" class="btn btn-primary">Become a member of {{ object.name }}</a>
                         </div>
-
-                        {% endfor %}
-                    </div>
-                </div>
+                    {% else %}
+                        <div class="inline-block button-wrapper">
+                            <a href="{% url 'project_create' pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Create your Project" data-fm-callback="reload">
+                                Start a Project
+                            </a>
+                        </div>
+                        <div class="inline-block button-wrapper">   
+                            <a id="add_cmnt" name="{{ object.pk }}" class="btn btn-primary">Post a Comment</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
+        </div>
+    </div>
+    
+    <hr>
 
-            <!-- members list -->
-            <div class="col-md-3">
-                <div class="panel panel-default card">
-                    <h3>Members</h3>
+    <!-- Projects -->
+    <div id="projects" class="row col-md-10 center">
+        <p class="lead">Projects</p>
+        {% if projects %}
+            {% for project in projects %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{% url 'user_profile' slug=project.initiator.username %}" class="pull-right">
+                            Posted by {{project.initiator }}
+                        </a>
+                        <h5><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h5>
+                    </div>
 
                     <div class="panel-body">
-                        <div class="list-group">
-                            {% for member in members %}
-                                <li class="list-group-item">
-                                <a href="{% url 'user_profile' slug=member.user.username  %}">{{ member.user.username }}</a>
-                                </li>
-                            {% endfor %}
-                        </div>
+                        ${{ project.current_funds }} raised out of ${{ project.funding_goal }}
                     </div>
                 </div>
+            {% endfor %}
+        {% else %}
+            <span class="bold h5">Nobody has start a project yet.</span>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <div class="row col-md-10 center">
+        
+        <!-- Members -->
+        <div id="members" class="row col-md-5 side-by-side">
+            <p class="lead">Members</p>
+            {% for member in members %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{% url 'user_profile' slug=member.user.username  %}">{{ member.user.username }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Comments -->
+        <div id="comments" class="row col-md-6 side-by-side">
+            <p class="lead">Comments</p>
+            <div class="list-group">
+                {% if cmnt_list %}
+                    {% for comment in cmnt_list %}
+                        <li class="list-group-item">
+                            <span class="pull-right h6 date">{{ comment.pub_date }}</span>
+                            <a href="{% url 'user_profile' slug=comment.user.username  %}">{{ comment.user.username }} says:</a>
+                            <div class="long-text">
+                                {{ comment.text }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <span class="bold h5">There are no comments on this message board.</span>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
 {% endif %}
 
 {% endblock %}

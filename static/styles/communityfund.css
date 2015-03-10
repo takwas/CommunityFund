@@ -7,41 +7,10 @@
 #search_container {
 }
 
-#middle {
-    margin-left: 10px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-}
-
-#sidebar {
-    width: inherit;
-    min-width: 250px;
-    max-width: 250px;
-    float: left;
-}
-
 #main {
-    height: 85%;
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 20px;
-    overflow: auto;
-}
-
-.progress {
-    margin: 10px 10px 10px 10px;
-}
-.progress-bar-success {
-    background-color: #0AA699;
-    background-image: none;
-}
-
-.table-borderless > tr { 
-     border-top: none; 
- }
-
-.panel-body {
-    word-wrap: break-word;
 }
 
 #interests li {
@@ -49,18 +18,35 @@
     padding-right: 20px;
 }
 
-.card {
-    margin: 10px auto;
-    padding: 20px 20px 20px 20px;
-    border: 1px solid #E0E0E0;
-
-    -webkit-box-shadow: 0 10px 6px -6px #777;
-    -moz-box-shadow: 0 10px 6px -6px #777;
-    box-shadow: 0 10px 6px -6px #777;
+.side-by-side {
+    margin: 0px 10px 0px 10px;
 }
 
-#proj_desc {
+.info {
+    text-align: center;
+}
+
+.date {
+    margin-top: -2px;
+}
+
+.center {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.button-wrapper {
+    margin: 20px 10px 20px 0px;
+}
+
+.long-text {
     word-wrap: break-word;
+}
+
+.panel-default > .panel-heading {
+    background-color: #E3F2FD;
 }
 
 * {

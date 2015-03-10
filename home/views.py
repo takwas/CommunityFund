@@ -193,7 +193,6 @@ class ProjectDetail(DetailView):
         context["percentage"] = p.current_funds / p.funding_goal * 100
 
 
-        # initiator stuff
         context["funders"] = get_all_funds().filter(project=p)
         ratings = UserReputation.objects.all().filter(rater=self.request.user, project=p)
 
@@ -322,8 +321,6 @@ class UserProfileView(DetailView):
             context["prating"] = sum(pratings) / len(pratings)
         else:
             context["prating"] = None
-
-        context["num_projects"] = projects.aggregate(Count('name'))['name__count']
 
         # get funds given to projects
         context["funds"] = get_all_funds().filter(user=self.request.user)

@@ -2,109 +2,84 @@
 
 {% block content %}
 
-<div class="row row-offcanvas row-offcanvas-left">
-    <!-- side bar -->
-    <div id="sidebar" class="sidebar-offcanvas">
-        <div class="col-md-12">
-            {% if user == object.initiator %}
-                <ul class="nav nav-sidebar">
-                    <li>
-                        <a href="{% url 'project_update' cid=object.community.id pk=object.pk %}" class="fm-update" data-fm-head="Update your Project" data-fm-callback="reload">Update Project</a>
-                    </li>
-                    <li> 
-                        <a href="{% url 'project_delete' cid=object.community.id pk=object.pk %}" class="fm-delete" data-fm-head="Delete this Project" data-fm-callback="redirect" data-fm-target="{% url 'community_details' pk=object.community.id %}">Delete Project</a>
-                    </li>
-                </ul>
+<div class="col-md-8 center page-content">
+    {% if user == object.initiator %}
+        <div class="row">
+            <p><a href="{% url 'project_update' cid=object.community.id pk=object.pk %}" class="fm-update" data-fm-head="Update your Project" data-fm-callback="reload">Update {{ object.name }}</a></p>
+            <p><a href="{% url 'project_delete' cid=object.community.id pk=object.pk %}" class="fm-delete" data-fm-head="Delete this Project" data-fm-callback="redirect" data-fm-target="{% url 'community_details' pk=object.community.id %}">Delete {{ object.name }}</a></p>
+        </div>
 
-            {% else %}
-                <ul class="nav nav-sidebar">
-                    <li>
-                    {% if object.current_funds < object.funding_goal %}
-                        <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Fund this Project" data-fm-callback="reload">
-                            Fund Project
-                        </a>
-                    {% elif did_fund and not did_rate_project %}
-                        <a href="{% url 'rate_project' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Rate this Project" data-fm-callback="reload">
-                            Rate Project
-                        </a>
-                    {% endif %}
-                    </li>
+        <hr>
+    {% endif %}
+
+    <div class="row">
+        <h1 class="info">{{ object.name }}</h1>
+        <p class="lead info">by <a href="{% url 'user_profile' slug=object.initiator  %}">{{ object.initiator }}</a></p>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="table">
+            <div class="table-cell col-md-8">
+                <h3>About this Project</h3>
+                <p class="long-text">{{ object.description }}</p>
+            </div>
+
+            <div id="stats" class="table-cell col-md-4">
+                <div class="num h1 bold">${{ object.current_funds }}</div>
+                <span class="bold h5">raised out of ${{ object.funding_goal }}</span>
+
+                <div class="num h1 bold">{{ rating }}</div>
+                <span class="bold h5">({{ num_ratings }} ratings by funders)</span>
+
+                {% if user.is_authenticated and user != object.initiator and is_member %}
+                    <div class="inline-block button-wrapper">
+                        {% if object.current_funds < object.funding_goal %}
+                            <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Fund this Project" data-fm-callback="reload">
+                                Fund Project
+                            </a>
+                        {% elif did_fund and not did_rate_project %}
+                            <a href="{% url 'rate_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Rate this Project" data-fm-callback="reload">
+                                Rate Project
+                            </a>
+                        {% endif %}
+                    </div>
 
                     {% if not did_rate_user and did_fund %}
-                    <li>
-                        <a href="{% url 'rate_init' cid=object.community.id pk=object.pk %}" class="fm-create" data-fm-head="Rate the Project Initiator" data-fm-callback="reload">
-                            Rate Initiator
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- main section -->
-    <div id="main">
-        <div class="col-md-12">
-
-            <!-- Header -->
-            <div class="row">
-                <h1 class="page-header">{{ object.name }}</h1>
-                <p class="lead">Posted by <a href="{% url 'user_profile' slug=object.initiator  %}">{{ object.initiator }}</a> on {{ object.pub_date }}</p>
-                <p class="lead">Posted in <a href="{% url 'community_details' pk=object.community.id  %}">{{ object.community }}</a></p>
-
-                <table class="table table-borderless">
-                    <tr>
-                        <td colspan="2">
-                            <!-- Progress Bar -->
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" 
-                                    aria-valuenow="{{ object.current_funds }}" aria-valuemin="0" 
-                                    aria-valuemax="{{ object.funding_goal }}" style="width:{{ percentage }}%">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="lead">Raised: ${{ object.current_funds }}</p>
-                        </td>
-                        <td>
-                            <p class="lead">Goal: ${{ object.funding_goal }}</p>
-                        </td>
-                    </tr>
-                </table>
-                <p class="lead">Rating: {{ rating }} ({{ num_ratings }} ratings)</p>
-            </div>
-
-            <!-- Description -->
-            <div class="row">
-                <div id="description" class="card">
-                    <h2>Description</h2>
-                    <p id="proj_desc">{{ object.description }}</p>
-                </div>
-            </div>
-
-
-            <!-- Funders -->
-            <div class="row">
-                <div id="funders" class="card">
-                    <h2>Funders</h2>
-                    {% for funder in funders %}
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <a href="{% url 'user_profile' slug=funder.user  %}">{{ funder.user.username }}</a>
-                                pledged ${{ funder.amount }}
-
-                                {% if user == object.initiator and funder.user.username not in rated %}
-                                    <a href="{% url 'rate_funder' cid=object.community_id pk=object.pk funder=funder.user %}" class="fm-create pull-right" data-fm-head="Rate this Funder" data-fm-callback="reload">Rate</a>
-                                {% endif %}
-                            </div>
+                        <div class="inline-block button-wrapper">   
+                            <a href="{% url 'rate_init' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Rate the Project Initiator" data-fm-callback="reload">
+                                Rate Initiator
+                            </a>
                         </div>
-                    {% endfor %}
-                </div>
+                    {% endif %}
+
+                {% endif %}
+                <hr>
+                <span class="h6">posted in <a href="{% url 'community_details' pk=object.community.id  %}">{{ object.community }}</a></span>
+                <br>
+                <span class="h6">started on {{ object.pub_date }}</span>
             </div>
         </div>
     </div>
+    <hr>
+
+    <h3>Funders</h3>
+    {% if funders %}
+        {% for funder in funders %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url 'user_profile' slug=funder.user  %}">{{ funder.user.username }}</a>
+                    pledged ${{ funder.amount }}
+
+                    {% if user == object.initiator and funder.user.username not in rated %}
+                        <a href="{% url 'rate_funder' cid=object.community_id pk=object.pk funder=funder.user %}" class="fm-create pull-right" data-fm-head="Rate this Funder" data-fm-callback="reload">Rate</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <span class="bold h5">Nobody has helped fund this project yet.</span>
+    {% endif %}
 </div>
 
 {% endblock %}
