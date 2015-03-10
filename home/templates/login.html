@@ -1,26 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="col-md-4 center">
+    <h3 class="info">Login</h3>
 
-<a>Login</a>
+    {% if form.errors %}
+        <span class="bold h5 info">Wrong username or password cuz. Try again.</span>
+    {% endif %}
 
-{% if form.errors %}
-    <p>Wrong username or password cuz. Try again.</p>
-{% endif %}
+    <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-col-md-8 center-block">
+        {% csrf_token %}
+        <div class="info center">
+            <span class="h5">Username: {{ form.username }}</span>
+            <br>
+            <br>
+            <span class="h5">Password: {{ form.password }}</span>
+        </div>
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-    {% csrf_token %}
+        <hr>
 
-    <div>
-        {{ form.username.label_tag }}
-        {{ form.username }}
-        <br>
-        {{ form.password.label_tag }}
-        {{ form.password }}
-    </div>
-
-    <input type="submit" value="login"></input>
-    <input type="hidden" name="next" value="{{ next }}"></input>
-</form>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login"></input>
+            <br>
+            <input type="hidden" name="next" value="{{ next }}"></input>
+        </div>        
+    </form>
+</div>
 
 {% endblock %}
