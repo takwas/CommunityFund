@@ -29,6 +29,8 @@
                     </button>
                     <a class="navbar-brand" href="{% url 'home' %}">CommunityFund</a>
                 </div>
+
+                {% if user.is_authenticated %}
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'community_create' %}" class="fm-create" data-fm-head="Create a New Community" data-fm-callback="redirect" data-fm-target="{% url 'user_profile' slug=user %}#communities">Create Community</a></li>
@@ -40,7 +42,7 @@
                         <li>
                         
                     </ul>
-
+                {% endif %}
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
                     

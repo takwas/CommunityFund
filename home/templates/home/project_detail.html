@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="col-md-8 center page-content">
+<div class="col-md-8 center">
     {% if user == object.initiator %}
         <div class="row">
             <p><a href="{% url 'project_update' cid=object.community.id pk=object.pk %}" class="fm-update" data-fm-head="Update your Project" data-fm-callback="reload">Update {{ object.name }}</a></p>

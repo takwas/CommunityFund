@@ -1,16 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if user.is_authenticated %}
+<div class="col-md-8 center">
+    {% if user.is_authenticated %}
+        <div class="row">
+            <h1 class="info">All Communities</h1>
+        </div>
+        
+        <hr>
 
-<h3> All Communities</h3>
-{% for post in object_list %}
-    <li>
-        <a href="{% url 'community_details' pk=post.pk %}">
-            {{ post.name }}
-        </a>
-    </li>
-{% endfor %}
+        <div class="col-md-8 center">
+            {% for post in object_list %}
+                <div class="center info">
+                    <a href="{% url 'community_details' pk=post.pk %}">
+                        {{ post.name }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <span class="h1 center">Login or Register to get started</span>
+    {% endif %}
+</div>
 
-{% endif %}
 {% endblock %}
