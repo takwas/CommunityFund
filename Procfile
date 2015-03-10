@@ -1,2 +1,1 @@
-web: gunicorn communityfund.wsgi --log-file -
-
+web: gunicorn communityfund.wsgi --log-file
