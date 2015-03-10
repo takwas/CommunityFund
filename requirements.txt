@@ -22,10 +22,7 @@ djangotoolbox==1.6.2
 futures==2.2.0
 gunicorn==19.3.0
 kombu==3.0.23
-macholib==1.5
-matplotlib==1.1.1
 modulegraph==0.10.1
-numpy==1.6.2
 psycopg2==2.5.4
 py2app==0.7.1
 pyOpenSSL==0.13
