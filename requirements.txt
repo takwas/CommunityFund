@@ -78,6 +78,7 @@ scipy==0.11.0
 six==1.8.0
 sqlparse==0.1.13
 thrift==0.9.1
+waitress==0.8.9
 wsgiref==0.1.2
 xattr==0.6.4
 zope.interface==3.8.0

@@ -1,1 +1,2 @@
-web: gunicorn communityfund.wsgi --log-file
+web: waitress-serve --port=$PORT communityfund.wsgi:application
+
