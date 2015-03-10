@@ -10,8 +10,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -20,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = ')v7ly^(#*l1t!ob0h7goi*rr5gut-1vui#5q*p(6%b)kwmy9(w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -28,7 +30,7 @@ TEMPLATE_DIRS = (
     BASE_DIR + "/home/templates/home",
     )
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://aqueous-tundra-7986.herokuapp.com/']
 
 
 # Application definition
@@ -113,3 +115,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 AUTH_PROFILE_MODULE = 'communityfund.UserProfile'
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

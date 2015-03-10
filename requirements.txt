@@ -29,6 +29,7 @@ django-registration-redux==1.1
 django-user-accounts==1.0
 djangotoolbox==1.6.2
 futures==2.2.0
+gunicorn==19.3.0
 kombu==3.0.23
 macholib==1.5
 matplotlib==1.1.1

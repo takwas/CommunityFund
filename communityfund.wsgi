@@ -1,3 +1,4 @@
-import django.core.handlers.wsgi
+from dj_static import Cling
 
-application = django.core.handlers.wsgi.WSGIHandler()
+application = Cling(get_wsgi_application())
+
