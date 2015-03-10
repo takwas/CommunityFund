@@ -22,7 +22,7 @@ DATABASES['default'] = dj_database_url.config()
 SECRET_KEY = ')v7ly^(#*l1t!ob0h7goi*rr5gut-1vui#5q*p(6%b)kwmy9(w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
