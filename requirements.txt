@@ -27,17 +27,6 @@ gunicorn==19.3.0
 httplib2==0.9
 kombu==3.0.23
 psycopg2==2.5.4
-py2app==0.7.1
-pyOpenSSL==0.13
-pycclib==1.6.1
-pycrypto==2.6.1
-pyobjc-core==2.3.2a0
 python-dateutil==1.5
 pytz==2014.7
-six==1.8.0
 sqlparse==0.1.13
-thrift==0.9.1
-waitress==0.8.9
-wsgiref==0.1.2
-xattr==0.6.4
-zope.interface==3.8.0
