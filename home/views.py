@@ -7,10 +7,13 @@ from registration.backends.simple.views import RegistrationView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from django.db.models import Max, Avg, Sum, Count
+from django.utils.timezone import activate
 from .models import *
 from .forms import *
 from fm.views import AjaxCreateView, AjaxUpdateView, AjaxDeleteView
 
+# set up appropriate time zone for user
+activate(settings.TIME_ZONE)
 
 def get_project(pid):
     return Project.objects.get(id=pid)
