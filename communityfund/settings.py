@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'communityfund.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'CA'
+TIME_ZONE = 'America/Toronto'
 
 USE_I18N = True
 
