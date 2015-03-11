@@ -40,7 +40,7 @@
                 {% if user.is_authenticated %}
                     {% if not is_member %}
                         <div class="inline-block button-wrapper">
-                            <a id="join_comm" name="{{ object.pk }}" class="btn btn-primary">Become a member of {{ object.name }}</a>
+                            <a id="join_comm" name="{{ object.pk }}" class="btn btn-primary">Join Community</a>
                         </div>
                     {% else %}
                         <div class="inline-block button-wrapper">
@@ -49,7 +49,7 @@
                             </a>
                         </div>
                         <div class="inline-block button-wrapper">   
-                            <a id="add_cmnt" name="{{ object.pk }}" class="btn btn-primary">Post a Comment</a>
+                            <a id="add_cmnt" name="{{ object.pk }}" class="btn btn-primary">Post a Message</a>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -78,7 +78,7 @@
                 </div>
             {% endfor %}
         {% else %}
-            <span class="bold h5">Nobody has start a project yet.</span>
+            <span class="bold h5">Nobody has started a project yet.</span>
         {% endif %}
     </div>
 
@@ -100,7 +100,7 @@
 
         <!-- Comments -->
         <div id="comments" class="row col-md-6 side-by-side">
-            <p class="lead">Comments</p>
+            <p class="lead">Message Board</p>
             <div class="list-group">
                 {% if cmnt_list %}
                     {% for comment in cmnt_list %}
@@ -113,7 +113,7 @@
                         </li>
                     {% endfor %}
                 {% else %}
-                    <span class="bold h5">There are no comments on this message board.</span>
+                    <span class="bold h5">There are no messages on this message board.</span>
                 {% endif %}
             </div>
         </div>
