@@ -49,7 +49,7 @@ class UserProfileInline(admin.StackedInline):
 
 
 class UserProfileAdmin(UserAdmin):
-    inlines=(UserProfileInLine,)
+    inlines=(UserProfileInline,)
 
 # Register User extended with UserProfile attributes
 admin.site.register(User, UserProfileAdmin)
