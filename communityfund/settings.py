@@ -28,7 +28,8 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = (
-    BASE_DIR + "./home/templates/home",
+    BASE_DIR + "../home/templates/home",
+    BASE_DIR + "home/templates/home",
     )
 
 ALLOWED_HOSTS = ['*']
@@ -107,6 +108,7 @@ USE_TZ = True
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, '../static'),
     os.path.join(BASE_DIR, 'static'),
 )
 
