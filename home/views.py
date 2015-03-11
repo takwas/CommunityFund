@@ -7,14 +7,12 @@ from registration.backends.simple.views import RegistrationView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from django.db.models import Max, Avg, Sum, Count
-from django.utils.timezone import activate
 from .models import *
 from .forms import *
 from fm.views import AjaxCreateView, AjaxUpdateView, AjaxDeleteView
 
-# set up appropriate time zone for user
-activate(settings.TIME_ZONE)
 
+# Helper functions for db queriers
 def get_project(pid):
     return Project.objects.get(id=pid)
 
@@ -44,6 +42,7 @@ class CommunityListView(ListView):
 
 class CustomRegistrationView(RegistrationView):
 
+    # Return home on succesful registration
     def get_success_url(self, request, user):
         return reverse_lazy("home")
 
@@ -72,11 +71,16 @@ class CommunityDetail(DetailView):
     template_name = "community_detail.html"
 
     def get_context_data(self, **kwargs):
+
         context = super(CommunityDetail, self).get_context_data(**kwargs)
+
+        # appropriate data used in template
         comm = context["object"]
         context["projects"] = get_all_projects().filter(community=comm)
+
         context["is_member"] = get_all_members() \
             .filter(user=self.request.user, community=comm)
+
         context["cmnt_list"] = Comment.objects.all().filter(community=comm) \
             .order_by("-pub_date")
         
@@ -92,6 +96,8 @@ class CommunityUpdateView(AjaxUpdateView):
     form_class = CommunityForm
 
     def get_queryset(self):
+        # filter so that user can't simply type in the update link
+        # for stuff they shouldn't be able to edit
         qset = super(CommunityUpdateView, self).get_queryset()
         return qset.filter(creator=self.request.user)
 
@@ -102,6 +108,8 @@ class JoinCommunityView(AjaxCreateView):
     form_class = MemberForm
 
     def form_valid(self, form):
+        
+        # the user and community are added by the app
         form_obj = form.save(commit=False)
         form_obj.user = self.request.user
         form_obj.community = get_community(self.kwargs["pk"])
@@ -117,6 +125,7 @@ class MemberListView(ListView):
     template_name = "member_list.html"
 
     def get_queryset(self):
+        # query to get all members of given community
         return get_all_members().filter(community_id=self.kwargs['pk'])
 
 
@@ -126,6 +135,7 @@ class CommentCreateView(AjaxCreateView):
     form_class = CommentForm 
 
     def form_valid(self, form):
+        # user and community automatically added, not up to user
         form_obj = form.save(commit=False)
         form_obj.user = self.request.user
         form_obj.community = Community.objects.get(pk=self.kwargs["pk"])
@@ -135,11 +145,13 @@ class CommentCreateView(AjaxCreateView):
 
 
 def search_communities(request):
+
     if request.method == "POST":
         search_text = request.POST['search_text']
     else:
         search_text = ''
 
+    # Simple search using contains
     comm = Community.objects.filter(interests__icontains=search_text)
 
     return render_to_response("community_search.html", {'search_text': search_text,
@@ -148,10 +160,13 @@ def search_communities(request):
 
 # Project Related Views
 class ProjectCreateView(AjaxCreateView):
+
     model = Project
     form_class = ProjectForm
 
     def form_valid(self, form):
+        
+        # fill in form fields that are not up to user
         comm_id = self.kwargs["pk"]
         comm = get_community(comm_id)
 
@@ -174,6 +189,8 @@ class ProjectDetail(DetailView):
     template_name = "project_detail.html"
 
     def get_context_data(self, **kwargs):
+
+        # appropriate data used in template
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         p = context["object"]
         
@@ -215,6 +232,8 @@ class ProjectUpdateView(AjaxUpdateView):
     form_class = ProjectForm 
 
     def get_queryset(self):
+        # filter so that user can't simply type in the update link
+        # for stuff they shouldn't be able to edit
         qset = super(ProjectUpdateView, self).get_queryset()
         return qset.filter(initiator=self.request.user)
 
@@ -225,11 +244,14 @@ class ProjectDeleteView(AjaxDeleteView):
     success_url = "/"
 
     def get_queryset(self):
+        # filter so that user can't simply type in the delete link
+        # for stuff they shouldn't be able to edit
         qset = super(ProjectDeleteView, self).get_queryset()
         return qset.filter(initiator=self.request.user)
 
 
 class FundProjectView(AjaxCreateView):
+
     model = Funded
     form_class = FundForm
 
@@ -241,6 +263,8 @@ class FundProjectView(AjaxCreateView):
         return ({'max_amount': max_funds})
 
     def form_valid(self, form):
+
+        # fill in fields that user cannot (or should not)
         project = get_project(self.kwargs["pk"])
 
         form_obj = form.save(commit=False)
@@ -255,11 +279,14 @@ class FundProjectView(AjaxCreateView):
 
 
 class RateProjectView(AjaxCreateView):
+
     model = ProjectReputation
     form_class = RateProjectForm
     template_name = "rate_form.html"
 
     def form_valid(self, form):
+
+        # fill in fields that user cannot
         project = get_project(self.kwargs['pk'])
 
         form_obj = form.save(commit=False)
@@ -273,6 +300,7 @@ class RateProjectView(AjaxCreateView):
 
 @login_required
 def funders_list_view(request, cid, pk):
+
     funders = get_all_funds().filter(project=pk)
     initiator = get_project(pk).initiator
 
@@ -297,6 +325,7 @@ class UserProfileView(DetailView):
 
     def get_context_data(self, **kwargs):
 
+        # data used by template (which has access to dict context)
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
         user = get_user(self.kwargs["slug"])
@@ -332,9 +361,10 @@ class UserProfileView(DetailView):
         comms = [x.community for x in get_all_members().filter(user=user)]
         friends = []
 
+        # Find all members of all communities the user is in 
         for item in comms:
             members = get_all_members().filter(community=item) 
-            
+                
             for member in members:
                 if member.user not in friends and member.user != self.request.user:
                     friends.append(member.user)
@@ -351,6 +381,8 @@ class UserProfileUpdateView(AjaxUpdateView):
     form_class = ProfileForm 
 
     def get_queryset(self):
+        # filter so that user can't simply type in the update link
+        # for stuff they shouldn't be able to edit
         qset = super(UserProfileUpdateView, self).get_queryset()
         return qset.filter(user=self.request.user)
 
@@ -362,6 +394,8 @@ class RateInitiatorView(AjaxCreateView):
     template_name = "rate_form.html"
 
     def form_valid(self, form):
+
+        # fill in stuff user cannot
         project = get_project(self.kwargs['pk'])
 
         form_obj = form.save(commit=False)
@@ -381,6 +415,8 @@ class RateFunderView(AjaxCreateView):
     template_name = "rate_form.html"
 
     def form_valid(self, form):
+
+        # fill in stuff user cannot
         project = get_project(self.kwargs['pk'])
         funder = get_user(self.kwargs['funder'])
 
