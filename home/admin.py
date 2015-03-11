@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from .models import *
 
@@ -40,9 +40,6 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(Comment, CommentAdmin)
 
 
-# Unregister User because we're extending it to UserProfile
-admin.site.unregister(User)
-
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
@@ -51,5 +48,8 @@ class UserProfileInline(admin.StackedInline):
 class UserProfileAdmin(UserAdmin):
     inlines=(UserProfileInline,)
 
+# Unregister User because we're extending it to UserProfile
+admin.site.unregister(get_user_model())
+
 # Register User extended with UserProfile attributes
-admin.site.register(User, UserProfileAdmin)
+admin.site.register(get_user_model(), UserProfileAdmin)
