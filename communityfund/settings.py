@@ -28,7 +28,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = (
-    BASE_DIR + "../home/templates/home",
+    BASE_DIR + "/../home/templates/home",
     BASE_DIR + "home/templates/home",
     )
 
@@ -81,6 +81,7 @@ WSGI_APPLICATION = 'communityfund.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+# uncomment below when developing locally
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
