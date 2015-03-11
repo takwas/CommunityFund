@@ -13,7 +13,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.join(__file__))
 
 import dj_database_url
-DATABASES = {'default': dj_database_url.config()}
+DATABASES = {'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))}
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Quick-start development settings - unsuitable for production
