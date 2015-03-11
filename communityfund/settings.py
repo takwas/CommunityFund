@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# uncomment below 3 lines when using heroku
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default=os.getenv('HEROKU_POSTGRESQL_GOLD_URL'))}
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -23,7 +24,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECRET_KEY = ')v7ly^(#*l1t!ob0h7goi*rr5gut-1vui#5q*p(6%b)kwmy9(w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = False 
 
 TEMPLATE_DEBUG = True
 
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'communityfund.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-# uncomment below when developing locally
+# uncomment below 6 lines when developing locally
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
