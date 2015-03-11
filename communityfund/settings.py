@@ -110,9 +110,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/'
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 AUTH_PROFILE_MODULE = 'communityfund.UserProfile'
-
