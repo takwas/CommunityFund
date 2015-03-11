@@ -41,6 +41,7 @@ class Community(models.Model):
 
 class Project(models.Model):
    
+    # validators to ensure data is of appropriate length
     initiator = models.ForeignKey(User)
     name = models.CharField("Name", max_length=100)
     description = models.TextField("Description", validators=[MaxLengthValidator(500)])
@@ -51,12 +52,14 @@ class Project(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __repr__(self):
-        return "{name: %s, initiator: %s, description: %s, community: %s}" % (self.name, self.initiator, self.description, self.community)
+        return "{name: %s, initiator: %s, description: %s, community: %s}" \
+                % (self.name, self.initiator, self.description, self.community)
 
     def __unicode__(self):
         return self.name
 
     def getCurrentFunds(self):
+        # database sum query
         funds = Funded.objects.all().filter(project=self.id).aggregate(Sum('amount'))
         return funds['amount__sum']
 

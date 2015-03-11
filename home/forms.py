@@ -7,17 +7,21 @@ from decimal import *
 class ProjectForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        
+        # initiate form, define method, and add Submit button
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Submit"))
 
+        # validate form field
         self.fields['funding_goal'] = forms.DecimalField(min_value=5, decimal_places=2)
 
     class Meta:
 
         model = Project
         exclude = ("initiator", "pub_date", "current_funds", "community")
+
 
 class MemberForm(forms.ModelForm):
 
@@ -37,6 +41,8 @@ class MemberForm(forms.ModelForm):
 class FundForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+
+        # find maximum amount funder can give to project at current time
         max_amount = kwargs.pop('initial', None).pop('max_amount', None)
 
         super(FundForm, self).__init__(*args, **kwargs)
@@ -83,6 +89,8 @@ class ProfileForm(forms.ModelForm):
 
 
 class RateUserForm(forms.ModelForm):
+
+    # ratings go from 1 to 5 (1 being lowest)
     CHOICES=[(1,'1'),
              (2,'2'),
              (3,'3'),
@@ -103,6 +111,7 @@ class RateUserForm(forms.ModelForm):
 
 
 class RateProjectForm(forms.ModelForm):
+
     CHOICES=[(1,'1'),
              (2,'2'),
              (3,'3'),
