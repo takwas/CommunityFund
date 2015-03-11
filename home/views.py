@@ -323,10 +323,10 @@ class UserProfileView(DetailView):
             context["prating"] = None
 
         # get funds given to projects
-        context["funds"] = get_all_funds().filter(user=self.request.user)
+        context["funds"] = get_all_funds().filter(user=user)
 
         # communities
-        comms = [x.community for x in get_all_members().filter(user=self.request.user)]
+        comms = [x.community for x in get_all_members().filter(user=user)]
         friends = []
 
         for item in comms:
