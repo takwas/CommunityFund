@@ -43,7 +43,7 @@ admin.site.register(Comment, CommentAdmin)
 # Unregister User because we're extending it to UserProfile
 admin.site.unregister(User)
 
-class UserProfileInline(admin.StackedInLine):
+class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
 
