@@ -1,3 +1,5 @@
+# Description
+
 Group members: Harris, Raymond, Mihir, and Tri
 
 Work in progress. 
