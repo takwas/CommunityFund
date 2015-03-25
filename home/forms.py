@@ -61,6 +61,10 @@ class FundForm(forms.ModelForm):
 
 
 class CommunityForm(forms.ModelForm):
+    
+    INTERESTS = ['Art', 'Comics', 'Crafts', 'Dance', 'Design', 'Fashion', 
+        'Film', 'Food', 'Games', 'Journalism', 'Music', 'Photography', 
+        'Publishing', 'Technology', 'Theater']
 
     def __init__(self, *args, **kwargs):
 
