@@ -66,6 +66,9 @@ class CommunityForm(forms.ModelForm):
         'Film', 'Food', 'Games', 'Journalism', 'Music', 'Photography', 
         'Publishing', 'Technology', 'Theater']
 
+    interests = forms.MultipleChoiceField(required=True,
+        widget=forms.CheckboxSelectMultiple, choices=[(x,x) for x in INTERESTS])
+
     def __init__(self, *args, **kwargs):
 
         super(CommunityForm, self).__init__(*args, **kwargs)

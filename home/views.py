@@ -55,7 +55,22 @@ class CommunityCreateView(AjaxCreateView):
 
     def form_valid(self, form):
         form_obj = form.save(commit=False)
+
         form_obj.creator = self.request.user
+
+        # format the unicode object returned from the form into a space
+        # separated string
+        interests_str = ""
+        INTERESTS = ['Art', 'Comics', 'Crafts', 'Dance', 'Design', 'Fashion', 
+            'Film', 'Food', 'Games', 'Journalism', 'Music', 'Photography', 
+            'Publishing', 'Technology', 'Theater']
+        
+        for x in str(form_obj.interests).split("'"):
+            if x in INTERESTS:
+                interests_str += x + ' '
+
+        form_obj.interests = interests_str
+
         form_obj.save()
 
         # automatically get added to community if not a member

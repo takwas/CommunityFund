@@ -10,12 +10,14 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # uncomment below 3 lines when using heroku
+'''
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default=os.getenv('HEROKU_POSTGRESQL_GOLD_URL'))}
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+'''
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -30,10 +32,10 @@ TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = (
     BASE_DIR + "/../home/templates/home",
-    BASE_DIR + "home/templates/home",
+    BASE_DIR + "/home/templates/home",
     )
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -83,12 +85,12 @@ WSGI_APPLICATION = 'communityfund.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 # uncomment below 6 lines when developing locally
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'communityfund_db',
-#    }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'communityfund_db',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -109,12 +111,14 @@ USE_TZ = True
 
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '../static'),
+    #os.path.join(BASE_DIR, '../static'),
     os.path.join(BASE_DIR, 'static'),
 )
-
+'''
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+'''
 
 LOGIN_REDIRECT_URL = '/'
 CRISPY_TEMPLATE_PACK = 'bootstrap'
