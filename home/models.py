@@ -70,6 +70,9 @@ class Project(models.Model):
     def getCurrentFunds(self):
         # database sum query
         funds = Funded.objects.all().filter(project=self.id).aggregate(Sum('amount'))
+
+        if not funds['amount__sum']:
+            return 0
         return funds['amount__sum']
 
 

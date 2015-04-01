@@ -174,7 +174,10 @@ class ProjectCreateView(AjaxCreateView):
         form_obj = form.save(commit=False)
         form_obj.initiator = self.request.user
         form_obj.community = comm
+
+        ## remove
         form_obj.current_funds = 0
+
         form_obj.save()
 
         # automatically get added to community if not a member
@@ -210,9 +213,6 @@ class ProjectDetail(DetailView):
 
         context["is_member"] = get_all_members() \
             .filter(community=p.community, user=self.request.user)
-
-        context["percentage"] = p.current_funds / p.funding_goal * 100
-
 
         context["funders"] = get_all_funds().filter(project=p)
         ratings = UserReputation.objects.all().filter(rater=self.request.user, project=p)
@@ -259,7 +259,7 @@ class FundProjectView(AjaxCreateView):
     def get_initial(self):
         # pass in max values for form
         project = get_project(self.kwargs["pk"])
-        max_funds = project.funding_goal - project.current_funds
+        max_funds = project.funding_goal - project.getCurrentFunds()
 
         return ({'max_amount': max_funds})
 
@@ -271,7 +271,6 @@ class FundProjectView(AjaxCreateView):
         form_obj = form.save(commit=False)
         form_obj.user = self.request.user
         form_obj.project = project
-        project.current_funds += form_obj.amount
 
         project.save()
         form_obj.save()

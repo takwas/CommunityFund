@@ -26,7 +26,13 @@
             </div>
 
             <div id="stats" class="table-cell col-md-4">
-                <div class="num h1 bold">${{ object.current_funds }}</div>
+                <div class="num h1 bold">
+                    {% if object.getCurrentFunds == 0 %}
+                        No Funds
+                    {% else %}
+                        ${{ object.getCurrentFunds }}
+                    {% endif %}
+                </div>
                 <span class="bold h5">raised out of ${{ object.funding_goal }}</span>
 
                 <div class="num h1 bold">{{ rating }}</div>
@@ -34,7 +40,7 @@
 
                 {% if user.is_authenticated and user != object.initiator and is_member %}
                     <div class="inline-block button-wrapper">
-                        {% if object.current_funds < object.funding_goal %}
+                        {% if object.getCurrentFunds < object.funding_goal %}
                             <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Fund this Project" data-fm-callback="reload">
                                 Fund Project
                             </a>
