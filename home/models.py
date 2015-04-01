@@ -4,6 +4,10 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator
 
+# predefined interests
+INTERESTS = ['Art', 'Comics', 'Crafts', 'Dance', 'Design', 'Fashion', 
+        'Film', 'Food', 'Games', 'Journalism', 'Music', 'Photography', 
+        'Publishing', 'Technology', 'Theater']
 
 class UserProfile(models.Model):
 

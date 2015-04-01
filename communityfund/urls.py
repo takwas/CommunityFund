@@ -74,9 +74,6 @@ project_urls = patterns('',
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-project$', 
             login_required(RateProjectView.as_view()), name="rate_project"),
-
-    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders$', 
-            funders_list_view, name="funders_view")
 )
 
 urlpatterns = patterns('',

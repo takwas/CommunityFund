@@ -61,9 +61,6 @@ class CommunityCreateView(AjaxCreateView):
         # format the unicode object returned from the form into a space
         # separated string
         interests_str = ""
-        INTERESTS = ['Art', 'Comics', 'Crafts', 'Dance', 'Design', 'Fashion', 
-            'Film', 'Food', 'Games', 'Journalism', 'Music', 'Photography', 
-            'Publishing', 'Technology', 'Theater']
         
         for x in str(form_obj.interests).split("'"):
             if x in INTERESTS:
@@ -311,24 +308,6 @@ class RateProjectView(AjaxCreateView):
         form_obj.save()
 
         return super(RateProjectView, self).form_valid(form)
-
-
-@login_required
-def funders_list_view(request, cid, pk):
-
-    funders = get_all_funds().filter(project=pk)
-    initiator = get_project(pk).initiator
-
-    ratings = UserReputation.objects.all().filter(rater=request.user, project=pk)
-
-    # check who this user has already rated
-    rated = []
-    for r in ratings:
-        rated += [str((get_user(r.rated)))]
-
-    return render(request, "funders_list.html", 
-        {'cid': cid, 'pk': pk, 'funders': funders, 'rated': rated, 
-         'initiator': initiator})
 
 
 # User Related Views
