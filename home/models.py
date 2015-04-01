@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Max, Avg, Sum, Count
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator, RegexValidator
 from multiselectfield import MultiSelectField
 
 # predefined interests
@@ -10,12 +10,16 @@ INTERESTS = ['Art', 'Comics', 'Crafts', 'Dance', 'Design', 'Fashion',
         'Film', 'Food', 'Games', 'Journalism', 'Music', 'Photography', 
         'Publishing', 'Technology', 'Theater']
 
+RATING = [1, 2, 3, 4, 5]
+
 class UserProfile(models.Model):
+
+    cc_regex = RegexValidator(r'^[0-9]*$', "Only numbers are allowed")
 
     user = models.OneToOneField(User)
     location = models.CharField("Location", max_length=100, blank=True)
     interests = MultiSelectField("Interests", max_choices=15, choices=[(x,x) for x in INTERESTS], blank=True)
-    cc_number = models.CharField("CC Number", max_length=16, blank=True)
+    cc_number = models.CharField("CC Number", max_length=16, blank=True, validators=[cc_regex])
 
     def __repr__(self):
         return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interests)
@@ -87,9 +91,8 @@ class ProjectReputation(models.Model):
 
     rated = models.ForeignKey(Project, related_name="project_rep")
     rater = models.ForeignKey(User) 
-    rating = models.IntegerField("Rating", 
-        validators=[MaxValueValidator(5),MinValueValidator(1)])
-
+    rating = models.IntegerField(max_length=1, choices=[(x, str(x)) for x in RATING])
+    
     def __repr__(self):
         return "{rated: %s, rater: %s, rating: %s}" % (self.rated, self.rater, self.rating)
 
@@ -102,8 +105,7 @@ class UserReputation(models.Model):
     rated = models.ForeignKey(User, related_name="user_rep")
     rater = models.ForeignKey(User)
     project = models.ForeignKey(Project) 
-    rating = models.IntegerField("Rating", 
-        validators=[MaxValueValidator(5),MinValueValidator(1)])
+    rating = models.IntegerField(max_length=1, choices=[(x, str(x)) for x in RATING])
 
     def __repr__(self):
         return "{rated: %s, rater: %s, rating: %s}" % (self.rated, self.rater, self.rating)

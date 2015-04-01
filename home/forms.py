@@ -75,6 +75,8 @@ class CommunityForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
 
+    cc_number = forms.CharField(max_length=16, min_length=16, required=False)
+
     def __init__(self, *args, **kwargs):
 
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -89,15 +91,6 @@ class ProfileForm(forms.ModelForm):
 
 class RateUserForm(forms.ModelForm):
 
-    # ratings go from 1 to 5 (1 being lowest)
-    CHOICES=[(1,'1'),
-             (2,'2'),
-             (3,'3'),
-             (4,'4'),
-             (5,'5')]
-
-    rating = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
-
     def __init__(self, *args, **kwargs):
 
         super(RateUserForm, self).__init__(*args, **kwargs)
@@ -110,14 +103,6 @@ class RateUserForm(forms.ModelForm):
 
 
 class RateProjectForm(forms.ModelForm):
-
-    CHOICES=[(1,'1'),
-             (2,'2'),
-             (3,'3'),
-             (4,'4'),
-             (5,'5')]
-
-    rating = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
 
     def __init__(self, *args, **kwargs):
 
