@@ -48,6 +48,10 @@
                             <a href="{% url 'rate_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Rate this Project" data-fm-callback="reload">
                                 Rate Project
                             </a>
+                        {% elif did_fund and did_rate_project %}
+                            <a href="{% url 'rate_project_update' cid=object.community.id pk=object.pk %}" class="fm-update btn btn-primary" data-fm-head="Rate this Project" data-fm-callback="reload">
+                                Update Project Rating
+                            </a>
                         {% endif %}
                     </div>
 
@@ -55,6 +59,12 @@
                         <div class="inline-block button-wrapper">   
                             <a href="{% url 'rate_init' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Rate the Project Initiator" data-fm-callback="reload">
                                 Rate Initiator
+                            </a>
+                        </div>
+                    {% elif did_rate_user and did_fund %}
+                        <div class="inline-block button-wrapper">   
+                            <a href="{% url 'rate_init_update' cid=object.community.id pk=object.pk %}" class="fm-update btn btn-primary" data-fm-head="Rate the Project Initiator" data-fm-callback="reload">
+                                Update Initiator Rating
                             </a>
                         </div>
                     {% endif %}
@@ -79,6 +89,8 @@
 
                     {% if user == object.initiator and funder.user.username not in rated %}
                         <a href="{% url 'rate_funder' cid=object.community_id pk=object.pk funder=funder.user %}" class="fm-create pull-right" data-fm-head="Rate this Funder" data-fm-callback="reload">Rate</a>
+                    {% elif user == object.initiator and funder.user.username in rated %}
+                        <a href="{% url 'rate_funder_update' cid=object.community_id pk=object.pk funder=funder.user %}" class="fm-update pull-right" data-fm-head="Rate this Funder" data-fm-callback="reload">Update Rating</a>
                     {% endif %}
                 </div>
             </div>

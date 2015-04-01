@@ -26,8 +26,14 @@ user_urls = patterns('',
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-initiator$', 
             login_required(RateInitiatorView.as_view()), name="rate_init"),
 
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-initiator-update$', 
+            login_required(RateInitiatorUpdateView.as_view()), name="rate_init_update"),
+
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders/rate=(?P<funder>\w+)$', 
-            login_required(RateFunderView.as_view()), name="rate_funder")
+            login_required(RateFunderView.as_view()), name="rate_funder"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/funders/update=(?P<funder>\w+)$', 
+            login_required(RateFunderUpdateView.as_view()), name="rate_funder_update")
 
 )
 
@@ -74,6 +80,9 @@ project_urls = patterns('',
 
     url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-project$', 
             login_required(RateProjectView.as_view()), name="rate_project"),
+
+    url(r'^community/cid=(?P<cid>\d+)/project/pid=(?P<pk>\d+)/rate-project-update$', 
+            login_required(RateProjectUpdateView.as_view()), name="rate_project_update"),
 )
 
 urlpatterns = patterns('',

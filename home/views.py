@@ -282,7 +282,6 @@ class RateProjectView(AjaxCreateView):
 
     model = ProjectReputation
     form_class = RateProjectForm
-    template_name = "rate_form.html"
 
     def form_valid(self, form):
 
@@ -296,6 +295,19 @@ class RateProjectView(AjaxCreateView):
         form_obj.save()
 
         return super(RateProjectView, self).form_valid(form)
+
+
+class RateProjectUpdateView(AjaxUpdateView):
+
+    model = ProjectReputation
+    form_class = RateProjectForm
+
+    def get_object(self, queryset=None):
+        pid = self.kwargs['pk']
+        user_id = self.request.user.id
+
+        rating = ProjectReputation.objects.get(rater=user_id, rated=pid)
+        return rating
 
 
 # User Related Views
@@ -372,7 +384,6 @@ class RateInitiatorView(AjaxCreateView):
 
     model = UserReputation
     form_class = RateUserForm
-    template_name = "rate_form.html"
 
     def form_valid(self, form):
 
@@ -389,11 +400,23 @@ class RateInitiatorView(AjaxCreateView):
         return super(RateInitiatorView, self).form_valid(form)
 
 
+class RateInitiatorUpdateView(AjaxUpdateView):
+
+    model = UserReputation
+    form_class = RateUserForm
+
+    def get_object(self, queryset=None):
+        pid = self.kwargs['pk']
+        user_id = self.request.user.id
+
+        rating = UserReputation.objects.get(rater=user_id, project=pid)
+        return rating
+
+
 class RateFunderView(AjaxCreateView):
 
     model = UserReputation
     form_class = RateUserForm
-    template_name = "rate_form.html"
 
     def form_valid(self, form):
 
@@ -409,4 +432,18 @@ class RateFunderView(AjaxCreateView):
         form_obj.save()
 
         return super(RateFunderView, self).form_valid(form)
+
+
+class RateFunderUpdateView(AjaxUpdateView):
+
+    model = UserReputation
+    form_class = RateUserForm
+
+    def get_object(self, queryset=None):
+        pid = self.kwargs['pk']
+        user_id = self.request.user.id
+        funder = get_user(self.kwargs['funder']).id
+
+        rating = UserReputation.objects.get(rater=user_id, project=pid, rated=funder)
+        return rating
 
