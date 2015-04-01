@@ -18,7 +18,7 @@
                 <p class="lead">User Interests</p>
                 {% if profile.interests %}
                     <ul id="interests">
-                        {% for i in interests %}
+                        {% for i in profile.interests %}
                             <li>{{ i }}</li>
                         {% endfor %}
                     </ul>

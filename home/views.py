@@ -58,16 +58,6 @@ class CommunityCreateView(AjaxCreateView):
 
         form_obj.creator = self.request.user
 
-        # format the unicode object returned from the form into a space
-        # separated string
-        interests_str = ""
-        
-        for x in str(form_obj.interests).split("'"):
-            if x in INTERESTS:
-                interests_str += x + ' '
-
-        form_obj.interests = interests_str
-
         form_obj.save()
 
         # automatically get added to community if not a member
@@ -97,7 +87,6 @@ class CommunityDetail(DetailView):
             .order_by("-pub_date")
         
         context["members"] = get_all_members().filter(community=comm)
-        context["interests"] = str(comm.interests).split()
 
         return context
 
@@ -328,7 +317,6 @@ class UserProfileView(DetailView):
         context["projects"] = projects
         context["prof_user"] = user
         context["profile"] = UserProfile.objects.get(user=user)
-        context["interests"] = str(context["profile"].interests).split()
 
         ratings = UserReputation.objects.all().filter(rated=user)
 

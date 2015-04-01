@@ -3,6 +3,7 @@ from django.db.models import Max, Avg, Sum, Count
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator
+from multiselectfield import MultiSelectField
 
 # predefined interests
 INTERESTS = ['Art', 'Comics', 'Crafts', 'Dance', 'Design', 'Fashion', 
@@ -13,7 +14,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     location = models.CharField("Location", max_length=100, blank=True)
-    interests = models.CharField("Interests", max_length=256, blank=True)
+    interests = MultiSelectField("Interests", max_choices=15, choices=[(x,x) for x in INTERESTS], blank=True)
     cc_number = models.CharField("CC Number", max_length=16, blank=True)
 
     def __repr__(self):
@@ -34,7 +35,7 @@ class Community(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField("Name", max_length=100)
     location = models.CharField("Location", max_length=100)
-    interests = models.CharField("Interests", max_length=256)
+    interests = MultiSelectField("Interests", max_choices=15, choices=[(x,x) for x in INTERESTS])
 
     def __repr__(self):
         return "{name: %s, location: %s, interests: %s}" % (self.name, self.location, self.interests)
