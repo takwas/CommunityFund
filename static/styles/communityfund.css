@@ -46,7 +46,8 @@
     white-space: pre-wrap;
 }
 
-.message {
+.table {
+    table-layout: fixed;
     word-wrap: break-word;
 }
 
