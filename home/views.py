@@ -7,6 +7,7 @@ from registration.backends.simple.views import RegistrationView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from django.db.models import Max, Avg, Sum, Count
+from django.db.models import Q
 from .models import *
 from .forms import *
 from fm.views import AjaxCreateView, AjaxUpdateView, AjaxDeleteView
@@ -153,8 +154,7 @@ def search_communities(request):
         search_text = ''
 
     # Simple search using contains
-    comm = Community.objects.filter(interests__icontains=search_text 
-            | location__icontains=search_text)
+    comm = Community.objects.filter(Q(interests__icontains=search_text) | Q(location__icontains=search_text))
 
     return render_to_response("community_search.html", {'search_text': search_text,
         'comm': comm})
