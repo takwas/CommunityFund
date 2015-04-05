@@ -7,6 +7,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from home.views import *
+from home.community_views import *
+from home.user_views import *
+from home.project_views import *
 
 user_urls = patterns('',
     url(r'^register/$', CustomRegistrationView.as_view(), 
