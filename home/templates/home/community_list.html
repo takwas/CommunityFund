@@ -9,14 +9,38 @@
         
         <hr>
 
-        <div class="col-md-8 center">
-            {% for post in object_list %}
-                <div class="center info">
-                    <a href="{% url 'community_details' pk=post.pk %}">
-                        {{ post.name }}
-                    </a>
-                </div>
-            {% endfor %}
+        <div class="center">
+            <table class="table">
+                <tr>
+                    <th class="col-md-4">Community</th>
+                    <th class="col-md-2">Location</th>
+                    <th class="col-md-2">Posted By</th>
+                    <th class="col-md-4">Interests</th>
+                </tr>
+
+                {% for post in object_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'community_details' pk=post.pk %}">
+                                {{ post.name }}
+                            </a>
+                        </td>
+
+                        <td>{{ post.location }}</td>
+
+                        <td>
+                            <a href="{% url 'user_profile' slug=post.creator %}">
+                                {{ post.creator }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {% for i in post.interests %}
+                                <span>{{ i }}</span>
+                            {% endfor %}
+                        </td>
+
+                {% endfor %}
         </div>
     {% else %}
         <span class="h1 center">Login or Register to get started</span>
