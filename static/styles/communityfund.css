@@ -43,6 +43,7 @@
 
 .long-text {
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .panel-default > .panel-heading {
