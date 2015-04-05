@@ -88,7 +88,7 @@ class CommunityDetail(DetailView):
             .order_by("-pub_date")
         
         context["members"] = get_all_members().filter(community=comm)
-        context["profile"] = UserProfile.objects.get(user__id=self.request.user.id)
+        context["profile"] = UserProfile.objects.get(user=self.request.user)
 
         return context
 
