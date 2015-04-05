@@ -12,10 +12,19 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# uncomment below 3 lines when using heroku
-import dj_database_url
-DATABASES = {'default': dj_database_url.config(default=os.getenv('HEROKU_POSTGRESQL_GOLD_URL'))}
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd4kvkm2db7me0l',
+        'HOST': 'ec2-54-163-226-9.compute-1.amazonaws.com',
+        'USER': 'nrnqlyareboewm',
+        'PASSWORD': '-sF1PLqn93MbMPR7hDYxXyhygt',
+        'PORT': '5432',
+    }
+}
+#import dj_database_url
+#DATABASES = {'default': dj_database_url.config(default=os.getenv('HEROKU_POSTGRESQL_ONYX'))}
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
