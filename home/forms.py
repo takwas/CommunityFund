@@ -75,7 +75,7 @@ class CommunityForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
 
-    cc_number = forms.CharField(max_length=16, min_length=16, required=False)
+    cc_number = forms.CharField(label="Credit Card Number", max_length=16, min_length=16, required=False)
 
     def __init__(self, *args, **kwargs):
 
