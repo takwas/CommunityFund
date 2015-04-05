@@ -7,6 +7,9 @@ class CommunityCreateView(AjaxCreateView):
     form_class = CommunityForm
 
     def form_valid(self, form):
+
+        # Ensure the creator for this new community is the user who sent
+        # the request
         form_obj = form.save(commit=False)
 
         form_obj.creator = self.request.user
@@ -31,16 +34,32 @@ class CommunityDetail(DetailView):
 
         # appropriate data used in template
         comm = context["object"]
-        context["projects"] = get_all_projects().filter(community=comm)
 
-        context["is_member"] = get_all_members() \
+        # get all projects posted in this community
+        projects = get_all_projects().filter(community=comm)
+
+        # get all comments made in the message board for this community
+        cmnt_list = Comment.objects.all().filter(community=comm) \
+            .order_by("-pub_date")
+
+        # get all members of this community
+        members = get_all_members().filter(community=comm)
+
+        # determine permissions this user has for this community depending on
+        # whether this user is a member of this community
+        is_member = get_all_members() \
             .filter(user=self.request.user, community=comm)
 
-        context["cmnt_list"] = Comment.objects.all().filter(community=comm) \
-            .order_by("-pub_date")
-        
-        context["members"] = get_all_members().filter(community=comm)
-        context["profile"] = UserProfile.objects.get(user=self.request.user)
+        # get the profile of the current user - used to check for credit card
+        # number existence
+        profile = UserProfile.objects.get(user=self.request.user)
+
+        # Return all the information required to display a community page
+        context["projects"] = projects
+        context["cmnt_list"] = cmnt_list
+        context["members"] = members
+        context["is_member"] = is_member
+        context["profile"] = profile
 
         return context
 
@@ -80,7 +99,8 @@ class CommentCreateView(AjaxCreateView):
     form_class = CommentForm 
 
     def form_valid(self, form):
-        # user and community automatically added, not up to user
+
+        # user and community being posted to automatically added, not up to user
         form_obj = form.save(commit=False)
         form_obj.user = self.request.user
         form_obj.community = Community.objects.get(pk=self.kwargs["pk"])
@@ -89,6 +109,8 @@ class CommentCreateView(AjaxCreateView):
         return super(CommentCreateView, self).form_valid(form)
 
 
+
+# Handle AJAX request when searching for communities
 def search_communities(request):
 
     if request.method == "POST":
@@ -101,4 +123,3 @@ def search_communities(request):
 
     return render_to_response("community_search.html", {'search_text': search_text,
         'comm': comm})
-        
