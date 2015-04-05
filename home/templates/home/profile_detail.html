@@ -13,7 +13,7 @@
     <hr>
 
     <ul class="nav nav-pills">
-        <li class="active"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+        <li class="active"><a href="#profile" role="tab" data-toggle="tab">About</a></li>
         <li><a href="#projects" role="tab" data-toggle="tab">Projects</a></li>
         <li><a href="#communities" role="tab" data-toggle="tab">Communities</a></li>
         <li><a href="#funding" role="tab" data-toggle="tab">Funding</a></li>
@@ -51,10 +51,10 @@
                 </div>
 
                 <div id="stats" class="table-cell col-md-4">
-                    <div class="num h1 bold"><a href="#projects">{{ projects|length }}</a></div>
+                    <div class="num h1 bold">{{ projects|length }}</div>
                     <span class="bold h5">projects started</span>
 
-                    <div class="num h1 bold"><a href="#communities">{{ comms|length }}</a></div>
+                    <div class="num h1 bold">{{ comms|length }}</div>
                     <span class="bold h5">communities joined</span>
 
                     <div class="num h1 bold">{{ rating }}</div>
@@ -78,7 +78,6 @@
 
         <!-- Projects -->
         <div id="projects" class="row center tab-pane">
-            <p class="lead">Projects</p>
             {% if projects %}
                 {% for project in projects %}
                     <div class="panel panel-default">
@@ -98,7 +97,6 @@
 
         <!-- Communities -->
         <div id="communities" class="row center tab-pane">
-            <p class="lead">Communities</p>
             <div class="list-group">
                 {% if comms %}
                     {% for community in comms %}
@@ -114,7 +112,6 @@
 
         <!-- Funding -->
         <div id="funding" class="row center tab-pane">
-            <p class="lead">Funding</p>
             <div class="list-group">
                 {% if funds %}
                     {% for fund in funds %}
@@ -131,7 +128,6 @@
     
 
         <div id="friends" class="row tab-pane center">
-            <p class="lead">Friends</p>
             <div class="list-group">
                 {% if friends %}
                     {% for friend in friends %}

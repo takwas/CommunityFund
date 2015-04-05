@@ -19,82 +19,87 @@
     </div>
 
     <hr>
-    <div class="row">
-        <div class="table">
-            <div class="table-cell col-md-8">
-                <p class="lead">Community Interests</p>
-                <ul id="interests">
-                    {% for i in object.interests %}
-                        <li>{{ i }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
 
-            <div id="stats" class="table-cell col-md-4">
-                <div class="num h1 bold"><a href="#projects">{{ projects|length }}</a></div>
-                <span class="bold h5">projects started</span>
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#about" role="tab" data-toggle="tab">About</a></li>
+        <li><a href="#projects" role="tab" data-toggle="tab">Projects</a></li>
+        <li><a href="#comments" role="tab" data-toggle="tab">Message Board</a></li>
+        <li><a href="#members" role="tab" data-toggle="tab">Members</a></li>
+    </ul>
 
-                <div class="num h1 bold"><a href="#members">{{ members|length }}</a></div>
-                <span class="bold h5">users are members of {{ object.name }}</span>
+    <hr>
 
-                {% if user.is_authenticated %}
-                    {% if not is_member %}
-                        <div class="inline-block button-wrapper">
-                            <a id="join_comm" name="{{ object.pk }}" class="btn btn-primary">Join Community</a>
-                        </div>
-                    {% else %}
-                        <div class="inline-block button-wrapper">
-                            {% if profile.cc_number %}
-                                <a href="{% url 'project_create' pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Create your Project" data-fm-callback="reload">
-                                    Start a Project
-                                </a>
-                            {% else %}
-                                <a id="project_start" class="btn btn-primary">
-                                    Start a Project
-                                </a>
-                            {% endif %}
-                        </div>
-                        <div class="inline-block button-wrapper">   
-                            <a id="add_cmnt" name="{{ object.pk }}" class="btn btn-primary">Post a Message</a>
-                        </div>
+    <div class="tab-content">
+        <div id="about" class="row tab-pane active">
+            <div class="table">
+                <div class="table-cell col-md-8">
+                    <p class="lead">Community Interests</p>
+                    <ul id="interests">
+                        {% for i in object.interests %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div id="stats" class="table-cell col-md-4">
+                    <div class="num h1 bold">{{ projects|length }}</div>
+                    <span class="bold h5">projects started</span>
+
+                    <div class="num h1 bold">{{ members|length }}</div>
+                    <span class="bold h5">users are members of {{ object.name }}</span>
+
+                    {% if user.is_authenticated %}
+                        {% if not is_member %}
+                            <div class="inline-block button-wrapper">
+                                <a id="join_comm" name="{{ object.pk }}" class="btn btn-primary">Join Community</a>
+                            </div>
+                        {% else %}
+                            <div class="inline-block button-wrapper">
+                                {% if profile.cc_number %}
+                                    <a href="{% url 'project_create' pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Create your Project" data-fm-callback="reload">
+                                        Start a Project
+                                    </a>
+                                {% else %}
+                                    <a id="project_start" class="btn btn-primary">
+                                        Start a Project
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="inline-block button-wrapper">   
+                                <a id="add_cmnt" name="{{ object.pk }}" class="btn btn-primary">Post a Message</a>
+                            </div>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </div>
             </div>
         </div>
-    </div>
     
-    <hr>
 
-    <!-- Projects -->
-    <div id="projects" class="row col-md-10 center">
-        <p class="lead">Projects</p>
-        {% if projects %}
-            {% for project in projects %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a href="{% url 'user_profile' slug=project.initiator.username %}" class="pull-right">
-                            Posted by {{project.initiator }}
-                        </a>
-                        <h5><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h5>
+        <!-- Projects -->
+        <div id="projects" class="row center tab-pane">
+            {% if projects %}
+                {% for project in projects %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="{% url 'user_profile' slug=project.initiator.username %}" class="pull-right">
+                                Posted by {{project.initiator }}
+                            </a>
+                            <h5><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h5>
+                        </div>
+
+                        <div class="panel-body">
+                            ${{ project.current_funds }} raised out of ${{ project.funding_goal }}
+                        </div>
                     </div>
+                {% endfor %}
+            {% else %}
+                <span class="bold h5">Nobody has started a project yet.</span>
+            {% endif %}
+        </div>
 
-                    <div class="panel-body">
-                        ${{ project.current_funds }} raised out of ${{ project.funding_goal }}
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <span class="bold h5">Nobody has started a project yet.</span>
-        {% endif %}
-    </div>
-
-    <hr>
-
-    <div class="row col-md-10 center">
         
         <!-- Members -->
-        <div id="members" class="row col-md-5 side-by-side">
-            <p class="lead">Members</p>
+        <div id="members" class="row center tab-pane">
             {% for member in members %}
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -105,17 +110,16 @@
         </div>
 
         <!-- Comments -->
-        <div id="comments" class="row col-md-6 side-by-side">
-            <p class="lead">Message Board</p>
+        <div id="comments" class="row tab-pane">
             <div class="list-group">
                 {% if cmnt_list %}
                     {% for comment in cmnt_list %}
                         <li class="list-group-item">
                             <span class="pull-right h6 date">{{ comment.pub_date }}</span>
                             <a href="{% url 'user_profile' slug=comment.user.username  %}">{{ comment.user.username }} says:</a>
-                            <div class="long-text">
+                            <p class="message">
                                 {{ comment.text }}
-                            </div>
+                            </p>
                         </li>
                     {% endfor %}
                 {% else %}

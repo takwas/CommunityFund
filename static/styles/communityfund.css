@@ -46,6 +46,10 @@
     white-space: pre-wrap;
 }
 
+.message {
+    word-wrap: break-word;
+}
+
 .panel-default > .panel-heading {
     background-color: #EEEEEE;
 }

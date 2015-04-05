@@ -316,7 +316,10 @@ class UserProfileView(DetailView):
         # data used by template (which has access to dict context)
         context = super(UserProfileView, self).get_context_data(**kwargs)
         comm = context["object"]
+
+        # current profile is profile of user
         user = get_user(self.kwargs["slug"])
+        
         projects = get_all_projects().filter(initiator=user)
 
         context["projects"] = projects
@@ -353,7 +356,7 @@ class UserProfileView(DetailView):
             members = get_all_members().filter(community=item) 
                 
             for member in members:
-                if member.user not in friends and member.user != self.request.user:
+                if member.user not in friends and member.user != user:
                     friends.append(member.user)
         
         context["comms"] = comms

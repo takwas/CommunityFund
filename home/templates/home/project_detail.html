@@ -28,7 +28,7 @@
             <div id="stats" class="table-cell col-md-4">
                 <div class="num h1 bold">
                     {% if object.getCurrentFunds == 0 %}
-                        No Funds
+                        $0.00
                     {% else %}
                         ${{ object.getCurrentFunds }}
                     {% endif %}
@@ -46,7 +46,7 @@
                                     Fund Project
                                 </a>
                             {% else %}
-                                <a id="project_fund" class="btn btn-primary">
+                                <a id="project_fund" class="btn btn-primary" >
                                     Fund Project
                                 </a>
                             {% endif %}
