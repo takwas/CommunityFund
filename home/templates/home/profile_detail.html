@@ -12,74 +12,90 @@
     </div>
     <hr>
 
-    <div class="row">
-        <div class="table">
-            <div class="table-cell col-md-8">
-                <p class="lead">User Interests</p>
-                {% if profile.interests %}
-                    <ul id="interests">
-                        {% for i in profile.interests %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <span class="bold h5">{{ prof_user.username }} has not listed any interests</span>
-                {% endif %}
-            </div>
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+        <li><a href="#projects" role="tab" data-toggle="tab">Projects</a></li>
+        <li><a href="#communities" role="tab" data-toggle="tab">Communities</a></li>
+        <li><a href="#funding" role="tab" data-toggle="tab">Funding</a></li>
+        <li><a href="#friends" role="tab" data-toggle="tab">Friends</a></li>
+    </ul>
 
-            <div id="stats" class="table-cell col-md-4">
-                <div class="num h1 bold"><a href="#projects">{{ projects|length }}</a></div>
-                <span class="bold h5">projects started</span>
-
-                <div class="num h1 bold"><a href="#communities">{{ comms|length }}</a></div>
-                <span class="bold h5">communities joined</span>
-
-                <div class="num h1 bold">{{ rating }}</div>
-                <span class="bold h5">average user rating ({{ num_ratings }} ratings)</span>
-
-                <div class="num h1 bold">{{ prating }}</div>
-                <span class="bold h5">average project rating</span>
-
-                {% if user == prof_user %}
-                    <div class="inline-block button-wrapper">
-                        <a href="{% url 'user_profile_edit' pk=user.id %}" class="fm-update btn btn-primary" data-fm-head="Update your Profile" data-fm-callback="reload">
-                            Update Profile
-                        </a>
+    <div class="tab-content">
+        <div id="profile" class="row tab-pane active">
+            <div class="table">
+                <div class="table-cell col-md-8">
+                    <div class="table-cell">
+                        <p class="lead">About {{ prof_user.username }}</p>
+                        {% if profile.biography %}
+                            <p class="long-text">{{ profile.biography }}</p>
+                        {% else %}
+                            <span class="bold h5">{{ prof_user.username }} has not entered a biography</span>
+                        {% endif %}
+                        <br>
                     </div>
-                    
-                {% endif %}
+
+                    <div class="table-cell">
+                        <p class="lead">Interests</p>
+                        {% if profile.interests %}
+                            <ul id="interests">
+                                {% for i in profile.interests %}
+                                    <li>{{ i }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="bold h5">{{ prof_user.username }} has not listed any interests</span>
+                        {% endif %}
+                    </div>                    
+                </div>
+
+                <div id="stats" class="table-cell col-md-4">
+                    <div class="num h1 bold"><a href="#projects">{{ projects|length }}</a></div>
+                    <span class="bold h5">projects started</span>
+
+                    <div class="num h1 bold"><a href="#communities">{{ comms|length }}</a></div>
+                    <span class="bold h5">communities joined</span>
+
+                    <div class="num h1 bold">{{ rating }}</div>
+                    <span class="bold h5">average user rating ({{ num_ratings }} ratings)</span>
+
+                    <div class="num h1 bold">{{ prating }}</div>
+                    <span class="bold h5">average project rating</span>
+
+                    {% if user == prof_user %}
+                        <div class="inline-block button-wrapper">
+                            <a href="{% url 'user_profile_edit' pk=user.id %}" class="fm-update btn btn-primary" data-fm-head="Update your Profile" data-fm-callback="reload">
+                                Update Profile
+                            </a>
+                        </div>
+                        
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-   
-    <hr>
+       
 
-    <!-- Projects -->
-    <div id="projects" class="row col-md-10 center">
-        <p class="lead">Projects</p>
-        {% if projects %}
-            {% for project in projects %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h5>
+        <!-- Projects -->
+        <div id="projects" class="row center tab-pane">
+            <p class="lead">Projects</p>
+            {% if projects %}
+                {% for project in projects %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5><a href="{% url 'project_details' pk=project.pk cid=object.pk %}">{{ project.name }}</a></h5>
+                        </div>
+
+                        <div class="panel-body">
+                            ${{ project.getCurrentFunds }} raised out of ${{ project.funding_goal }}
+                        </div>
                     </div>
+                {% endfor %}
+            {% else %}
+                <span class="bold h5">{{ prof_user.username }} has not started any projects.</span>
+            {% endif %}
+        </div>
 
-                    <div class="panel-body">
-                        ${{ project.getCurrentFunds }} raised out of ${{ project.funding_goal }}
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <span class="bold h5">{{ prof_user.username }} has not started any projects.</span>
-        {% endif %}
-    </div>
-
-    <hr>
-
-    <div class="row col-md-10 center">
-        
         <!-- Communities -->
-        <div id="communities" class="row col-md-5 side-by-side">
+        <div id="communities" class="row center tab-pane">
             <p class="lead">Communities</p>
             <div class="list-group">
                 {% if comms %}
@@ -95,7 +111,7 @@
         </div>
 
         <!-- Funding -->
-        <div id="comments" class="row col-md-6 side-by-side">
+        <div id="funding" class="row center tab-pane">
             <p class="lead">Funding</p>
             <div class="list-group">
                 {% if funds %}
@@ -109,13 +125,10 @@
                 {% endif %}
             </div>
         </div>
-    </div>
 
+    
 
-    {% if user == prof_user %}
-        <hr>
-
-        <div id="friends" class="row col-md-8 center">
+        <div id="friends" class="row tab-pane center">
             <p class="lead">Friends</p>
             <div class="list-group">
                 {% if friends %}
@@ -129,7 +142,7 @@
                 {% endif %}
             </div>
         </div>
-    {% endif %}
+    </div>
 </div>
 
 {% endblock %}

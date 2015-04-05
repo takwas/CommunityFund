@@ -47,7 +47,11 @@
 }
 
 .panel-default > .panel-heading {
-    background-color: #E3F2FD;
+    background-color: #EEEEEE;
+}
+
+.tab-pane {
+    margin: 20px 20px 20px 20px;
 }
 
 * {
