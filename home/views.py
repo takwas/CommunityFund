@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, FormView
@@ -88,8 +88,7 @@ class CommunityDetail(DetailView):
             .order_by("-pub_date")
         
         context["members"] = get_all_members().filter(community=comm)
-
-        context["profile"] = UserProfile.objects.get(user=self.request.user)
+        context["profile"] = UserProfile.objects.get(user__id=self.request.user.id)
 
         return context
 
