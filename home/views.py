@@ -153,7 +153,8 @@ def search_communities(request):
         search_text = ''
 
     # Simple search using contains
-    comm = Community.objects.filter(interests__icontains=search_text)
+    comm = Community.objects.filter(interests__icontains=search_text 
+            | location__icontains=search_text)
 
     return render_to_response("community_search.html", {'search_text': search_text,
         'comm': comm})
