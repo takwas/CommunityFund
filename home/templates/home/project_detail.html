@@ -41,9 +41,15 @@
                 {% if user.is_authenticated and user != object.initiator and is_member %}
                     <div class="inline-block button-wrapper">
                         {% if object.getCurrentFunds < object.funding_goal %}
-                            <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Fund this Project" data-fm-callback="reload">
-                                Fund Project
-                            </a>
+                            {% if profile.cc_number %}
+                                <a href="{% url 'fund_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Fund this Project" data-fm-callback="reload">
+                                    Fund Project
+                                </a>
+                            {% else %}
+                                <a id="project_fund" class="btn btn-primary">
+                                    Fund Project
+                                </a>
+                            {% endif %}
                         {% elif did_fund and not did_rate_project %}
                             <a href="{% url 'rate_project' cid=object.community.id pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Rate this Project" data-fm-callback="reload">
                                 Rate Project
@@ -69,6 +75,10 @@
                         </div>
                     {% endif %}
 
+                {% elif user.is_authenticated and user != object.initiator and not is_member %}
+                    <div class="inline-block button-wrapper">
+                        <span class="bold h5">You must join this community to help fund this project</span>
+                    </div>
                 {% endif %}
                 <hr>
                 <span class="h6">posted in <a href="{% url 'community_details' pk=object.community.id  %}">{{ object.community }}</a></span>

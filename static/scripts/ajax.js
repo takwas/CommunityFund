@@ -75,6 +75,15 @@ $(function() {
         );
     });
 
+    $('#project_start').click(function() {
+        bootbox.alert("You must enter your credit card information before you can start a project.",
+            function() {});
+    });
+
+    $('#project_fund').click(function() {
+        bootbox.alert("You must enter your credit card information before you can fund this project.",
+            function() {});
+    });
 });
 
 function searchSuccess(data, textStatus, jqXHR) {

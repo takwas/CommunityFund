@@ -88,6 +88,8 @@ class CommunityDetail(DetailView):
         
         context["members"] = get_all_members().filter(community=comm)
 
+        context["profile"] = UserProfile.objects.get(user=self.request.user)
+
         return context
 
 
@@ -118,16 +120,6 @@ class JoinCommunityView(AjaxCreateView):
         form_obj.save()
 
         return super(JoinCommunityView, self).form_valid(form) 
-
-
-class MemberListView(ListView):
-
-    model = Member
-    template_name = "member_list.html"
-
-    def get_queryset(self):
-        # query to get all members of given community
-        return get_all_members().filter(community_id=self.kwargs['pk'])
 
 
 class CommentCreateView(AjaxCreateView):
@@ -223,6 +215,8 @@ class ProjectDetail(DetailView):
             rated += [str((get_user(r.rated)))]
 
         context["rated"] = rated
+
+        context["profile"] = UserProfile.objects.get(user = self.request.user)
 
         return context
 

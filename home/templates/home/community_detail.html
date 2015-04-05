@@ -44,9 +44,15 @@
                         </div>
                     {% else %}
                         <div class="inline-block button-wrapper">
-                            <a href="{% url 'project_create' pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Create your Project" data-fm-callback="reload">
-                                Start a Project
-                            </a>
+                            {% if profile.cc_number %}
+                                <a href="{% url 'project_create' pk=object.pk %}" class="fm-create btn btn-primary" data-fm-head="Create your Project" data-fm-callback="reload">
+                                    Start a Project
+                                </a>
+                            {% else %}
+                                <a id="project_start" class="btn btn-primary">
+                                    Start a Project
+                                </a>
+                            {% endif %}
                         </div>
                         <div class="inline-block button-wrapper">   
                             <a id="add_cmnt" name="{{ object.pk }}" class="btn btn-primary">Post a Message</a>

@@ -55,9 +55,6 @@ community_urls = patterns('',
     url(r'^community/cid=(?P<pk>\d+)/comment$', csrf_exempt(login_required(CommentCreateView.as_view())), 
         name="cmnt_create"),
 
-    url(r'^community/cid=(?P<pk>\d+)/members$', MemberListView.as_view(), 
-        name="member_list"),
-
     url(r'^community/cid=(?P<pk>\d+)/update$', login_required(CommunityUpdateView.as_view()), 
         name="comm_update")
 )
