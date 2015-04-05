@@ -18,9 +18,11 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     location = models.CharField("Location", max_length=100, blank=True)
+    address = models.CharField("Address", max_length=50, blank=True)
+    biography = models.TextField("Biography", max_length=140, blank=True)
     interests = MultiSelectField("Interests", max_choices=15, choices=[(x,x) for x in INTERESTS], blank=True)
     cc_number = models.CharField("CC Number", max_length=16, blank=True, validators=[cc_regex])
-
+    
     def __repr__(self):
         return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interests)
 
