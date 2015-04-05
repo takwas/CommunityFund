@@ -21,7 +21,7 @@ class UserProfile(models.Model):
     address = models.CharField("Address", max_length=50, blank=True, null=True)
     biography = models.TextField("Biography", max_length=140, blank=True, null=True)
     interests = MultiSelectField("Interests", max_choices=15, choices=[(x,x) for x in INTERESTS], blank=True)
-    cc_number = models.CharField("CC Number", max_length=16, blank=True, validators=[cc_regex])
+    cc_number = models.CharField("Credit Card Number", max_length=16, blank=True, validators=[cc_regex])
     
     def __repr__(self):
         return "{user: %s, location: %s, interests: %s}" % (self.user, self.location, self.interests)
@@ -59,6 +59,7 @@ class Project(models.Model):
     community = models.ForeignKey(Community)
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2, 
         validators=[MinValueValidator(0)])
+    current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __repr__(self):

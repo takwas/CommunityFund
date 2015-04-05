@@ -42,6 +42,8 @@ $(function() {
                         },
                         success: function(response) {
                             window.location.reload(true);
+                            $('.nav-pills a[href=#comments]').tab('show') ;
+                                                       
                         },
                         dataType: 'html'
                     });
@@ -65,7 +67,7 @@ $(function() {
                             'csrfmiddlewaretoken': '{{csrf_token}}'
                         },
                         success: function(response) {
-                            window.location.href = (document.URL.split('#')[0]) + '#comments';
+                            // reload page to display new comment
                             window.location.reload(true);
                         },
                         dataType: 'html'
@@ -83,6 +85,17 @@ $(function() {
     $('#project_fund').click(function() {
         bootbox.alert("You must enter your credit card information before you can fund this project.",
             function() {});
+    });
+
+    // Javascript to enable link to a nav tab
+    var url = document.location.toString();
+    if (url.match('#')) {
+        $('.nav-pills a[href=#'+url.split('#')[1]+']').tab('show') ;
+    } 
+
+    // Change hash for page-reload to open proper tab
+    $('.nav-pills a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
     });
 });
 
