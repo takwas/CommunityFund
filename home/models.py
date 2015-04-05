@@ -59,7 +59,6 @@ class Project(models.Model):
     community = models.ForeignKey(Community)
     funding_goal = models.DecimalField("Funding Goal", max_digits=19, decimal_places=2, 
         validators=[MinValueValidator(0)])
-    current_funds = models.DecimalField("Current Funds", max_digits=19, decimal_places=2)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __repr__(self):
