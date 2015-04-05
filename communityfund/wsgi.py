@@ -13,5 +13,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "communityfund.settings")
 from django.core.wsgi import get_wsgi_application
 #from whitenoise.django import DjangoWhiteNoise
 
+os.environ['DJANGO_SETTINGS_MODULE'] = 'myapp.settings'
 application = get_wsgi_application()
 #application = DjangoWhiteNoise(application)

@@ -13,9 +13,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # uncomment below 3 lines when using heroku
-import dj_database_url
-DATABASES = {'default': dj_database_url.config(default=os.getenv('HEROKU_POSTGRESQL_GOLD_URL'))}
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#import dj_database_url
+#DATABASES = {'default': dj_database_url.config(default=os.getenv('HEROKU_POSTGRESQL_GOLD_URL'))}
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -83,13 +83,18 @@ WSGI_APPLICATION = 'communityfund.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-# uncomment below 6 lines when developing locally
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'communityfund_db',
-#    }
-#}
+#uncomment below 6 lines when developing locally
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'communityfund_db',
+       'USER': 'postgres',                      # Not used with sqlite3.
+            'PASSWORD': 'tritheman123',                  # Not used with sqlite3.
+            'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '5432', 
+       
+   }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
