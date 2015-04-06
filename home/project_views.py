@@ -18,6 +18,8 @@ class ProjectCreateView(AjaxCreateView):
         form_obj.initiator = self.request.user
         form_obj.community = comm
 
+        form_obj.current_funds = 0
+
         form_obj.save()
 
         # automatically get added to community if not a member

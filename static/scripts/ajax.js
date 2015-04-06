@@ -41,9 +41,7 @@ $(function() {
                             'cid': cid, 'csrfmiddlewaretoken': '{{csrf_token}}'
                         },
                         success: function(response) {
-                            window.location.reload(true);
-                            $('.nav-pills a[href=#comments]').tab('show') ;
-                                                       
+                            window.location.reload(true)                                                       
                         },
                         dataType: 'html'
                     });

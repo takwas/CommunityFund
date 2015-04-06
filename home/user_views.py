@@ -24,6 +24,11 @@ class UserProfileView(DetailView):
         rating = ratings.aggregate(Avg('rating'))['rating__avg']
         num_ratings = ratings.aggregate(Count('rating'))['rating__count']
 
+
+        # === PROJECTS SECTION ===
+        # get all projects the user this profile belongs to has started
+        projects = get_all_projects().filter(initiator=user)
+
         # get the average of the average ratings their projects
         pratings = []
         for p in projects:
@@ -37,14 +42,10 @@ class UserProfileView(DetailView):
             prating_avg = sum(pratings) / len(pratings)
 
 
-        # === PROJECTS SECTION ===
-        # get all projects the user this profile belongs to has started
-        projects = get_all_projects().filter(initiator=user)
-
-
         # === COMMUNITIES SECTION ===
         # get all the communities the user this profile belongs to is a part of
         comms = [x.community for x in get_all_members().filter(user=user)]
+
 
         # === FUNDING SECTION ===
         # get funds given to projects by the user this profile belongs to
@@ -66,7 +67,7 @@ class UserProfileView(DetailView):
         # Return all the information required to display a user profile
         context["prof_user"] = user
         context["profile"] = UserProfile.objects.get(user=user)
-        ontext["rating"] = rating
+        context["rating"] = rating
         context["num_ratings"] = num_ratings
         context["prating"] = prating_avg
 
